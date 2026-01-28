@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Cấu hình lương mặc định -->
+        <record id="demo_cau_hinh_luong" model="cau_hinh_luong">
+            <field name="ten_cau_hinh">Cấu hình lương chuẩn 2026</field>
+            <field name="don_vi_tien">VNĐ</field>
+            <field name="so_cong_chuan">24.0</field>
+            <field name="ty_le_bhxh">8.0</field>
+            <field name="ty_le_bhyt">1.5</field>
+            <field name="ty_le_bhtn">1.0</field>
+            <field name="muc_phat_di_muon">5000.0</field>
+            <field name="muc_phat_ve_som">5000.0</field>
+            <field name="muc_phat_vang_mat">200000.0</field>
+            <field name="nguong_mien_phat_di_muon">5.0</field>
+            <field name="nguong_mien_phat_ve_som">5.0</field>
+            <field name="muc_giam_tru_ban_than">11000000.0</field>
+            <field name="muc_giam_tru_nguoi_phu_thuoc">4400000.0</field>
+            <field name="active">True</field>
+            <field name="ghi_chu">Cấu hình lương theo quy định năm 2026</field>
+        </record>
+
+        <!-- Demo các loại phụ cấp -->
+        <record id="demo_phu_cap_an_trua" model="phu_cap">
+            <field name="ma_phu_cap">PC001</field>
+            <field name="ten_phu_cap">Phụ cấp ăn trưa</field>
+            <field name="loai_phu_cap">co_dinh</field>
+            <field name="so_tien">730000.0</field>
+            <field name="tinh_thue">False</field>
+            <field name="tinh_bao_hiem">False</field>
+            <field name="mo_ta">Phụ cấp ăn trưa hàng ngày (730k/tháng)</field>
+        </record>
+
+        <record id="demo_phu_cap_xang_xe" model="phu_cap">
+            <field name="ma_phu_cap">PC002</field>
+            <field name="ten_phu_cap">Phụ cấp xăng xe</field>
+            <field name="loai_phu_cap">co_dinh</field>
+            <field name="so_tien">500000.0</field>
+            <field name="tinh_thue">False</field>
+            <field name="tinh_bao_hiem">False</field>
+            <field name="mo_ta">Phụ cấp đi lại, xăng xe</field>
+        </record>
+
+        <record id="demo_phu_cap_dien_thoai" model="phu_cap">
+            <field name="ma_phu_cap">PC003</field>
+            <field name="ten_phu_cap">Phụ cấp điện thoại</field>
+            <field name="loai_phu_cap">co_dinh</field>
+            <field name="so_tien">300000.0</field>
+            <field name="tinh_thue">False</field>
+            <field name="tinh_bao_hiem">False</field>
+            <field name="mo_ta">Phụ cấp liên lạc điện thoại</field>
+        </record>
+
+        <record id="demo_phu_cap_chuc_vu_truong_phong" model="phu_cap">
+            <field name="ma_phu_cap">PC004</field>
+            <field name="ten_phu_cap">Phụ cấp Trưởng phòng</field>
+            <field name="loai_phu_cap">theo_chuc_vu</field>
+            <field name="so_tien">2000000.0</field>
+            <field name="tinh_thue">True</field>
+            <field name="tinh_bao_hiem">False</field>
+            <field name="mo_ta">Phụ cấp trách nhiệm cho cấp Trưởng phòng</field>
+        </record>
+
+        <record id="demo_phu_cap_chuc_vu_pho_phong" model="phu_cap">
+            <field name="ma_phu_cap">PC005</field>
+            <field name="ten_phu_cap">Phụ cấp Phó phòng</field>
+            <field name="loai_phu_cap">theo_chuc_vu</field>
+            <field name="so_tien">1000000.0</field>
+            <field name="tinh_thue">True</field>
+            <field name="tinh_bao_hiem">False</field>
+            <field name="mo_ta">Phụ cấp trách nhiệm cho cấp Phó phòng</field>
+        </record>
+
+        <!-- Demo loại khấu trừ -->
+        <record id="demo_khau_tru_cong_doan" model="loai_khau_tru">
+            <field name="ma_khau_tru">KT001</field>
+            <field name="ten_khau_tru">Phí công đoàn</field>
+            <field name="loai">phan_tram</field>
+            <field name="gia_tri">1.0</field>
+            <field name="mo_ta">Phí đóng công đoàn (1% lương cơ bản)</field>
+        </record>
+
+        <record id="demo_khau_tru_tam_ung" model="loai_khau_tru">
+            <field name="ma_khau_tru">KT002</field>
+            <field name="ten_khau_tru">Tạm ứng lương</field>
+            <field name="loai">thu_cong</field>
+            <field name="gia_tri">0</field>
+            <field name="mo_ta">Số tiền tạm ứng lương (nếu có)</field>
+        </record>
+
+        <!-- Demo biểu thuế TNCN -->
+        <record id="demo_thue_bac_1" model="cau_hinh_thue">
+            <field name="ten_bac">Bậc 1</field>
+            <field name="muc_tu">0</field>
+            <field name="muc_den">5000000</field>
+            <field name="ty_le_thue">5.0</field>
+        </record>
+
+        <record id="demo_thue_bac_2" model="cau_hinh_thue">
+            <field name="ten_bac">Bậc 2</field>
+            <field name="muc_tu">5000001</field>
+            <field name="muc_den">10000000</field>
+            <field name="ty_le_thue">10.0</field>
+        </record>
+
+        <record id="demo_thue_bac_3" model="cau_hinh_thue">
+            <field name="ten_bac">Bậc 3</field>
+            <field name="muc_tu">10000001</field>
+            <field name="muc_den">18000000</field>
+            <field name="ty_le_thue">15.0</field>
+        </record>
+
+        <record id="demo_thue_bac_4" model="cau_hinh_thue">
+            <field name="ten_bac">Bậc 4</field>
+            <field name="muc_tu">18000001</field>
+            <field name="muc_den">32000000</field>
+            <field name="ty_le_thue">20.0</field>
+        </record>
+
+        <record id="demo_thue_bac_5" model="cau_hinh_thue">
+            <field name="ten_bac">Bậc 5</field>
+            <field name="muc_tu">32000001</field>
+            <field name="muc_den">52000000</field>
+            <field name="ty_le_thue">25.0</field>
+        </record>
+
+        <record id="demo_thue_bac_6" model="cau_hinh_thue">
+            <field name="ten_bac">Bậc 6</field>
+            <field name="muc_tu">52000001</field>
+            <field name="muc_den">80000000</field>
+            <field name="ty_le_thue">30.0</field>
+        </record>
+
+        <record id="demo_thue_bac_7" model="cau_hinh_thue">
+            <field name="ten_bac">Bậc 7</field>
+            <field name="muc_tu">80000001</field>
+            <field name="muc_den">999999999999</field>
+            <field name="ty_le_thue">35.0</field>
+        </record>
+
+        <!-- Demo Hợp đồng lao động -->
+        <record id="demo_hop_dong_nv1" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD001</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="loai_hop_dong">khong_xac_dinh</field>
+            <field name="ngay_ky">2020-01-01</field>
+            <field name="ngay_hieu_luc">2020-01-01</field>
+            <field name="luong_co_ban">25000000</field>
+            <field name="luong_dong_bao_hiem">20000000</field>
+            <field name="so_nguoi_phu_thuoc">2</field>
+            <field name="trang_thai">hieu_luc</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_xang_xe'), ref('demo_phu_cap_chuc_vu_truong_phong')])]"/>
+        </record>
+        
+        <record id="demo_hop_dong_nv2" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD002</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="loai_hop_dong">xac_dinh_12_thang</field>
+            <field name="ngay_ky">2021-06-15</field>
+            <field name="ngay_hieu_luc">2021-06-15</field>
+            <field name="ngay_het_han">2027-06-14</field>
+            <field name="luong_co_ban">12000000</field>
+            <field name="luong_dong_bao_hiem">12000000</field>
+            <field name="so_nguoi_phu_thuoc">0</field>
+            <field name="trang_thai">hieu_luc</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_xang_xe')])]"/>
+        </record>
+        
+        <record id="demo_hop_dong_nv3" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD003</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_3"/>
+            <field name="loai_hop_dong">khong_xac_dinh</field>
+            <field name="ngay_ky">2019-03-01</field>
+            <field name="ngay_hieu_luc">2019-03-01</field>
+            <field name="luong_co_ban">18000000</field>
+            <field name="luong_dong_bao_hiem">15000000</field>
+            <field name="so_nguoi_phu_thuoc">1</field>
+            <field name="trang_thai">hieu_luc</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_xang_xe'), ref('demo_phu_cap_dien_thoai'), ref('demo_phu_cap_chuc_vu_pho_phong')])]"/>
+        </record>
+        
+        <record id="demo_hop_dong_nv4" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD004</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_4"/>
+            <field name="loai_hop_dong">xac_dinh_12_thang</field>
+            <field name="ngay_ky">2024-01-01</field>
+            <field name="ngay_hieu_luc">2024-01-01</field>
+            <field name="ngay_het_han">2027-01-01</field>
+            <field name="luong_co_ban">12000000</field>
+            <field name="luong_dong_bao_hiem">12000000</field>
+            <field name="so_nguoi_phu_thuoc">0</field>
+            <field name="trang_thai">hieu_luc</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua')])]"/>
+        </record>
+        
+        <record id="demo_hop_dong_nv5" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD005</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_5"/>
+            <field name="loai_hop_dong">thu_viec</field>
+            <field name="ngay_ky">2025-12-01</field>
+            <field name="ngay_hieu_luc">2025-12-01</field>
+            <field name="ngay_het_han">2026-02-28</field>
+            <field name="luong_co_ban">5000000</field>
+            <field name="luong_dong_bao_hiem">0</field>
+            <field name="so_nguoi_phu_thuoc">0</field>
+            <field name="trang_thai">hieu_luc</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================== DASHBOARD CHẤM CÔNG ===================== -->
+    
+    <!-- ========== PIVOT VIEWS ========== -->
+    
+    <!-- Pivot View - Chấm công chi tiết theo tuần -->
+    <record id="view_bang_cham_cong_dashboard_pivot" model="ir.ui.view">
+        <field name="name">bang_cham_cong.dashboard.pivot</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <pivot string="Thống kê chấm công chi tiết" display_quantity="true">
+                <field name="nhan_vien_id" type="row"/>
+                <field name="ngay_cham_cong" type="col" interval="week"/>
+                <field name="phut_di_muon" type="measure"/>
+                <field name="phut_ve_som" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Pivot View - Theo trạng thái -->
+    <record id="view_bang_cham_cong_pivot_trang_thai" model="ir.ui.view">
+        <field name="name">bang_cham_cong.pivot.trang_thai</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích trạng thái chấm công" display_quantity="true">
+                <field name="trang_thai" type="row"/>
+                <field name="ngay_cham_cong" type="col" interval="month"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Pivot View - Vi phạm theo nhân viên -->
+    <record id="view_bang_cham_cong_pivot_vi_pham" model="ir.ui.view">
+        <field name="name">bang_cham_cong.pivot.vi_pham</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">115</field>
+        <field name="arch" type="xml">
+            <pivot string="Tổng hợp vi phạm theo nhân viên">
+                <field name="nhan_vien_id" type="row"/>
+                <field name="ca_lam" type="col"/>
+                <field name="phut_di_muon" type="measure"/>
+                <field name="phut_ve_som" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Pivot View - Theo ca làm -->
+    <record id="view_bang_cham_cong_pivot_ca_lam" model="ir.ui.view">
+        <field name="name">bang_cham_cong.pivot.ca_lam</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">120</field>
+        <field name="arch" type="xml">
+            <pivot string="Thống kê theo ca làm" display_quantity="true">
+                <field name="ca_lam" type="row"/>
+                <field name="trang_thai" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ========== GRAPH VIEWS ========== -->
+
+    <!-- Graph View - Pie: Trạng thái chấm công -->
+    <record id="view_bang_cham_cong_graph_trang_thai" model="ir.ui.view">
+        <field name="name">bang_cham_cong.graph.trang_thai</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <graph string="Phân bố trạng thái chấm công" type="pie">
+                <field name="trang_thai" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Graph View - Bar: Đi muộn theo nhân viên -->
+    <record id="view_bang_cham_cong_graph_di_muon" model="ir.ui.view">
+        <field name="name">bang_cham_cong.graph.di_muon</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">60</field>
+        <field name="arch" type="xml">
+            <graph string="Tổng phút đi muộn theo nhân viên" type="bar">
+                <field name="nhan_vien_id" type="row"/>
+                <field name="phut_di_muon" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Graph View - Bar: Về sớm theo nhân viên -->
+    <record id="view_bang_cham_cong_graph_ve_som" model="ir.ui.view">
+        <field name="name">bang_cham_cong.graph.ve_som</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">70</field>
+        <field name="arch" type="xml">
+            <graph string="Tổng phút về sớm theo nhân viên" type="bar">
+                <field name="nhan_vien_id" type="row"/>
+                <field name="phut_ve_som" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Graph View - Pie: Theo ca làm -->
+    <record id="view_bang_cham_cong_graph_ca_lam" model="ir.ui.view">
+        <field name="name">bang_cham_cong.graph.ca_lam</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">80</field>
+        <field name="arch" type="xml">
+            <graph string="Phân bố theo ca làm" type="pie">
+                <field name="ca_lam" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Graph View - Line: Xu hướng theo thời gian -->
+    <record id="view_bang_cham_cong_graph_xu_huong" model="ir.ui.view">
+        <field name="name">bang_cham_cong.graph.xu_huong</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <graph string="Xu hướng vi phạm theo ngày" type="line">
+                <field name="ngay_cham_cong" type="row" interval="day"/>
+                <field name="phut_di_muon" type="measure"/>
+                <field name="phut_ve_som" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Graph View - Bar: Stacked trạng thái theo tháng -->
+    <record id="view_bang_cham_cong_graph_thang" model="ir.ui.view">
+        <field name="name">bang_cham_cong.graph.thang</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">95</field>
+        <field name="arch" type="xml">
+            <graph string="Trạng thái chấm công theo tháng" type="bar" stacked="1">
+                <field name="ngay_cham_cong" type="row" interval="month"/>
+                <field name="trang_thai" type="col"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Graph View - Bar: Vi phạm theo ca làm -->
+    <record id="view_bang_cham_cong_graph_vi_pham_ca" model="ir.ui.view">
+        <field name="name">bang_cham_cong.graph.vi_pham_ca</field>
+        <field name="model">bang_cham_cong</field>
+        <field name="priority">98</field>
+        <field name="arch" type="xml">
+            <graph string="Vi phạm theo ca làm" type="bar">
+                <field name="ca_lam" type="row"/>
+                <field name="phut_di_muon" type="measure"/>
+                <field name="phut_ve_som" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ========== DASHBOARD ACTIONS ========== -->
+
+    <!-- Dashboard chính Chấm công -->
+    <record id="action_cham_cong_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Chấm công</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">graph,pivot,calendar,tree,form</field>
+        <field name="view_id" ref="view_bang_cham_cong_graph_trang_thai"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Chưa có dữ liệu chấm công
+            </p>
+            <p class="text-muted">
+                Hãy tạo bảng chấm công để xem thống kê.
+            </p>
+        </field>
+    </record>
+
+    <!-- Thống kê vi phạm -->
+    <record id="action_thong_ke_vi_pham" model="ir.actions.act_window">
+        <field name="name">Thống kê vi phạm</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_id" ref="view_bang_cham_cong_graph_di_muon"/>
+        <field name="domain">[('trang_thai', 'in', ['di_muon', 've_som', 'di_muon_ve_som', 'vang_mat'])]</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Không có vi phạm nào trong tháng này
+            </p>
+        </field>
+    </record>
+    
+    <!-- Xu hướng chấm công -->
+    <record id="action_xu_huong_cham_cong" model="ir.actions.act_window">
+        <field name="name">Xu hướng chấm công</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_id" ref="view_bang_cham_cong_graph_xu_huong"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Xem xu hướng vi phạm theo thời gian
+            </p>
+        </field>
+    </record>
+    
+    <!-- Thống kê theo ca làm -->
+    <record id="action_thong_ke_ca_lam" model="ir.actions.act_window">
+        <field name="name">Thống kê theo ca làm</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_id" ref="view_bang_cham_cong_graph_ca_lam"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Phân tích chấm công theo ca làm việc
+            </p>
+        </field>
+    </record>
+    
+    <!-- Chấm công hôm nay -->
+    <record id="action_cham_cong_hom_nay" model="ir.actions.act_window">
+        <field name="name">Chấm công hôm nay</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">tree,calendar,form</field>
+        <field name="context">{'search_default_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Chưa có dữ liệu chấm công hôm nay
+            </p>
+        </field>
+    </record>
+    
+    <!-- Nhân viên đi muộn -->
+    <record id="action_nv_di_muon" model="ir.actions.act_window">
+        <field name="name">Nhân viên đi muộn</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">tree,graph,form</field>
+        <field name="domain">[('trang_thai', 'in', ['di_muon', 'di_muon_ve_som'])]</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Không có nhân viên đi muộn
+            </p>
+        </field>
+    </record>
+    
+    <!-- Nhân viên về sớm -->
+    <record id="action_nv_ve_som" model="ir.actions.act_window">
+        <field name="name">Nhân viên về sớm</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">tree,graph,form</field>
+        <field name="domain">[('trang_thai', 'in', ['ve_som', 'di_muon_ve_som'])]</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Không có nhân viên về sớm
+            </p>
+        </field>
+    </record>
+    
+    <!-- Nhân viên vắng mặt -->
+    <record id="action_nv_vang_mat" model="ir.actions.act_window">
+        <field name="name">Nhân viên vắng mặt</field>
+        <field name="res_model">bang_cham_cong</field>
+        <field name="view_mode">tree,graph,form</field>
+        <field name="domain">[('trang_thai', '=', 'vang_mat')]</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Không có nhân viên vắng mặt
+            </p>
+        </field>
+    </record>
+
+    <!-- ========== ĐỢT ĐĂNG KÝ VIEWS ========== -->
+
+    <!-- Pivot View Đợt đăng ký -->
+    <record id="view_dot_dang_ky_pivot" model="ir.ui.view">
+        <field name="name">dot_dang_ky.pivot</field>
+        <field name="model">dot_dang_ky</field>
+        <field name="arch" type="xml">
+            <pivot string="Thống kê đợt đăng ký" display_quantity="true">
+                <field name="nam_dang_ky" type="row"/>
+                <field name="thang_dang_ky" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View Đợt đăng ký -->
+    <record id="view_dot_dang_ky_graph" model="ir.ui.view">
+        <field name="name">dot_dang_ky.graph</field>
+        <field name="model">dot_dang_ky</field>
+        <field name="arch" type="xml">
+            <graph string="Thống kê đợt đăng ký theo tháng" type="bar">
+                <field name="thang_dang_ky" type="row"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Action Thống kê đợt đăng ký -->
+    <record id="action_dot_dang_ky_dashboard" model="ir.actions.act_window">
+        <field name="name">Thống kê đợt đăng ký</field>
+        <field name="res_model">dot_dang_ky</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+        <field name="view_id" ref="view_dot_dang_ky_graph"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Thống kê các đợt đăng ký ca làm
+            </p>
+        </field>
+    </record>
+    
+    <!-- ========== ĐƠN TỪ VIEWS ========== -->
+    
+    <!-- Pivot View Đơn từ -->
+    <record id="view_don_tu_pivot" model="ir.ui.view">
+        <field name="name">don_tu.pivot</field>
+        <field name="model">don_tu</field>
+        <field name="arch" type="xml">
+            <pivot string="Thống kê đơn từ" display_quantity="true">
+                <field name="loai_don" type="row"/>
+                <field name="trang_thai_duyet" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Graph View Đơn từ -->
+    <record id="view_don_tu_graph" model="ir.ui.view">
+        <field name="name">don_tu.graph</field>
+        <field name="model">don_tu</field>
+        <field name="arch" type="xml">
+            <graph string="Phân loại đơn từ" type="pie">
+                <field name="loai_don" type="row"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Graph View Đơn từ theo trạng thái -->
+    <record id="view_don_tu_graph_trang_thai" model="ir.ui.view">
+        <field name="name">don_tu.graph.trang_thai</field>
+        <field name="model">don_tu</field>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <graph string="Trạng thái đơn từ" type="bar">
+                <field name="trang_thai_duyet" type="row"/>
+                <field name="loai_don" type="col"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Action Thống kê đơn từ -->
+    <record id="action_don_tu_dashboard" model="ir.actions.act_window">
+        <field name="name">Thống kê đơn từ</field>
+        <field name="res_model">don_tu</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+        <field name="view_id" ref="view_don_tu_graph"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Thống kê các loại đơn từ
+            </p>
+        </field>
+    </record>
+    
+    <!-- Đơn chờ duyệt -->
+    <record id="action_don_cho_duyet" model="ir.actions.act_window">
+        <field name="name">Đơn chờ duyệt</field>
+        <field name="res_model">don_tu</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('trang_thai_duyet', '=', 'cho_duyet')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Không có đơn nào đang chờ duyệt
+            </p>
+        </field>
+    </record>
+</odoo>

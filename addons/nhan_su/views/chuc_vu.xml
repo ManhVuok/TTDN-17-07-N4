@@ -7,10 +7,23 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <div class="oe_read_only" style="font-size:25px">Chức vụ</div>
-                        <group col="4" string="Thông tin chung">
-                            <field name="ma_chuc_vu"/>
-                            <field name="ten_chuc_vu"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="ten_chuc_vu" placeholder="Tên chức vụ"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Thông tin chung">
+                                <field name="ma_chuc_vu"/>
+                                <field name="cap_bac"/>
+                            </group>
+                            <group string="Thông tin lương">
+                                <field name="luong_co_ban_de_xuat"/>
+                                <field name="phu_cap_chuc_vu"/>
+                            </group>
+                        </group>
+                        <group string="Mô tả công việc">
+                            <field name="mo_ta" nolabel="1" placeholder="Mô tả nhiệm vụ và trách nhiệm của chức vụ..."/>
                         </group>
                     </sheet>
                 </form>
@@ -24,6 +37,9 @@
                 <tree>
                     <field name="ma_chuc_vu"/>
                     <field name="ten_chuc_vu"/>
+                    <field name="cap_bac"/>
+                    <field name="luong_co_ban_de_xuat" sum="Tổng"/>
+                    <field name="phu_cap_chuc_vu" sum="Tổng"/>
                 </tree>
             </field>
         </record>

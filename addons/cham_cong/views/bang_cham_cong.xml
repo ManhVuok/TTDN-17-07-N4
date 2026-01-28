@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View - Cải tiến đẹp hơn -->
+        <record id="view_bang_cham_cong_form" model="ir.ui.view">
+            <field name="name">bang_cham_cong.form</field>
+            <field name="model">bang_cham_cong</field>
+            <field name="arch" type="xml">
+                <form string="Bảng chấm công">
+                    <sheet>
+                        
+                        <widget name="web_ribbon" title="ĐI LÀM ĐÚNG GIỜ" bg_color="bg-success" attrs="{'invisible': [('trang_thai', '!=', 'di_lam')]}"/>
+                        <widget name="web_ribbon" title="ĐI MUỘN" bg_color="bg-warning" attrs="{'invisible': [('trang_thai', '!=', 'di_muon')]}"/>
+                        <widget name="web_ribbon" title="VỀ SỚM" bg_color="bg-warning" attrs="{'invisible': [('trang_thai', '!=', 've_som')]}"/>
+                        <widget name="web_ribbon" title="ĐI MUỘN + VỀ SỚM" bg_color="bg-danger" attrs="{'invisible': [('trang_thai', '!=', 'di_muon_ve_som')]}"/>
+                        <widget name="web_ribbon" title="VẮNG MẶT" bg_color="bg-danger" attrs="{'invisible': [('trang_thai', '!=', 'vang_mat')]}"/>
+                        <widget name="web_ribbon" title="CÓ PHÉP" bg_color="bg-info" attrs="{'invisible': [('trang_thai', '!=', 'vang_mat_co_phep')]}"/>
+                        
+                        <div class="oe_title">
+                            <label for="Id_BCC" string="Mã chấm công"/>
+                            <h1>
+                                <field name="Id_BCC" readonly="1" class="text-primary"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Thông tin chung">
+                                <field name="nhan_vien_id" options="{'no_open': True}"/>
+                                <field name="ngay_cham_cong"/>
+                                <field name="dang_ky_ca_lam_id" readonly="1"/>
+                                <field name="ca_lam" readonly="1" widget="badge" decoration-info="1"/>
+                            </group>
+                            <group string="Trạng thái">
+                                <field name="trang_thai" widget="badge" 
+                                       decoration-success="trang_thai == 'di_lam'"
+                                       decoration-warning="trang_thai in ['di_muon', 've_som', 'di_muon_ve_som']"
+                                       decoration-danger="trang_thai == 'vang_mat'"
+                                       decoration-info="trang_thai == 'vang_mat_co_phep'"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Thời gian làm việc" name="time">
+                                <group>
+                                    <group string="Giờ theo ca đăng ký">
+                                        <field name="gio_vao_ca" readonly="1" widget="datetime"/>
+                                        <field name="gio_ra_ca" readonly="1" widget="datetime"/>
+                                    </group>
+                                    <group string="Giờ thực tế (Check-in/out)">
+                                        <field name="gio_vao" widget="datetime"/>
+                                        <field name="gio_ra" widget="datetime"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Thông tin vi phạm" name="violation">
+                                <group>
+                                    <group string="Đi muộn">
+                                        <field name="phut_di_muon_goc" readonly="1" string="Phút đi muộn (trước khi trừ)"/>
+                                        <field name="phut_di_muon" readonly="1" string="Phút đi muộn (sau khi trừ đơn)"/>
+                                    </group>
+                                    <group string="Về sớm">
+                                        <field name="phut_ve_som_goc" readonly="1" string="Phút về sớm (trước khi trừ)"/>
+                                        <field name="phut_ve_som" readonly="1" string="Phút về sớm (sau khi trừ đơn)"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="Đơn từ liên quan" name="request" attrs="{'invisible': [('don_tu_id', '=', False)]}">
+                                <group>
+                                    <group>
+                                        <field name="don_tu_id" readonly="1"/>
+                                        <field name="loai_don" readonly="1" widget="badge"/>
+                                        <field name="thoi_gian_xin" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View - Cải tiến với badges -->
+        <record id="view_bang_cham_cong_tree" model="ir.ui.view">
+            <field name="name">bang_cham_cong.tree</field>
+            <field name="model">bang_cham_cong</field>
+            <field name="arch" type="xml">
+                <tree string="Bảng chấm công"
+                      decoration-success="trang_thai == 'di_lam'"
+                      decoration-warning="trang_thai in ['di_muon', 've_som', 'di_muon_ve_som']"
+                      decoration-danger="trang_thai == 'vang_mat'"
+                      decoration-info="trang_thai == 'vang_mat_co_phep'">
+                    <field name="nhan_vien_id" decoration-bf="1"/>
+                    <field name="ngay_cham_cong"/>
+                    <field name="ca_lam" widget="badge" decoration-info="1"/>
+                    <field name="gio_vao" widget="datetime"/>
+                    <field name="gio_ra" widget="datetime"/>
+                    <field name="phut_di_muon" sum="Tổng đi muộn"/>
+                    <field name="phut_ve_som" sum="Tổng về sớm"/>
+                    <field name="trang_thai" widget="badge"
+                           decoration-success="trang_thai == 'di_lam'"
+                           decoration-warning="trang_thai in ['di_muon', 've_som', 'di_muon_ve_som']"
+                           decoration-danger="trang_thai == 'vang_mat'"
+                           decoration-info="trang_thai == 'vang_mat_co_phep'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Calendar View -->
+        <record id="view_bang_cham_cong_calendar" model="ir.ui.view">
+            <field name="name">bang_cham_cong.calendar</field>
+            <field name="model">bang_cham_cong</field>
+            <field name="arch" type="xml">
+                <calendar string="Lịch chấm công" date_start="ngay_cham_cong" color="trang_thai" mode="month" quick_add="0">
+                    <field name="nhan_vien_id"/>
+                    <field name="ca_lam"/>
+                    <field name="trang_thai"/>
+                    <field name="phut_di_muon"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Pivot View -->
+        <record id="view_bang_cham_cong_pivot" model="ir.ui.view">
+            <field name="name">bang_cham_cong.pivot</field>
+            <field name="model">bang_cham_cong</field>
+            <field name="arch" type="xml">
+                <pivot string="Thống kê chấm công" display_quantity="true">
+                    <field name="nhan_vien_id" type="row"/>
+                    <field name="ngay_cham_cong" type="col" interval="month"/>
+                    <field name="phut_di_muon" type="measure"/>
+                    <field name="phut_ve_som" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Graph View -->
+        <record id="view_bang_cham_cong_graph" model="ir.ui.view">
+            <field name="name">bang_cham_cong.graph</field>
+            <field name="model">bang_cham_cong</field>
+            <field name="arch" type="xml">
+                <graph string="Biểu đồ chấm công" type="pie">
+                    <field name="trang_thai"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="bang_cham_cong_search" model="ir.ui.view">
+            <field name="name">bang_cham_cong.search</field>
+            <field name="model">bang_cham_cong</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm chấm công">
+                    <field name="nhan_vien_id"/>
+                    <field name="ngay_cham_cong"/>
+                    <field name="trang_thai"/>
+                    <separator/>
+                    <filter string="Hôm nay" name="today" domain="[('ngay_cham_cong','=', context_today().strftime('%%Y-%%m-%%d'))]" icon="fa-calendar-check-o"/>
+                    <filter string="Tuần này" name="this_week" domain="[('ngay_cham_cong','&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d'))]" icon="fa-calendar"/>
+                    <filter string="Tháng này" name="this_month" domain="[('ngay_cham_cong','&gt;=', context_today().strftime('%%Y-%%m-01'))]" icon="fa-calendar-o"/>
+                    <separator/>
+                    <filter string="Đi làm đúng giờ" name="di_lam" domain="[('trang_thai','=','di_lam')]" icon="fa-check"/>
+                    <filter string="Đi muộn" name="di_muon" domain="[('trang_thai','=','di_muon')]" icon="fa-clock-o"/>
+                    <filter string="Về sớm" name="ve_som" domain="[('trang_thai','=','ve_som')]" icon="fa-clock-o"/>
+                    <filter string="Vắng mặt" name="vang_mat" domain="[('trang_thai','=','vang_mat')]" icon="fa-times"/>
+                    <separator/>
+                    <group expand="1" string="Nhóm theo">
+                        <filter string="Nhân viên" name="group_nhan_vien" context="{'group_by':'nhan_vien_id'}"/>
+                        <filter string="Trạng thái" name="group_trang_thai" context="{'group_by':'trang_thai'}"/>
+                        <filter string="Ca làm" name="group_ca_lam" context="{'group_by':'ca_lam'}"/>
+                        <filter string="Ngày" name="group_ngay" context="{'group_by':'ngay_cham_cong:day'}"/>
+                        <filter string="Tháng" name="group_thang" context="{'group_by':'ngay_cham_cong:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_bang_cham_cong" model="ir.actions.act_window">
+            <field name="name">Bảng chấm công</field>
+            <field name="res_model">bang_cham_cong</field>
+            <field name="view_mode">tree,calendar,form,pivot,graph</field>
+            <field name="search_view_id" ref="bang_cham_cong_search"/>
+            <field name="context">{'search_default_this_month': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo bản ghi chấm công mới
+                </p>
+                <p class="text-muted">
+                    Quản lý và theo dõi giờ làm việc của nhân viên.<br/>
+                    Hệ thống tự động tính toán đi muộn, về sớm dựa trên ca đăng ký.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

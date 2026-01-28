@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_chi_tiet_luong_form" model="ir.ui.view">
+        <field name="name">chi_tiet_luong.form</field>
+        <field name="model">chi_tiet_luong</field>
+        <field name="arch" type="xml">
+            <form string="Chi tiết lương">
+                <header>
+                    <button name="action_tinh_luong" string="Tính lại lương" type="object" class="btn-primary"/>
+                    <button name="action_xem_cham_cong" string="Xem chấm công" type="object" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="nhan_vien_id" readonly="1"/>
+                        </h1>
+                        <h3>
+                            <span>Kỳ lương: </span>
+                            <field name="thang" readonly="1" class="oe_inline"/>
+                            <span>/</span>
+                            <field name="nam" readonly="1" class="oe_inline"/>
+                        </h3>
+                    </div>
+                    
+                    <group>
+                        <group string="Thông tin nhân viên">
+                            <field name="phong_ban_id" readonly="1"/>
+                            <field name="chuc_vu_id" readonly="1"/>
+                            <field name="hop_dong_id"/>
+                        </group>
+                        <group string="Thông tin hợp đồng">
+                            <field name="luong_co_ban" readonly="1"/>
+                            <field name="luong_dong_bao_hiem" readonly="1"/>
+                            <field name="so_nguoi_phu_thuoc" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Chấm công">
+                            <group>
+                                <group string="Số công">
+                                    <field name="so_cong_chuan" readonly="1"/>
+                                    <field name="so_cong_thuc_te" readonly="1"/>
+                                    <field name="so_ngay_vang" readonly="1"/>
+                                    <field name="so_ngay_vang_co_phep" readonly="1"/>
+                                    <field name="so_ngay_vang_khong_phep" readonly="1"/>
+                                </group>
+                                <group string="Vi phạm">
+                                    <field name="tong_phut_di_muon" readonly="1"/>
+                                    <field name="tong_phut_ve_som" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Thu nhập">
+                            <group>
+                                <group string="Lương cơ bản">
+                                    <field name="luong_theo_cong" readonly="1"/>
+                                    <field name="tong_phu_cap" readonly="1"/>
+                                    <field name="thu_nhap_khac"/>
+                                </group>
+                                <group string="Làm thêm giờ (OT)">
+                                    <field name="so_gio_lam_them_ngay_thuong" help="Hệ số 150%"/>
+                                    <field name="so_gio_lam_them_cuoi_tuan" help="Hệ số 200%"/>
+                                    <field name="so_gio_lam_them_ngay_le" help="Hệ số 300%"/>
+                                    <field name="tien_lam_them_gio" readonly="1" class="text-success"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Tổng thu nhập">
+                                    <field name="tong_thu_nhap" readonly="1" class="oe_highlight"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Khấu trừ">
+                            <group>
+                                <group string="Bảo hiểm">
+                                    <field name="tien_bhxh" readonly="1"/>
+                                    <field name="tien_bhyt" readonly="1"/>
+                                    <field name="tien_bhtn" readonly="1"/>
+                                    <field name="tong_bao_hiem" readonly="1"/>
+                                </group>
+                                <group string="Tiền phạt">
+                                    <field name="tien_phat_di_muon" readonly="1"/>
+                                    <field name="tien_phat_ve_som" readonly="1"/>
+                                    <field name="tien_phat_vang_mat" readonly="1"/>
+                                    <field name="tong_tien_phat" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Thuế TNCN">
+                                    <field name="thu_nhap_chiu_thue" readonly="1"/>
+                                    <field name="giam_tru_gia_canh" readonly="1"/>
+                                    <field name="thu_nhap_tinh_thue" readonly="1"/>
+                                    <field name="thue_tncn" readonly="1"/>
+                                </group>
+                                <group string="Khác">
+                                    <field name="khau_tru_khac"/>
+                                    <field name="tong_khau_tru" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Tổng kết">
+                            <group>
+                                <group>
+                                    <field name="tong_thu_nhap" readonly="1" string="Tổng thu nhập (Gross)"/>
+                                    <field name="tong_khau_tru" readonly="1" string="Tổng khấu trừ"/>
+                                </group>
+                                <group>
+                                    <field name="luong_thuc_nhan" readonly="1" class="oe_highlight" 
+                                           string="LƯƠNG THỰC NHẬN (NET)"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Ghi chú">
+                            <field name="ghi_chu" placeholder="Ghi chú cho nhân viên này..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_chi_tiet_luong_tree" model="ir.ui.view">
+        <field name="name">chi_tiet_luong.tree</field>
+        <field name="model">chi_tiet_luong</field>
+        <field name="arch" type="xml">
+            <tree string="Chi tiết lương" editable="bottom">
+                <field name="nhan_vien_id"/>
+                <field name="phong_ban_id"/>
+                <field name="chuc_vu_id"/>
+                <field name="so_cong_thuc_te"/>
+                <field name="luong_co_ban" sum="Tổng"/>
+                <field name="tong_phu_cap" sum="Tổng"/>
+                <field name="tong_thu_nhap" sum="Tổng"/>
+                <field name="tong_bao_hiem" sum="Tổng"/>
+                <field name="tong_tien_phat" sum="Tổng"/>
+                <field name="thue_tncn" sum="Tổng"/>
+                <field name="luong_thuc_nhan" sum="Tổng"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_chi_tiet_luong_search" model="ir.ui.view">
+        <field name="name">chi_tiet_luong.search</field>
+        <field name="model">chi_tiet_luong</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm chi tiết lương">
+                <field name="nhan_vien_id"/>
+                <field name="phong_ban_id"/>
+                <field name="bang_luong_id"/>
+                <separator/>
+                <group expand="0" string="Nhóm theo">
+                    <filter string="Phòng ban" name="group_phong_ban" context="{'group_by':'phong_ban_id'}"/>
+                    <filter string="Bảng lương" name="group_bang_luong" context="{'group_by':'bang_luong_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_chi_tiet_luong" model="ir.actions.act_window">
+        <field name="name">Chi tiết lương</field>
+        <field name="res_model">chi_tiet_luong</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Chưa có chi tiết lương
+            </p>
+            <p>
+                Chi tiết lương được tạo tự động từ Bảng lương. Hãy tạo hoặc chọn một bảng lương để xem chi tiết.
+            </p>
+        </field>
+    </record>
+</odoo>

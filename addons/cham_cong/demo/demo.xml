@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo Đợt đăng ký tháng 1/2026 -->
+        <record id="demo_dot_dang_ky_01_2026" model="dot_dang_ky">
+            <field name="ten_dot">Đăng ký ca làm tháng 01/2026</field>
+            <field name="thang_dang_ky">1</field>
+            <field name="nam_dang_ky">2026</field>
+            <field name="ngay_bat_dau">2026-01-01</field>
+            <field name="ngay_ket_thuc">2026-01-31</field>
+            <field name="trang_thai">da_dong</field>
+        </record>
+
+        <!-- Demo Đăng ký ca làm theo ngày cho NV001 - Nguyễn Văn An -->
+        <record id="demo_dkcltn_nv1_01" model="dang_ky_ca_lam_theo_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-02</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+        
+        <record id="demo_dkcltn_nv1_02" model="dang_ky_ca_lam_theo_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-03</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+        
+        <record id="demo_dkcltn_nv1_03" model="dang_ky_ca_lam_theo_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-06</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+        
+        <record id="demo_dkcltn_nv1_04" model="dang_ky_ca_lam_theo_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-07</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+
+        <!-- Demo Đăng ký ca làm cho NV002 - Trần Thị Bình -->
+        <record id="demo_dkcltn_nv2_01" model="dang_ky_ca_lam_theo_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-02</field>
+            <field name="ca_lam">Sáng</field>
+        </record>
+        
+        <record id="demo_dkcltn_nv2_02" model="dang_ky_ca_lam_theo_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-03</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+
+        <!-- Demo Bảng chấm công NV001 -->
+        <record id="demo_bcc_nv1_01" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="ngay_cham_cong">2026-01-02</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv1_01"/>
+            <field name="gio_vao">2026-01-02 00:35:00</field>
+            <field name="gio_ra">2026-01-02 10:30:00</field>
+        </record>
+        
+        <record id="demo_bcc_nv1_02" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="ngay_cham_cong">2026-01-03</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv1_02"/>
+            <field name="gio_vao">2026-01-03 00:45:00</field>
+            <field name="gio_ra">2026-01-03 10:30:00</field>
+        </record>
+        
+        <record id="demo_bcc_nv1_03" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="ngay_cham_cong">2026-01-06</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv1_03"/>
+            <field name="gio_vao">2026-01-06 00:30:00</field>
+            <field name="gio_ra">2026-01-06 10:30:00</field>
+        </record>
+
+        <!-- Demo Bảng chấm công NV002 -->
+        <record id="demo_bcc_nv2_01" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="ngay_cham_cong">2026-01-02</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv2_01"/>
+            <field name="gio_vao">2026-01-02 00:30:00</field>
+            <field name="gio_ra">2026-01-02 04:30:00</field>
+        </record>
+        
+        <record id="demo_bcc_nv2_02" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="ngay_cham_cong">2026-01-03</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv2_02"/>
+            <field name="gio_vao">2026-01-03 01:00:00</field>
+            <field name="gio_ra">2026-01-03 10:00:00</field>
+        </record>
+
+        <!-- Demo Đơn từ -->
+        <record id="demo_don_tu_1" model="don_tu">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="loai_don">di_muon</field>
+            <field name="ngay_ap_dung">2026-01-03</field>
+            <field name="thoi_gian_xin">15</field>
+            <field name="ly_do">Kẹt xe trên đường đi làm</field>
+            <field name="trang_thai_duyet">da_duyet</field>
+        </record>
+        
+        <record id="demo_don_tu_2" model="don_tu">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="loai_don">nghi_phep</field>
+            <field name="ngay_ap_dung">2026-01-07</field>
+            <field name="thoi_gian_xin">1</field>
+            <field name="ly_do">Việc gia đình</field>
+            <field name="trang_thai_duyet">cho_duyet</field>
+        </record>
+
+    </data>
+</odoo>

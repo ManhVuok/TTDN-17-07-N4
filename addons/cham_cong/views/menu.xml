@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Menu gốc -->
+        <menuitem
+            id="menu_root"
+            name="Chấm công"
+            sequence="12"/>
+        
+        <!-- Dashboard -->
+        <menuitem name="Dashboard" 
+            id="menu_cham_cong_dashboard" 
+            parent="menu_root" 
+            sequence="0"
+            action="action_cham_cong_dashboard"
+        />
+
+        <!-- Bảng chấm công -->
+        <menuitem name="Bảng chấm công" 
+            id="menu_bang_cham_cong" 
+            parent="menu_root" 
+            sequence="1"
+            action="action_bang_cham_cong"
+        />
+
+        <!-- Đăng ký ca làm -->
+        <menuitem name="Đăng ký ca làm" 
+            id="menu_dang_ky_ca_lam_theo_ngay" 
+            parent="menu_root" 
+            sequence="2"
+            action="action_dang_ky_ca_lam_theo_ngay"
+        />
+
+        <!-- Đợt đăng ký -->
+        <menuitem name="Đợt đăng ký" 
+            id="menu_dot_dang_ky" 
+            parent="menu_root" 
+            sequence="3"
+            action="action_dot_dang_ky"
+        />
+
+        <!-- Đơn từ -->
+        <menuitem name="Đơn từ" 
+            id="menu_don_tu" 
+            parent="menu_root" 
+            sequence="4"
+            action="action_don_tu"
+        />
+        
+        <!-- Nghỉ phép năm -->
+        <menuitem name="Quản lý nghỉ phép" 
+            id="menu_nghi_phep_nam" 
+            parent="menu_root" 
+            sequence="5"
+            action="action_nghi_phep_nam"
+        />
+        
+        <!-- Báo cáo &amp; Thống kê -->
+        <menuitem name="Báo cáo &amp; Thống kê" 
+            id="menu_thong_ke_cham_cong" 
+            parent="menu_root" 
+            sequence="10"
+        />
+
+        <menuitem name="Thống kê vi phạm" 
+            id="menu_thong_ke_vi_pham" 
+            parent="menu_thong_ke_cham_cong" 
+            sequence="1"
+            action="action_thong_ke_vi_pham"
+        />
+        
+        <menuitem name="Xu hướng chấm công" 
+            id="menu_xu_huong_cham_cong" 
+            parent="menu_thong_ke_cham_cong" 
+            sequence="2"
+            action="action_xu_huong_cham_cong"
+        />
+        
+        <menuitem name="Thống kê theo ca làm" 
+            id="menu_thong_ke_ca_lam" 
+            parent="menu_thong_ke_cham_cong" 
+            sequence="3"
+            action="action_thong_ke_ca_lam"
+        />
+        
+        <menuitem name="Thống kê đợt đăng ký" 
+            id="menu_dot_dang_ky_dashboard" 
+            parent="menu_thong_ke_cham_cong" 
+            sequence="4"
+            action="action_dot_dang_ky_dashboard"
+        />
+        
+        <menuitem name="Thống kê đơn từ" 
+            id="menu_don_tu_dashboard" 
+            parent="menu_thong_ke_cham_cong" 
+            sequence="5"
+            action="action_don_tu_dashboard"
+        />
+        
+        <!-- Truy cập nhanh -->
+        <menuitem name="Truy cập nhanh" 
+            id="menu_truy_cap_nhanh_cc" 
+            parent="menu_root" 
+            sequence="11"
+        />
+        
+        <menuitem name="Chấm công hôm nay" 
+            id="menu_cham_cong_hom_nay" 
+            parent="menu_truy_cap_nhanh_cc" 
+            sequence="1"
+            action="action_cham_cong_hom_nay"
+        />
+        
+        <menuitem name="Nhân viên đi muộn" 
+            id="menu_nv_di_muon" 
+            parent="menu_truy_cap_nhanh_cc" 
+            sequence="2"
+            action="action_nv_di_muon"
+        />
+        
+        <menuitem name="Nhân viên về sớm" 
+            id="menu_nv_ve_som" 
+            parent="menu_truy_cap_nhanh_cc" 
+            sequence="3"
+            action="action_nv_ve_som"
+        />
+        
+        <menuitem name="Nhân viên vắng mặt" 
+            id="menu_nv_vang_mat" 
+            parent="menu_truy_cap_nhanh_cc" 
+            sequence="4"
+            action="action_nv_vang_mat"
+        />
+        
+        <menuitem name="Đơn chờ duyệt" 
+            id="menu_don_cho_duyet" 
+            parent="menu_truy_cap_nhanh_cc" 
+            sequence="5"
+            action="action_don_cho_duyet"
+        />
+        
+        <!-- ===================== CA LÀM VIỆC & TĂNG CA ===================== -->
+        <menuitem name="Ca làm &amp; Tăng ca" 
+            id="menu_ca_lam_tang_ca" 
+            parent="menu_root" 
+            sequence="6"
+        />
+        
+        <menuitem name="Định nghĩa ca làm" 
+            id="menu_ca_lam_viec" 
+            parent="menu_ca_lam_tang_ca" 
+            sequence="1"
+            action="action_ca_lam_viec"
+        />
+        
+        <menuitem name="Đăng ký tăng ca" 
+            id="menu_dang_ky_tang_ca" 
+            parent="menu_ca_lam_tang_ca" 
+            sequence="2"
+            action="action_dang_ky_tang_ca"
+        />
+        
+        <menuitem name="Tăng ca chờ duyệt" 
+            id="menu_tang_ca_cho_duyet" 
+            parent="menu_ca_lam_tang_ca" 
+            sequence="3"
+            action="action_tang_ca_cho_duyet"
+        />
+    </data>
+</odoo>

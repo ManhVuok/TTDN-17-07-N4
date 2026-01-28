@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_cau_hinh_luong_form" model="ir.ui.view">
+        <field name="name">cau_hinh_luong.form</field>
+        <field name="model">cau_hinh_luong</field>
+        <field name="arch" type="xml">
+            <form string="Cấu hình lương">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ten_cau_hinh" placeholder="Tên cấu hình"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Thông tin chung">
+                            <field name="don_vi_tien"/>
+                            <field name="so_cong_chuan"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Tỷ lệ bảo hiểm">
+                            <group>
+                                <group>
+                                    <field name="ty_le_bhxh" widget="percentage"/>
+                                    <field name="ty_le_bhyt" widget="percentage"/>
+                                    <field name="ty_le_bhtn" widget="percentage"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Mức phạt vi phạm">
+                            <group>
+                                <group string="Mức phạt">
+                                    <field name="muc_phat_di_muon"/>
+                                    <field name="muc_phat_ve_som"/>
+                                    <field name="muc_phat_vang_mat"/>
+                                </group>
+                                <group string="Ngưỡng miễn phạt">
+                                    <field name="nguong_mien_phat_di_muon"/>
+                                    <field name="nguong_mien_phat_ve_som"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Thuế TNCN">
+                            <group>
+                                <group>
+                                    <field name="muc_giam_tru_ban_than"/>
+                                    <field name="muc_giam_tru_nguoi_phu_thuoc"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Ghi chú">
+                            <field name="ghi_chu" placeholder="Ghi chú thêm..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_cau_hinh_luong_tree" model="ir.ui.view">
+        <field name="name">cau_hinh_luong.tree</field>
+        <field name="model">cau_hinh_luong</field>
+        <field name="arch" type="xml">
+            <tree string="Danh sách cấu hình lương">
+                <field name="ten_cau_hinh"/>
+                <field name="so_cong_chuan"/>
+                <field name="ty_le_bhxh"/>
+                <field name="ty_le_bhyt"/>
+                <field name="ty_le_bhtn"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_cau_hinh_luong" model="ir.actions.act_window">
+        <field name="name">Cấu hình lương</field>
+        <field name="res_model">cau_hinh_luong</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo cấu hình lương mới
+            </p>
+            <p>
+                Thiết lập các thông số tính lương như tỷ lệ bảo hiểm, số công chuẩn, mức phạt vi phạm...
+            </p>
+        </field>
+    </record>
+
+    <!-- Cấu hình thuế TNCN -->
+    <record id="view_cau_hinh_thue_form" model="ir.ui.view">
+        <field name="name">cau_hinh_thue.form</field>
+        <field name="model">cau_hinh_thue</field>
+        <field name="arch" type="xml">
+            <form string="Bậc thuế TNCN">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="ten_bac"/>
+                            <field name="ty_le_thue" widget="percentage"/>
+                        </group>
+                        <group>
+                            <field name="muc_tu"/>
+                            <field name="muc_den"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cau_hinh_thue_tree" model="ir.ui.view">
+        <field name="name">cau_hinh_thue.tree</field>
+        <field name="model">cau_hinh_thue</field>
+        <field name="arch" type="xml">
+            <tree string="Biểu thuế TNCN">
+                <field name="ten_bac"/>
+                <field name="muc_tu"/>
+                <field name="muc_den"/>
+                <field name="ty_le_thue"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_cau_hinh_thue" model="ir.actions.act_window">
+        <field name="name">Biểu thuế TNCN</field>
+        <field name="res_model">cau_hinh_thue</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

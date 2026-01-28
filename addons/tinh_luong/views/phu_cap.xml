@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View Phụ cấp -->
+    <record id="view_phu_cap_form" model="ir.ui.view">
+        <field name="name">phu_cap.form</field>
+        <field name="model">phu_cap</field>
+        <field name="arch" type="xml">
+            <form string="Phụ cấp">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="ten_phu_cap"/>
+                        <h1>
+                            <field name="ten_phu_cap" placeholder="Tên phụ cấp"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Thông tin cơ bản">
+                            <field name="ma_phu_cap"/>
+                            <field name="loai_phu_cap"/>
+                            <field name="so_tien"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Tính chất">
+                            <field name="tinh_thue"/>
+                            <field name="tinh_bao_hiem"/>
+                        </group>
+                    </group>
+                    <group string="Điều kiện áp dụng">
+                        <field name="chuc_vu_ids" widget="many2many_tags"/>
+                        <field name="phong_ban_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string="Mô tả">
+                        <field name="mo_ta" placeholder="Mô tả chi tiết về loại phụ cấp này..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View Phụ cấp -->
+    <record id="view_phu_cap_tree" model="ir.ui.view">
+        <field name="name">phu_cap.tree</field>
+        <field name="model">phu_cap</field>
+        <field name="arch" type="xml">
+            <tree string="Danh sách phụ cấp">
+                <field name="ma_phu_cap"/>
+                <field name="ten_phu_cap"/>
+                <field name="loai_phu_cap"/>
+                <field name="so_tien" sum="Tổng"/>
+                <field name="tinh_thue"/>
+                <field name="tinh_bao_hiem"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action Phụ cấp -->
+    <record id="action_phu_cap" model="ir.actions.act_window">
+        <field name="name">Phụ cấp</field>
+        <field name="res_model">phu_cap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tạo loại phụ cấp mới
+            </p>
+            <p>
+                Quản lý các loại phụ cấp như phụ cấp chức vụ, phụ cấp xăng xe, điện thoại...
+            </p>
+        </field>
+    </record>
+
+    <!-- Form View Loại khấu trừ -->
+    <record id="view_loai_khau_tru_form" model="ir.ui.view">
+        <field name="name">loai_khau_tru.form</field>
+        <field name="model">loai_khau_tru</field>
+        <field name="arch" type="xml">
+            <form string="Loại khấu trừ">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="ma_khau_tru"/>
+                            <field name="ten_khau_tru"/>
+                        </group>
+                        <group>
+                            <field name="loai"/>
+                            <field name="gia_tri"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="mo_ta"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View Loại khấu trừ -->
+    <record id="view_loai_khau_tru_tree" model="ir.ui.view">
+        <field name="name">loai_khau_tru.tree</field>
+        <field name="model">loai_khau_tru</field>
+        <field name="arch" type="xml">
+            <tree string="Danh sách loại khấu trừ">
+                <field name="ma_khau_tru"/>
+                <field name="ten_khau_tru"/>
+                <field name="loai"/>
+                <field name="gia_tri"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action Loại khấu trừ -->
+    <record id="action_loai_khau_tru" model="ir.actions.act_window">
+        <field name="name">Loại khấu trừ</field>
+        <field name="res_model">loai_khau_tru</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

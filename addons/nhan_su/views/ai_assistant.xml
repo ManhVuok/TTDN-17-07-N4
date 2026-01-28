@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ===================== CẤU HÌNH API ===================== -->
+        
+        <!-- Form View - Cấu hình API -->
+        <record id="view_ai_cau_hinh_api_form" model="ir.ui.view">
+            <field name="name">ai.cau_hinh_api.form</field>
+            <field name="model">ai.cau_hinh_api</field>
+            <field name="arch" type="xml">
+                <form string="Cấu hình API AI">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="ten" placeholder="Tên cấu hình"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Thông tin API">
+                                <field name="api_url"/>
+                                <field name="model_name"/>
+                                <field name="active"/>
+                            </group>
+                            <group string="Xác thực">
+                                <field name="api_key" password="True"/>
+                            </group>
+                        </group>
+                        
+                        <div class="alert alert-info" role="alert">
+                            <strong>Hướng dẫn:</strong>
+                            <ol>
+                                <li>Đăng ký tài khoản tại <a href="https://openrouter.ai" target="_blank">openrouter.ai</a></li>
+                                <li>Tạo API Key trong mục "Keys"</li>
+                                <li>Copy API Key và paste vào trường trên</li>
+                                <li>Model mặc định: <code>xiaomi/mimo-v2-flash:free</code> (miễn phí)</li>
+                            </ol>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Tree View - Cấu hình API -->
+        <record id="view_ai_cau_hinh_api_tree" model="ir.ui.view">
+            <field name="name">ai.cau_hinh_api.tree</field>
+            <field name="model">ai.cau_hinh_api</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách cấu hình API">
+                    <field name="ten"/>
+                    <field name="api_url"/>
+                    <field name="model_name"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Action - Cấu hình API -->
+        <record id="action_ai_cau_hinh_api" model="ir.actions.act_window">
+            <field name="name">Cấu hình API AI</field>
+            <field name="res_model">ai.cau_hinh_api</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo cấu hình API AI
+                </p>
+                <p class="text-muted">
+                    Nhập API Key từ OpenRouter để sử dụng AI Assistant.
+                </p>
+            </field>
+        </record>
+        
+        <!-- ===================== LỊCH SỬ CHAT ===================== -->
+        
+        <!-- Form View - Lịch sử chat -->
+        <record id="view_ai_lich_su_chat_form" model="ir.ui.view">
+            <field name="name">ai.lich_su_chat.form</field>
+            <field name="model">ai.lich_su_chat</field>
+            <field name="arch" type="xml">
+                <form string="Chi tiết chat" create="false" edit="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="thoi_gian"/>
+                                <field name="thanh_cong"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Câu hỏi &amp; Trả lời">
+                                <group string="Câu hỏi">
+                                    <field name="cau_hoi" nolabel="1"/>
+                                </group>
+                                <group string="Trả lời AI">
+                                    <field name="tra_loi" nolabel="1"/>
+                                </group>
+                            </page>
+                            <page string="Context Data">
+                                <field name="context_data" nolabel="1"/>
+                            </page>
+                            <page string="Lỗi" attrs="{'invisible': [('thanh_cong', '=', True)]}">
+                                <field name="loi" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Tree View - Lịch sử chat -->
+        <record id="view_ai_lich_su_chat_tree" model="ir.ui.view">
+            <field name="name">ai.lich_su_chat.tree</field>
+            <field name="model">ai.lich_su_chat</field>
+            <field name="arch" type="xml">
+                <tree string="Lịch sử chat AI" decoration-success="thanh_cong == True" decoration-danger="thanh_cong == False">
+                    <field name="thoi_gian"/>
+                    <field name="user_id"/>
+                    <field name="cau_hoi"/>
+                    <field name="thanh_cong" widget="boolean"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Action - Lịch sử chat -->
+        <record id="action_ai_lich_su_chat" model="ir.actions.act_window">
+            <field name="name">Lịch sử chat AI</field>
+            <field name="res_model">ai.lich_su_chat</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'create': False, 'edit': False}</field>
+        </record>
+        
+        <!-- ===================== AI ASSISTANT (WIZARD) ===================== -->
+        
+        <!-- Form View - AI Assistant -->
+        <record id="view_ai_assistant_form" model="ir.ui.view">
+            <field name="name">ai.assistant.form</field>
+            <field name="model">ai.assistant</field>
+            <field name="arch" type="xml">
+                <form string="AI Assistant - Trợ lý thông minh">
+                    <sheet>
+                        <div class="text-center mb-4">
+                            <h2 style="color: #2196F3;">
+                                <i class="fa fa-robot" style="margin-right: 10px;"/>
+                                AI Assistant
+                            </h2>
+                            <p class="text-muted">Hỏi đáp thông minh dựa trên dữ liệu hệ thống</p>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="loai_context" widget="radio" options="{'horizontal': true}"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Câu hỏi của bạn">
+                            <field name="cau_hoi" nolabel="1" placeholder="VD: Có bao nhiêu nhân viên đang làm việc? Ai đi muộn nhiều nhất tháng này?..."/>
+                        </group>
+                        
+                        <group string="Trả lời từ AI" attrs="{'invisible': [('tra_loi', '=', False)]}">
+                            <field name="tra_loi" nolabel="1"/>
+                        </group>
+                        
+                        <div class="alert alert-secondary" role="alert">
+                            <strong>Gợi ý câu hỏi:</strong>
+                            <ul class="mb-0">
+                                <li>Có bao nhiêu nhân viên đang làm việc?</li>
+                                <li>Phòng ban nào có nhiều nhân viên nhất?</li>
+                                <li>Ai đi muộn nhiều nhất trong tháng này?</li>
+                                <li>Tổng quỹ lương tháng này là bao nhiêu?</li>
+                                <li>Thống kê nhân viên theo giới tính?</li>
+                            </ul>
+                        </div>
+                    </sheet>
+                    
+                    <footer>
+                        <button name="action_hoi_ai" string="Hỏi AI" type="object" class="btn-primary" icon="fa-paper-plane"/>
+                        <button string="Đóng" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Action - Mở AI Assistant -->
+        <record id="action_ai_assistant" model="ir.actions.act_window">
+            <field name="name">Hỏi AI Assistant</field>
+            <field name="res_model">ai.assistant</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>

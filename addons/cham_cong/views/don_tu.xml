@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View với workflow -->
+        <record id="view_don_tu_form" model="ir.ui.view">
+            <field name="name">don_tu.form</field>
+            <field name="model">don_tu</field>
+            <field name="arch" type="xml">
+                <form string="Đơn từ">
+                    <header>
+                        <button name="action_gui_duyet" string="Gửi duyệt" type="object" 
+                                class="btn-primary" icon="fa-paper-plane"
+                                attrs="{'invisible': [('trang_thai_duyet', '!=', 'nhap')]}"/>
+                        <button name="action_duyet" string="Phê duyệt" type="object" 
+                                class="btn-success" icon="fa-check"
+                                attrs="{'invisible': [('trang_thai_duyet', '!=', 'cho_duyet')]}"/>
+                        <button name="action_tu_choi" string="Từ chối" type="object" 
+                                class="btn-danger" icon="fa-times"
+                                attrs="{'invisible': [('trang_thai_duyet', '!=', 'cho_duyet')]}"/>
+                        <button name="action_huy" string="Hủy đơn" type="object" 
+                                class="btn-secondary" icon="fa-ban"
+                                attrs="{'invisible': [('trang_thai_duyet', 'in', ['da_duyet', 'huy'])]}"/>
+                        <button name="action_reset" string="Đặt lại" type="object" 
+                                class="btn-secondary" icon="fa-refresh"
+                                attrs="{'invisible': [('trang_thai_duyet', 'in', ['nhap', 'da_duyet'])]}"/>
+                        <field name="trang_thai_duyet" widget="statusbar" 
+                               statusbar_visible="nhap,cho_duyet,da_duyet"
+                               options="{'clickable': '0'}"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="ĐÃ DUYỆT" bg_color="bg-success" attrs="{'invisible': [('trang_thai_duyet', '!=', 'da_duyet')]}"/>
+                        <widget name="web_ribbon" title="TỪ CHỐI" bg_color="bg-danger" attrs="{'invisible': [('trang_thai_duyet', '!=', 'tu_choi')]}"/>
+                        <widget name="web_ribbon" title="ĐÃ HỦY" bg_color="bg-secondary" attrs="{'invisible': [('trang_thai_duyet', '!=', 'huy')]}"/>
+                        
+                        <div class="oe_title">
+                            <label for="ten_don" string="Tiêu đề"/>
+                            <h1>
+                                <field name="ten_don" readonly="1" class="text-primary"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Thông tin nhân viên">
+                                <field name="nhan_vien_id" attrs="{'readonly': [('trang_thai_duyet', '!=', 'nhap')]}"/>
+                                <field name="phong_ban_id" readonly="1"/>
+                            </group>
+                            <group string="Thời gian">
+                                <field name="ngay_lam_don"/>
+                                <field name="ngay_ap_dung" attrs="{'readonly': [('trang_thai_duyet', '!=', 'nhap')]}"/>
+                                <field name="ngay_ket_thuc" attrs="{'readonly': [('trang_thai_duyet', '!=', 'nhap')], 'invisible': [('loai_don', 'not in', ['nghi', 'nghi_phep', 'nghi_khong_luong', 'cong_tac'])]}"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group string="Chi tiết đơn">
+                                <field name="loai_don" widget="radio" attrs="{'readonly': [('trang_thai_duyet', '!=', 'nhap')]}"/>
+                                <field name="thoi_gian_xin" attrs="{'readonly': [('trang_thai_duyet', '!=', 'nhap')], 'invisible': [('loai_don', 'not in', ['di_muon', 've_som'])], 'required': [('loai_don', 'in', ['di_muon', 've_som'])]}"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Lý do">
+                            <field name="ly_do" nolabel="1" placeholder="Nhập lý do xin phép..." attrs="{'readonly': [('trang_thai_duyet', '!=', 'nhap')]}"/>
+                        </group>
+                        
+                        <group string="Thông tin phê duyệt" attrs="{'invisible': [('nguoi_duyet_id', '=', False)]}">
+                            <group>
+                                <field name="nguoi_duyet_id"/>
+                                <field name="ngay_duyet"/>
+                            </group>
+                            <group attrs="{'invisible': [('ly_do_tu_choi', '=', False)]}">
+                                <field name="ly_do_tu_choi"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Ghi chú" attrs="{'invisible': [('ghi_chu', '=', False)]}">
+                            <field name="ghi_chu" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_don_tu_tree" model="ir.ui.view">
+            <field name="name">don_tu.tree</field>
+            <field name="model">don_tu</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách đơn từ"
+                      decoration-success="trang_thai_duyet == 'da_duyet'"
+                      decoration-warning="trang_thai_duyet == 'cho_duyet'"
+                      decoration-danger="trang_thai_duyet == 'tu_choi'"
+                      decoration-muted="trang_thai_duyet == 'huy'">
+                    <field name="nhan_vien_id"/>
+                    <field name="phong_ban_id" widget="badge"/>
+                    <field name="loai_don" widget="badge" 
+                           decoration-info="loai_don in ['nghi', 'nghi_phep']"
+                           decoration-warning="loai_don in ['di_muon', 've_som']"/>
+                    <field name="ngay_ap_dung"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="thoi_gian_xin"/>
+                    <field name="trang_thai_duyet" widget="badge"
+                           decoration-success="trang_thai_duyet == 'da_duyet'"
+                           decoration-warning="trang_thai_duyet == 'cho_duyet'"
+                           decoration-danger="trang_thai_duyet == 'tu_choi'"
+                           decoration-muted="trang_thai_duyet in ['huy', 'nhap']"/>
+                    <field name="nguoi_duyet_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Kanban View -->
+        <record id="view_don_tu_kanban" model="ir.ui.view">
+            <field name="name">don_tu.kanban</field>
+            <field name="model">don_tu</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="trang_thai_duyet" class="o_kanban_small_column">
+                    <field name="id"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="loai_don"/>
+                    <field name="ngay_ap_dung"/>
+                    <field name="trang_thai_duyet"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <strong><field name="nhan_vien_id"/></strong>
+                                        <span t-attf-class="badge #{record.trang_thai_duyet.raw_value == 'da_duyet' ? 'badge-success' : (record.trang_thai_duyet.raw_value == 'cho_duyet' ? 'badge-warning' : 'badge-secondary')}">
+                                            <field name="trang_thai_duyet"/>
+                                        </span>
+                                    </div>
+                                    <div class="o_kanban_record_body mt-2">
+                                        <div><span class="badge badge-info"><field name="loai_don"/></span></div>
+                                        <div class="mt-1 text-muted">
+                                            <i class="fa fa-calendar"/> <field name="ngay_ap_dung"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record model="ir.ui.view" id="don_tu_search">
+            <field name="name">don_tu.search</field>
+            <field name="model">don_tu</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm đơn từ">
+                    <field name="nhan_vien_id"/>
+                    <field name="phong_ban_id"/>
+                    <field name="loai_don"/>
+                    <separator/>
+                    <filter string="Chờ duyệt" name="cho_duyet" domain="[('trang_thai_duyet','=','cho_duyet')]" icon="fa-clock-o"/>
+                    <filter string="Đã duyệt" name="da_duyet" domain="[('trang_thai_duyet','=','da_duyet')]" icon="fa-check"/>
+                    <filter string="Từ chối" name="tu_choi" domain="[('trang_thai_duyet','=','tu_choi')]" icon="fa-times"/>
+                    <filter string="Nháp" name="nhap" domain="[('trang_thai_duyet','=','nhap')]" icon="fa-pencil"/>
+                    <separator/>
+                    <filter string="Đơn xin nghỉ" name="nghi" domain="[('loai_don','in',['nghi','nghi_phep','nghi_khong_luong'])]"/>
+                    <filter string="Đơn đi muộn/về sớm" name="di_muon_ve_som" domain="[('loai_don','in',['di_muon','ve_som'])]"/>
+                    <separator/>
+                    <filter string="Tháng này" name="this_month" domain="[('ngay_ap_dung','&gt;=', (context_today().replace(day=1)).strftime('%%Y-%%m-%%d'))]"/>
+                    <separator/>
+                    <group expand="1" string="Nhóm theo">
+                        <filter string="Nhân viên" name="group_nhan_vien" context="{'group_by':'nhan_vien_id'}"/>
+                        <filter string="Phòng ban" name="group_phong_ban" context="{'group_by':'phong_ban_id'}"/>
+                        <filter string="Loại đơn" name="group_loai_don" context="{'group_by':'loai_don'}"/>
+                        <filter string="Trạng thái" name="group_trang_thai" context="{'group_by':'trang_thai_duyet'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_don_tu" model="ir.actions.act_window">
+            <field name="name">Đơn từ</field>
+            <field name="res_model">don_tu</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="don_tu_search"/>
+            <field name="context">{'search_default_cho_duyet': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo đơn từ mới
+                </p>
+                <p class="text-muted">
+                    Quản lý các loại đơn từ: nghỉ phép, đi muộn, về sớm, công tác...
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

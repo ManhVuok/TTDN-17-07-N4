@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mở rộng Form View Nhân viên - thêm smart button hợp đồng -->
+    <record id="view_nhan_vien_form_inherit_tinh_luong" model="ir.ui.view">
+        <field name="name">nhan_vien.form.inherit.tinh_luong</field>
+        <field name="model">nhan_vien</field>
+        <field name="inherit_id" ref="nhan_su.view_nhan_vien_form"/>
+        <field name="arch" type="xml">
+            <!-- Thêm smart button vào đầu sheet -->
+            <xpath expr="//sheet/div[hasclass('oe_title')]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_xem_hop_dong" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                        <field name="so_hop_dong" widget="statinfo" string="Hợp đồng"/>
+                    </button>
+                </div>
+            </xpath>
+            
+            <!-- Thêm thông tin lương vào form -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Thông tin lương">
+                    <group>
+                        <group string="Hợp đồng hiệu lực">
+                            <field name="hop_dong_hieu_luc_id" readonly="1"/>
+                            <field name="luong_hien_tai" readonly="1"/>
+                        </group>
+                        <group>
+                            <button name="action_tao_hop_dong" string="Tạo hợp đồng mới" type="object" class="btn-primary"/>
+                        </group>
+                    </group>
+                    <field name="hop_dong_ids" readonly="1">
+                        <tree>
+                            <field name="ma_hop_dong"/>
+                            <field name="loai_hop_dong"/>
+                            <field name="ngay_hieu_luc"/>
+                            <field name="ngay_het_han"/>
+                            <field name="luong_co_ban"/>
+                            <field name="trang_thai"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Mở rộng Tree View Nhân viên -->
+    <record id="view_nhan_vien_tree_inherit_tinh_luong" model="ir.ui.view">
+        <field name="name">nhan_vien.tree.inherit.tinh_luong</field>
+        <field name="model">nhan_vien</field>
+        <field name="inherit_id" ref="nhan_su.view_nhan_vien_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='so_dien_thoai']" position="after">
+                <field name="luong_hien_tai" sum="Tổng lương"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

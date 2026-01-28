@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Action -->
+    <record id="action_report_ho_so_nhan_vien" model="ir.actions.report">
+        <field name="name">Hồ sơ nhân viên</field>
+        <field name="model">nhan_vien</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nhan_su.report_ho_so_nhan_vien</field>
+        <field name="report_file">nhan_su.report_ho_so_nhan_vien</field>
+        <field name="print_report_name">'Hồ sơ - %s' % (object.ho_va_ten)</field>
+        <field name="binding_model_id" ref="model_nhan_vien"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <!-- Report Template -->
+    <template id="report_ho_so_nhan_vien">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="text-center mb-4">
+                            <h2>HỒ SƠ NHÂN VIÊN</h2>
+                            <p class="text-muted">Ngày in: <span t-esc="context_today().strftime('%d/%m/%Y')"/></p>
+                        </div>
+                        
+                        <!-- Avatar và thông tin cơ bản -->
+                        <div class="row mb-4">
+                            <div class="col-3 text-center">
+                                <t t-if="o.anh">
+                                    <img t-att-src="image_data_uri(o.anh)" style="max-width: 150px; max-height: 180px; border: 1px solid #ddd;"/>
+                                </t>
+                                <t t-else="">
+                                    <div style="width: 150px; height: 180px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd;">
+                                        <span style="color: #999;">Không có ảnh</span>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="col-9">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td style="width: 30%; background: #f5f5f5;"><strong>Mã nhân viên</strong></td>
+                                        <td><span t-field="o.ma_dinh_danh"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f5f5f5;"><strong>Họ và tên</strong></td>
+                                        <td><strong><span t-field="o.ho_va_ten"/></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f5f5f5;"><strong>Phòng ban</strong></td>
+                                        <td><span t-field="o.phong_ban_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f5f5f5;"><strong>Chức vụ</strong></td>
+                                        <td><span t-field="o.chuc_vu_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f5f5f5;"><strong>Trạng thái</strong></td>
+                                        <td>
+                                            <span t-if="o.trang_thai == 'dang_lam'" class="badge badge-success">Đang làm việc</span>
+                                            <span t-if="o.trang_thai == 'thu_viec'" class="badge badge-info">Đang thử việc</span>
+                                            <span t-if="o.trang_thai == 'nghi_viec'" class="badge badge-secondary">Đã nghỉ việc</span>
+                                            <span t-if="o.trang_thai == 'tam_nghi'" class="badge badge-warning">Tạm nghỉ</span>
+                                            <span t-if="o.trang_thai == 'nghi_thai_san'" class="badge badge-warning">Nghỉ thai sản</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Thông tin cá nhân -->
+                        <h4 style="background: #007bff; color: white; padding: 8px; margin-top: 20px;">I. THÔNG TIN CÁ NHÂN</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Ngày sinh</strong></td>
+                                <td style="width: 25%;"><span t-field="o.ngay_sinh" t-options='{"widget": "date"}'/></td>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Tuổi</strong></td>
+                                <td style="width: 25%;"><span t-field="o.tuoi"/> tuổi</td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Giới tính</strong></td>
+                                <td><span t-field="o.gioi_tinh"/></td>
+                                <td style="background: #f5f5f5;"><strong>Tình trạng hôn nhân</strong></td>
+                                <td><span t-field="o.tinh_trang_hon_nhan"/></td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Số CMND/CCCD</strong></td>
+                                <td><span t-field="o.so_cmnd"/></td>
+                                <td style="background: #f5f5f5;"><strong>Ngày cấp</strong></td>
+                                <td><span t-field="o.ngay_cap_cmnd" t-options='{"widget": "date"}'/></td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Nơi cấp</strong></td>
+                                <td colspan="3"><span t-field="o.noi_cap_cmnd"/></td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Quê quán</strong></td>
+                                <td colspan="3"><span t-field="o.que_quan"/></td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Địa chỉ hiện tại</strong></td>
+                                <td colspan="3"><span t-field="o.dia_chi_hien_tai"/></td>
+                            </tr>
+                        </table>
+                        
+                        <!-- Thông tin liên hệ -->
+                        <h4 style="background: #28a745; color: white; padding: 8px; margin-top: 20px;">II. THÔNG TIN LIÊN HỆ</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Email cá nhân</strong></td>
+                                <td style="width: 25%;"><span t-field="o.email"/></td>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Email công ty</strong></td>
+                                <td style="width: 25%;"><span t-field="o.email_cong_ty"/></td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Số điện thoại</strong></td>
+                                <td colspan="3"><span t-field="o.so_dien_thoai"/></td>
+                            </tr>
+                        </table>
+                        
+                        <!-- Liên hệ khẩn cấp -->
+                        <h4 style="background: #dc3545; color: white; padding: 8px; margin-top: 20px;">III. LIÊN HỆ KHẨN CẤP</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Người liên hệ</strong></td>
+                                <td style="width: 25%;"><span t-field="o.nguoi_lien_he_khan_cap"/></td>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Quan hệ</strong></td>
+                                <td style="width: 25%;"><span t-field="o.quan_he_khan_cap"/></td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Số điện thoại</strong></td>
+                                <td colspan="3"><span t-field="o.sdt_khan_cap"/></td>
+                            </tr>
+                        </table>
+                        
+                        <!-- Thông tin ngân hàng -->
+                        <h4 style="background: #17a2b8; color: white; padding: 8px; margin-top: 20px;">IV. THÔNG TIN NGÂN HÀNG</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Ngân hàng</strong></td>
+                                <td style="width: 25%;"><span t-field="o.ten_ngan_hang"/></td>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Chi nhánh</strong></td>
+                                <td style="width: 25%;"><span t-field="o.chi_nhanh_ngan_hang"/></td>
+                            </tr>
+                            <tr>
+                                <td style="background: #f5f5f5;"><strong>Số tài khoản</strong></td>
+                                <td colspan="3"><span t-field="o.so_tai_khoan"/></td>
+                            </tr>
+                        </table>
+                        
+                        <!-- Thông tin làm việc -->
+                        <h4 style="background: #6c757d; color: white; padding: 8px; margin-top: 20px;">V. THÔNG TIN LÀM VIỆC</h4>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td style="width: 25%; background: #f5f5f5;"><strong>Ngày vào làm</strong></td>
+                                <td><span t-field="o.ngay_vao_lam" t-options='{"widget": "date"}'/></td>
+                            </tr>
+                            <tr t-if="o.trang_thai == 'nghi_viec'">
+                                <td style="background: #f5f5f5;"><strong>Ngày nghỉ việc</strong></td>
+                                <td><span t-field="o.ngay_nghi_viec" t-options='{"widget": "date"}'/></td>
+                            </tr>
+                        </table>
+                        
+                        <!-- Lịch sử công tác -->
+                        <t t-if="o.lich_su_cong_tac_ids">
+                            <h4 style="background: #ffc107; color: black; padding: 8px; margin-top: 20px;">VI. LỊCH SỬ CÔNG TÁC</h4>
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr style="background: #f5f5f5;">
+                                        <th>Phòng ban</th>
+                                        <th>Chức vụ</th>
+                                        <th>Loại</th>
+                                        <th>Từ ngày</th>
+                                        <th>Đến ngày</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.lich_su_cong_tac_ids" t-as="ls">
+                                        <tr>
+                                            <td><span t-field="ls.phong_ban_id"/></td>
+                                            <td><span t-field="ls.chuc_vu_id"/></td>
+                                            <td><span t-field="ls.loai_chuc_vu"/></td>
+                                            <td><span t-field="ls.ngay_bat_dau" t-options='{"widget": "date"}'/></td>
+                                            <td><span t-field="ls.ngay_ket_thuc" t-options='{"widget": "date"}'/></td>
+                                            <td><span t-field="ls.trang_thai"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        
+                        <!-- Bằng cấp chứng chỉ -->
+                        <t t-if="o.danh_sach_chung_chi_bang_cap_ids">
+                            <h4 style="background: #6f42c1; color: white; padding: 8px; margin-top: 20px;">VII. BẰNG CẤP - CHỨNG CHỈ</h4>
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr style="background: #f5f5f5;">
+                                        <th>Chứng chỉ/Bằng cấp</th>
+                                        <th>Loại</th>
+                                        <th>Ngày cấp</th>
+                                        <th>Nơi cấp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.danh_sach_chung_chi_bang_cap_ids" t-as="cc">
+                                        <tr>
+                                            <td><span t-field="cc.chung_chi_id"/></td>
+                                            <td><span t-field="cc.loai_chung_chi"/></td>
+                                            <td><span t-field="cc.ngay_cap" t-options='{"widget": "date"}'/></td>
+                                            <td><span t-field="cc.noi_cap"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        
+                        <!-- Footer -->
+                        <div class="row mt-5">
+                            <div class="col-6 text-center">
+                                <p><strong>Người lập</strong></p>
+                                <p class="text-muted">(Ký và ghi rõ họ tên)</p>
+                            </div>
+                            <div class="col-6 text-center">
+                                <p><strong>Trưởng phòng HR</strong></p>
+                                <p class="text-muted">(Ký và ghi rõ họ tên)</p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    
+    <!-- Report Danh sách nhân viên -->
+    <record id="action_report_danh_sach_nhan_vien" model="ir.actions.report">
+        <field name="name">Danh sách nhân viên</field>
+        <field name="model">nhan_vien</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nhan_su.report_danh_sach_nhan_vien</field>
+        <field name="report_file">nhan_su.report_danh_sach_nhan_vien</field>
+        <field name="print_report_name">'Danh sách nhân viên - %s' % (context_today().strftime('%%d-%%m-%%Y'))</field>
+        <field name="binding_model_id" ref="model_nhan_vien"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <template id="report_danh_sach_nhan_vien">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center mb-4">
+                        <h2>DANH SÁCH NHÂN VIÊN</h2>
+                        <p class="text-muted">Ngày in: <span t-esc="context_today().strftime('%d/%m/%Y')"/></p>
+                        <p>Tổng số: <span t-esc="len(docs)"/> nhân viên</p>
+                    </div>
+                    
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr style="background: #007bff; color: white;">
+                                <th>STT</th>
+                                <th>Mã NV</th>
+                                <th>Họ và tên</th>
+                                <th>Giới tính</th>
+                                <th>Phòng ban</th>
+                                <th>Chức vụ</th>
+                                <th>SĐT</th>
+                                <th>Email</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="o">
+                                <tr>
+                                    <td><span t-esc="o_index + 1"/></td>
+                                    <td><span t-field="o.ma_dinh_danh"/></td>
+                                    <td><strong><span t-field="o.ho_va_ten"/></strong></td>
+                                    <td><span t-field="o.gioi_tinh"/></td>
+                                    <td><span t-field="o.phong_ban_id"/></td>
+                                    <td><span t-field="o.chuc_vu_id"/></td>
+                                    <td><span t-field="o.so_dien_thoai"/></td>
+                                    <td><span t-field="o.email"/></td>
+                                    <td>
+                                        <span t-if="o.trang_thai == 'dang_lam'">Đang làm</span>
+                                        <span t-if="o.trang_thai == 'thu_viec'">Thử việc</span>
+                                        <span t-if="o.trang_thai == 'nghi_viec'">Đã nghỉ</span>
+                                        <span t-if="o.trang_thai == 'tam_nghi'">Tạm nghỉ</span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    
+                    <div class="row mt-5">
+                        <div class="col-6">
+                            <p><strong>Ghi chú:</strong></p>
+                            <p class="text-muted">Danh sách này được xuất từ hệ thống quản lý nhân sự.</p>
+                        </div>
+                        <div class="col-6 text-center">
+                            <p><strong>Người lập</strong></p>
+                            <p class="text-muted">(Ký và ghi rõ họ tên)</p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

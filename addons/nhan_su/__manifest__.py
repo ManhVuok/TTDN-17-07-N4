@@ -1,40 +1,48 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "nhan_su",
-
+    'name': "Quản lý Nhân sự",
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
+        Module quản lý hồ sơ nhân viên, phòng ban, chức vụ và lịch sử công tác.""",
     'description': """
-        Long description of module's purpose
+        Module Quản lý Nhân sự
+        ======================
+        
+        Tính năng chính:
+        - Quản lý hồ sơ nhân viên đầy đủ
+        - Quản lý cơ cấu phòng ban
+        - Quản lý chức vụ và cấp bậc
+        - Theo dõi lịch sử công tác
+        - Quản lý bằng cấp, chứng chỉ
+        - Dashboard thống kê nhân sự
+        - AI Assistant tích hợp (OpenRouter API)
     """,
-
-    'author': "My Company",
+    'author': "Business Internship Team",
     'website': "http://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
-
-    # any module necessary for this one to work correctly
+    'category': 'Human Resources',
+    'version': '1.1',
+    'license': 'LGPL-3',
     'depends': ['base'],
-
-    # always loaded
+    'external_dependencies': {
+        'python': ['requests'],
+    },
     'data': [
         'security/ir.model.access.csv',
-        'views/chuc_vu.xml',
-        'views/don_vi.xml',
         'views/nhan_vien.xml',
+        'views/phong_ban.xml',
+        'views/chuc_vu.xml',
         'views/lich_su_cong_tac.xml',
         'views/chung_chi_bang_cap.xml',
         'views/danh_sach_chung_chi_bang_cap.xml',
+        'views/ai_assistant.xml',
+        'views/dashboard.xml',
+        'report/ho_so_nhan_vien_report.xml',
         'views/menu.xml',
+        'data/sample_data.xml',
     ],
-    # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
 }

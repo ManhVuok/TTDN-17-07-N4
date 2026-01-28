@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo Đợt đăng ký tháng 1/2026 - Thêm nhân viên vào đợt đăng ký -->
+        <record id="demo_dot_dang_ky_01_2026" model="dot_dang_ky">
+            <field name="ma_dot">DOT2026-01</field>
+            <field name="nam_dang_ky">2026</field>
+            <field name="thang_dang_ky">1</field>
+            <field name="han_dang_ky">2025-12-25</field>
+            <field name="nhan_vien_ids" eval="[(6, 0, [ref('nhan_su.demo_nhan_vien_1'), ref('nhan_su.demo_nhan_vien_2'), ref('nhan_su.demo_nhan_vien_3'), ref('nhan_su.demo_nhan_vien_4'), ref('nhan_su.demo_nhan_vien_5')])]"/>
+        </record>
+
+        <!-- Demo Đăng ký ca làm theo ngày cho NV001 - Nguyễn Văn An -->
+        <record id="demo_dkcltn_nv1_01" model="dang_ky_ca_lam_theo_ngay">
+            <field name="ma_dot_ngay">DKCA-NV001-20260102</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-02</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+        
+        <record id="demo_dkcltn_nv1_02" model="dang_ky_ca_lam_theo_ngay">
+            <field name="ma_dot_ngay">DKCA-NV001-20260103</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-03</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+        
+        <record id="demo_dkcltn_nv1_03" model="dang_ky_ca_lam_theo_ngay">
+            <field name="ma_dot_ngay">DKCA-NV001-20260106</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-06</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+
+        <!-- Demo Đăng ký ca làm cho NV002 - Trần Thị Bình -->
+        <record id="demo_dkcltn_nv2_01" model="dang_ky_ca_lam_theo_ngay">
+            <field name="ma_dot_ngay">DKCA-NV002-20260102</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-02</field>
+            <field name="ca_lam">Sáng</field>
+        </record>
+        
+        <record id="demo_dkcltn_nv2_02" model="dang_ky_ca_lam_theo_ngay">
+            <field name="ma_dot_ngay">DKCA-NV002-20260103</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-03</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+
+        <!-- Demo Đăng ký ca làm cho NV003 -->
+        <record id="demo_dkcltn_nv3_01" model="dang_ky_ca_lam_theo_ngay">
+            <field name="ma_dot_ngay">DKCA-NV003-20260102</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_3"/>
+            <field name="dot_dang_ky_id" ref="demo_dot_dang_ky_01_2026"/>
+            <field name="ngay_lam">2026-01-02</field>
+            <field name="ca_lam">Cả ngày</field>
+        </record>
+
+        <!-- Demo Bảng chấm công NV001 (giờ UTC, VN là +7) -->
+        <record id="demo_bcc_nv1_01" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="ngay_cham_cong">2026-01-02</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv1_01"/>
+            <field name="gio_vao">2026-01-02 00:35:00</field>
+            <field name="gio_ra">2026-01-02 10:30:00</field>
+        </record>
+        
+        <record id="demo_bcc_nv1_02" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="ngay_cham_cong">2026-01-03</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv1_02"/>
+            <field name="gio_vao">2026-01-03 00:45:00</field>
+            <field name="gio_ra">2026-01-03 10:30:00</field>
+        </record>
+
+        <!-- Demo Bảng chấm công NV002 -->
+        <record id="demo_bcc_nv2_01" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="ngay_cham_cong">2026-01-02</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv2_01"/>
+            <field name="gio_vao">2026-01-02 00:30:00</field>
+            <field name="gio_ra">2026-01-02 04:30:00</field>
+        </record>
+        
+        <record id="demo_bcc_nv2_02" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="ngay_cham_cong">2026-01-03</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv2_02"/>
+            <field name="gio_vao">2026-01-03 01:00:00</field>
+            <field name="gio_ra">2026-01-03 10:00:00</field>
+        </record>
+
+        <!-- Demo Bảng chấm công NV003 -->
+        <record id="demo_bcc_nv3_01" model="bang_cham_cong">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_3"/>
+            <field name="ngay_cham_cong">2026-01-02</field>
+            <field name="dang_ky_ca_lam_id" ref="demo_dkcltn_nv3_01"/>
+            <field name="gio_vao">2026-01-02 00:30:00</field>
+            <field name="gio_ra">2026-01-02 10:30:00</field>
+        </record>
+
+        <!-- Demo Đơn từ -->
+        <record id="demo_don_tu_1" model="don_tu">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="loai_don">di_muon</field>
+            <field name="ngay_ap_dung">2026-01-03</field>
+            <field name="thoi_gian_xin">15</field>
+            <field name="trang_thai_duyet">da_duyet</field>
+        </record>
+        
+        <record id="demo_don_tu_2" model="don_tu">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="loai_don">nghi</field>
+            <field name="ngay_ap_dung">2026-01-07</field>
+            <field name="thoi_gian_xin">1</field>
+            <field name="trang_thai_duyet">cho_duyet</field>
+        </record>
+        
+        <!-- ===================== CA LÀM VIỆC MẪU ===================== -->
+        <record id="demo_ca_hanh_chinh" model="ca_lam_viec">
+            <field name="ma_ca">CA-HC</field>
+            <field name="ten_ca">Ca hành chính</field>
+            <field name="loai_ca">hanh_chinh</field>
+            <field name="gio_bat_dau">8.0</field>
+            <field name="gio_ket_thuc">17.0</field>
+            <field name="gio_nghi_bat_dau">12.0</field>
+            <field name="gio_nghi_ket_thuc">13.0</field>
+            <field name="he_so_luong">1.0</field>
+            <field name="mo_ta">Ca làm việc hành chính chuẩn: 8h-17h, nghỉ trưa 12h-13h</field>
+        </record>
+        
+        <record id="demo_ca_sang" model="ca_lam_viec">
+            <field name="ma_ca">CA-S</field>
+            <field name="ten_ca">Ca sáng</field>
+            <field name="loai_ca">sang</field>
+            <field name="gio_bat_dau">6.0</field>
+            <field name="gio_ket_thuc">14.0</field>
+            <field name="gio_nghi_bat_dau">11.0</field>
+            <field name="gio_nghi_ket_thuc">11.5</field>
+            <field name="he_so_luong">1.0</field>
+            <field name="mo_ta">Ca sáng cho nhà máy/sản xuất</field>
+        </record>
+        
+        <record id="demo_ca_chieu" model="ca_lam_viec">
+            <field name="ma_ca">CA-C</field>
+            <field name="ten_ca">Ca chiều</field>
+            <field name="loai_ca">chieu</field>
+            <field name="gio_bat_dau">14.0</field>
+            <field name="gio_ket_thuc">22.0</field>
+            <field name="gio_nghi_bat_dau">18.0</field>
+            <field name="gio_nghi_ket_thuc">18.5</field>
+            <field name="he_so_luong">1.0</field>
+            <field name="mo_ta">Ca chiều cho nhà máy/sản xuất</field>
+        </record>
+        
+        <record id="demo_ca_dem" model="ca_lam_viec">
+            <field name="ma_ca">CA-D</field>
+            <field name="ten_ca">Ca đêm</field>
+            <field name="loai_ca">dem</field>
+            <field name="gio_bat_dau">22.0</field>
+            <field name="gio_ket_thuc">6.0</field>
+            <field name="gio_nghi_bat_dau">2.0</field>
+            <field name="gio_nghi_ket_thuc">2.5</field>
+            <field name="he_so_luong">1.3</field>
+            <field name="la_ca_dem" eval="True"/>
+            <field name="mo_ta">Ca đêm có hệ số lương 130%</field>
+        </record>
+        
+        <!-- ===================== ĐĂNG KÝ TĂNG CA MẪU ===================== -->
+        <record id="demo_tang_ca_1" model="dang_ky_tang_ca">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
+            <field name="ngay_tang_ca">2026-01-20</field>
+            <field name="loai_ngay">ngay_thuong</field>
+            <field name="gio_bat_dau">17.5</field>
+            <field name="gio_ket_thuc">20.0</field>
+            <field name="ly_do_tang_ca">Hoàn thành dự án gấp cho khách hàng</field>
+            <field name="cong_viec_thuc_hien">Viết báo cáo tổng kết và chuẩn bị tài liệu họp</field>
+            <field name="trang_thai">hoan_thanh</field>
+            <field name="gio_bat_dau_thuc_te">17.5</field>
+            <field name="gio_ket_thuc_thuc_te">20.0</field>
+        </record>
+        
+        <record id="demo_tang_ca_2" model="dang_ky_tang_ca">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
+            <field name="ngay_tang_ca">2026-01-25</field>
+            <field name="loai_ngay">cuoi_tuan</field>
+            <field name="gio_bat_dau">9.0</field>
+            <field name="gio_ket_thuc">12.0</field>
+            <field name="ly_do_tang_ca">Hỗ trợ kiểm kê cuối tháng</field>
+            <field name="cong_viec_thuc_hien">Kiểm kê kho và cập nhật sổ sách</field>
+            <field name="trang_thai">da_duyet</field>
+        </record>
+        
+        <record id="demo_tang_ca_3" model="dang_ky_tang_ca">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_3"/>
+            <field name="ngay_tang_ca">2026-01-27</field>
+            <field name="loai_ngay">ngay_thuong</field>
+            <field name="gio_bat_dau">18.0</field>
+            <field name="gio_ket_thuc">21.0</field>
+            <field name="ly_do_tang_ca">Debug lỗi hệ thống khẩn cấp</field>
+            <field name="cong_viec_thuc_hien">Sửa lỗi và test hệ thống</field>
+            <field name="trang_thai">cho_duyet</field>
+        </record>
+
+    </data>
+</odoo>

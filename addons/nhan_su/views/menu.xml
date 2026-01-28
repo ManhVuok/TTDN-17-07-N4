@@ -1,53 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- Menu gốc -->
         <menuitem
             id="menu_root"
-            name="QLNS"
-            sequence="0"/>
-          
-        <menuitem name="Quản lý nhân viên" 
+            name="Quản lý Nhân sự"
+            sequence="10"/>
+        
+        <!-- Dashboard -->
+        <menuitem name="Dashboard" 
+            id="menu_nhan_su_dashboard" 
+            parent="menu_root" 
+            sequence="0"
+            action="action_nhan_su_dashboard"
+        />
+
+        <!-- Quản lý nhân viên -->
+        <menuitem name="Nhân viên" 
             id="menu_nhan_vien" 
             parent="menu_root" 
             sequence="1"
             action="action_nhan_vien"
         />
 
-        <menuitem name="Danh mục chung" 
-            id="menu_danh_muc_chung" 
-            parent="menu_root" 
-            sequence="1"
-        />
-
-        <menuitem name="Danh mục đơn vị" 
-            id="menu_don_vi" 
-            parent="menu_danh_muc_chung" 
-            sequence="1"
-            action="action_don_vi"
-        />
-        <menuitem name="Danh mục chức vụ" 
-            id="menu_chuc_vu" 
-            parent="menu_danh_muc_chung" 
-            sequence="2"
-            action="action_chuc_vu"
-        />
-        <menuitem name="Danh mục chứng chỉ, bằng cấp" 
-            id="menu_chung_chi_bang_cap" 
-            parent="menu_danh_muc_chung" 
-            sequence="3"
-            action="action_chung_chi_bang_cap"
-        />
+        <!-- Lịch sử công tác -->
         <menuitem name="Lịch sử công tác" 
-            id="menu_lich_su_cong_tac" 
+            id="lich_su_cong_tac" 
             parent="menu_root" 
-            sequence="4"
+            sequence="3"
             action="action_lich_su_cong_tac"
         />
-        <menuitem name="Danh sách chứng chỉ, bằng cấp" 
-            id="menu_danh_sach_chung_chi_bang_cap" 
+
+        <!-- Danh sách chứng chỉ bằng cấp -->
+        <menuitem name="Bằng cấp - Chứng chỉ" 
+            id="danh_sach_chung_chi_bang_cap" 
             parent="menu_root" 
             sequence="4"
             action="action_danh_sach_chung_chi_bang_cap"
+        />
+
+        <!-- Truy cập nhanh -->
+        <menuitem name="Truy cập nhanh" 
+            id="menu_truy_cap_nhanh" 
+            parent="menu_root" 
+            sequence="5"
+        />
+        
+        <menuitem name="NV đang làm việc" 
+            id="menu_nv_dang_lam" 
+            parent="menu_truy_cap_nhanh" 
+            sequence="1"
+            action="action_nv_dang_lam"
+        />
+        
+        <menuitem name="NV đang thử việc" 
+            id="menu_nv_thu_viec" 
+            parent="menu_truy_cap_nhanh" 
+            sequence="2"
+            action="action_nv_thu_viec"
+        />
+        
+        <menuitem name="NV đã nghỉ việc" 
+            id="menu_nv_nghi_viec" 
+            parent="menu_truy_cap_nhanh" 
+            sequence="3"
+            action="action_nv_nghi_viec"
+        />
+
+        <!-- Thống kê - Menu cha -->
+        <menuitem name="Báo cáo &amp; Thống kê" 
+            id="menu_thong_ke" 
+            parent="menu_root" 
+            sequence="6"
+        />
+
+        <!-- Thống kê con -->
+        <menuitem name="Theo phòng ban" 
+            id="menu_thong_ke_phong_ban" 
+            parent="menu_thong_ke" 
+            sequence="1"
+            action="action_thong_ke_phong_ban"
+        />
+        
+        <menuitem name="Theo giới tính" 
+            id="menu_thong_ke_gioi_tinh" 
+            parent="menu_thong_ke" 
+            sequence="2"
+            action="action_thong_ke_gioi_tinh"
+        />
+        
+        <menuitem name="Theo chức vụ" 
+            id="menu_thong_ke_chuc_vu" 
+            parent="menu_thong_ke" 
+            sequence="3"
+            action="action_thong_ke_chuc_vu"
+        />
+        
+        <menuitem name="Phân tích độ tuổi" 
+            id="menu_thong_ke_tuoi" 
+            parent="menu_thong_ke" 
+            sequence="4"
+            action="action_thong_ke_tuoi"
+        />
+        
+        <menuitem name="Phân bố quê quán" 
+            id="menu_thong_ke_que_quan" 
+            parent="menu_thong_ke" 
+            sequence="5"
+            action="action_thong_ke_que_quan"
+        />
+        
+        <menuitem name="Trạng thái nhân viên" 
+            id="menu_thong_ke_trang_thai" 
+            parent="menu_thong_ke" 
+            sequence="6"
+            action="action_thong_ke_trang_thai"
+        />
+
+        <!-- Danh mục dùng chung -->
+        <menuitem name="Danh mục" 
+            id="danh_muc_dung_chung" 
+            parent="menu_root" 
+            sequence="10"
+        />
+
+        <menuitem name="Phòng ban" 
+            id="menu_phong_ban" 
+            parent="danh_muc_dung_chung" 
+            sequence="0"
+            action="action_phong_ban"
+        />
+
+        <menuitem name="Chức vụ" 
+            id="menu_chuc_vu" 
+            parent="danh_muc_dung_chung" 
+            sequence="1"
+            action="action_chuc_vu"
+        />
+
+        <menuitem name="Loại chứng chỉ" 
+            id="menu_chung_chi_bang_cap" 
+            parent="danh_muc_dung_chung" 
+            sequence="2"
+            action="action_chung_chi_bang_cap"
+        />
+        
+        <!-- ===================== AI ASSISTANT ===================== -->
+        <menuitem name="AI Assistant" 
+            id="menu_ai_assistant_root" 
+            parent="menu_root" 
+            sequence="2"
+        />
+        
+        <menuitem name="Hỏi AI" 
+            id="menu_hoi_ai" 
+            parent="menu_ai_assistant_root" 
+            sequence="1"
+            action="action_ai_assistant"
+        />
+        
+        <menuitem name="Lịch sử chat" 
+            id="menu_lich_su_chat" 
+            parent="menu_ai_assistant_root" 
+            sequence="2"
+            action="action_ai_lich_su_chat"
+        />
+        
+        <menuitem name="Cấu hình API" 
+            id="menu_cau_hinh_api" 
+            parent="menu_ai_assistant_root" 
+            sequence="3"
+            action="action_ai_cau_hinh_api"
         />
     </data>
 </odoo>

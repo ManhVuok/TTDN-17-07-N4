@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ===================== CA LÀM VIỆC ===================== -->
+        
+        <!-- Form View - Ca làm việc -->
+        <record id="view_ca_lam_viec_form" model="ir.ui.view">
+            <field name="name">ca_lam_viec.form</field>
+            <field name="model">ca_lam_viec</field>
+            <field name="arch" type="xml">
+                <form string="Ca làm việc">
+                    <sheet>
+                        <widget name="web_ribbon" title="Ca đêm" bg_color="bg-dark" attrs="{'invisible': [('la_ca_dem', '=', False)]}"/>
+                        
+                        <div class="oe_title">
+                            <label for="ten_ca" class="oe_edit_only"/>
+                            <h1>
+                                <field name="ten_ca" placeholder="Tên ca làm việc"/>
+                            </h1>
+                            <label for="ma_ca" class="oe_edit_only"/>
+                            <h3>
+                                <field name="ma_ca" placeholder="Mã ca"/>
+                            </h3>
+                        </div>
+                        
+                        <group>
+                            <group string="Thời gian làm việc">
+                                <field name="gio_bat_dau" widget="float_time"/>
+                                <field name="gio_ket_thuc" widget="float_time"/>
+                                <field name="so_gio_lam" widget="float_time" class="text-primary fw-bold"/>
+                                <field name="thoi_gian_hien_thi"/>
+                            </group>
+                            <group string="Thời gian nghỉ">
+                                <field name="gio_nghi_bat_dau" widget="float_time"/>
+                                <field name="gio_nghi_ket_thuc" widget="float_time"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group string="Phân loại">
+                                <field name="loai_ca" widget="radio"/>
+                                <field name="la_ca_dem"/>
+                                <field name="active"/>
+                            </group>
+                            <group string="Hệ số lương">
+                                <field name="he_so_luong"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Mô tả">
+                            <field name="mo_ta" nolabel="1" placeholder="Mô tả chi tiết về ca làm việc..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Tree View - Ca làm việc -->
+        <record id="view_ca_lam_viec_tree" model="ir.ui.view">
+            <field name="name">ca_lam_viec.tree</field>
+            <field name="model">ca_lam_viec</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách ca làm việc" decoration-muted="active == False" decoration-info="la_ca_dem == True">
+                    <field name="ma_ca"/>
+                    <field name="ten_ca"/>
+                    <field name="loai_ca" widget="badge"/>
+                    <field name="gio_bat_dau" widget="float_time"/>
+                    <field name="gio_ket_thuc" widget="float_time"/>
+                    <field name="so_gio_lam" widget="float_time" sum="Tổng giờ"/>
+                    <field name="he_so_luong"/>
+                    <field name="la_ca_dem" widget="boolean"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Kanban View - Ca làm việc -->
+        <record id="view_ca_lam_viec_kanban" model="ir.ui.view">
+            <field name="name">ca_lam_viec.kanban</field>
+            <field name="model">ca_lam_viec</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_small_column">
+                    <field name="id"/>
+                    <field name="ma_ca"/>
+                    <field name="ten_ca"/>
+                    <field name="thoi_gian_hien_thi"/>
+                    <field name="so_gio_lam"/>
+                    <field name="loai_ca"/>
+                    <field name="la_ca_dem"/>
+                    <field name="he_so_luong"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top" style="padding: 12px;">
+                                    <div class="d-flex align-items-center">
+                                        <div t-attf-class="rounded-circle mr-2 d-flex align-items-center justify-content-center"
+                                             t-attf-style="width: 50px; height: 50px; background: #{record.la_ca_dem.raw_value ? '#34495e' : '#3498db'}; color: white;">
+                                            <i t-attf-class="fa #{record.la_ca_dem.raw_value ? 'fa-moon-o' : 'fa-sun-o'}" style="font-size: 24px;" title="Ca"/>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <strong style="font-size: 14px;">
+                                                <field name="ten_ca"/>
+                                            </strong>
+                                            <div class="text-muted" style="font-size: 12px;">
+                                                [<field name="ma_ca"/>]
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body" style="padding: 0 12px 12px;">
+                                    <div class="mb-2">
+                                        <i class="fa fa-clock-o mr-1" title="Thời gian"/>
+                                        <strong><field name="thoi_gian_hien_thi"/></strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="badge badge-primary">
+                                            <field name="so_gio_lam" widget="float_time"/> giờ
+                                        </span>
+                                        <span t-if="record.he_so_luong.raw_value != 1" class="badge badge-warning">
+                                            x<field name="he_so_luong"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Search View - Ca làm việc -->
+        <record id="view_ca_lam_viec_search" model="ir.ui.view">
+            <field name="name">ca_lam_viec.search</field>
+            <field name="model">ca_lam_viec</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm ca làm việc">
+                    <field name="ma_ca"/>
+                    <field name="ten_ca"/>
+                    <separator/>
+                    <filter string="Ca đêm" name="ca_dem" domain="[('la_ca_dem', '=', True)]"/>
+                    <filter string="Đang sử dụng" name="active" domain="[('active', '=', True)]"/>
+                    <separator/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter string="Loại ca" name="group_loai_ca" context="{'group_by': 'loai_ca'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action - Ca làm việc -->
+        <record id="action_ca_lam_viec" model="ir.actions.act_window">
+            <field name="name">Ca làm việc</field>
+            <field name="res_model">ca_lam_viec</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="view_ca_lam_viec_search"/>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo ca làm việc đầu tiên
+                </p>
+                <p class="text-muted">
+                    Định nghĩa các ca làm việc trong công ty: Ca sáng, Ca chiều, Ca đêm, Ca hành chính...
+                </p>
+            </field>
+        </record>
+        
+        <!-- ===================== ĐĂNG KÝ TĂNG CA ===================== -->
+        
+        <!-- Form View - Đăng ký tăng ca -->
+        <record id="view_dang_ky_tang_ca_form" model="ir.ui.view">
+            <field name="name">dang_ky_tang_ca.form</field>
+            <field name="model">dang_ky_tang_ca</field>
+            <field name="arch" type="xml">
+                <form string="Đăng ký tăng ca">
+                    <header>
+                        <button name="action_gui_duyet" string="Gửi duyệt" type="object" class="btn-primary" 
+                                states="nhap" icon="fa-send"/>
+                        <button name="action_duyet" string="Duyệt" type="object" class="btn-success" 
+                                states="cho_duyet" icon="fa-check"/>
+                        <button name="action_tu_choi" string="Từ chối" type="object" class="btn-danger" 
+                                states="cho_duyet" icon="fa-times"/>
+                        <button name="action_hoan_thanh" string="Hoàn thành" type="object" class="btn-info" 
+                                states="da_duyet" icon="fa-flag-checkered"/>
+                        <button name="action_huy" string="Hủy" type="object" class="btn-secondary" 
+                                states="nhap,cho_duyet,da_duyet" icon="fa-ban"/>
+                        <button name="action_reset" string="Đặt lại" type="object" class="btn-warning" 
+                                states="tu_choi,huy" icon="fa-refresh"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="nhap,cho_duyet,da_duyet,hoan_thanh"/>
+                    </header>
+                    
+                    <sheet>
+                        <widget name="web_ribbon" title="Đã duyệt" bg_color="bg-success" attrs="{'invisible': [('trang_thai', '!=', 'da_duyet')]}"/>
+                        <widget name="web_ribbon" title="Hoàn thành" bg_color="bg-info" attrs="{'invisible': [('trang_thai', '!=', 'hoan_thanh')]}"/>
+                        <widget name="web_ribbon" title="Từ chối" bg_color="bg-danger" attrs="{'invisible': [('trang_thai', '!=', 'tu_choi')]}"/>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="ten_hien_thi" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Thông tin nhân viên">
+                                <field name="nhan_vien_id" options="{'no_create': True}"/>
+                                <field name="phong_ban_id"/>
+                            </group>
+                            <group string="Thời gian tăng ca">
+                                <field name="ngay_tang_ca"/>
+                                <field name="loai_ngay" widget="radio"/>
+                                <field name="ca_lam_viec_id" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group string="Giờ đăng ký">
+                                <field name="gio_bat_dau" widget="float_time"/>
+                                <field name="gio_ket_thuc" widget="float_time"/>
+                                <field name="so_gio_tang_ca" widget="float_time" class="text-primary fw-bold"/>
+                                <field name="he_so_tang_ca" class="text-warning fw-bold"/>
+                            </group>
+                            <group string="Giờ thực tế" attrs="{'invisible': [('trang_thai', 'not in', ['da_duyet', 'hoan_thanh'])]}">
+                                <field name="gio_bat_dau_thuc_te" widget="float_time"/>
+                                <field name="gio_ket_thuc_thuc_te" widget="float_time"/>
+                                <field name="so_gio_thuc_te" widget="float_time" class="text-success fw-bold"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Thông tin chi tiết">
+                                <group>
+                                    <field name="ly_do_tang_ca" placeholder="Lý do cần làm thêm giờ..."/>
+                                    <field name="cong_viec_thuc_hien" placeholder="Công việc sẽ thực hiện trong thời gian tăng ca..."/>
+                                    <field name="ghi_chu" placeholder="Ghi chú thêm..."/>
+                                </group>
+                            </page>
+                            <page string="Phê duyệt" attrs="{'invisible': [('trang_thai', 'in', ['nhap'])]}">
+                                <group>
+                                    <group>
+                                        <field name="nguoi_duyet_id"/>
+                                        <field name="ngay_duyet"/>
+                                    </group>
+                                    <group attrs="{'invisible': [('trang_thai', '!=', 'tu_choi')]}">
+                                        <field name="ly_do_tu_choi"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                        
+                        <div class="alert alert-info" role="alert">
+                            <strong>Quy định tăng ca:</strong>
+                            <ul class="mb-0">
+                                <li>Ngày thường: Hệ số <strong>150%</strong></li>
+                                <li>Cuối tuần (T7, CN): Hệ số <strong>200%</strong></li>
+                                <li>Ngày lễ: Hệ số <strong>300%</strong></li>
+                                <li>Mỗi lần đăng ký tối đa <strong>4 giờ</strong></li>
+                            </ul>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Tree View - Đăng ký tăng ca -->
+        <record id="view_dang_ky_tang_ca_tree" model="ir.ui.view">
+            <field name="name">dang_ky_tang_ca.tree</field>
+            <field name="model">dang_ky_tang_ca</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách đăng ký tăng ca"
+                      decoration-success="trang_thai == 'hoan_thanh'"
+                      decoration-info="trang_thai == 'da_duyet'"
+                      decoration-warning="trang_thai == 'cho_duyet'"
+                      decoration-danger="trang_thai == 'tu_choi'"
+                      decoration-muted="trang_thai == 'huy'">
+                    <field name="ngay_tang_ca"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="phong_ban_id" widget="badge"/>
+                    <field name="loai_ngay" widget="badge" 
+                           decoration-success="loai_ngay == 'ngay_thuong'"
+                           decoration-warning="loai_ngay == 'cuoi_tuan'"
+                           decoration-danger="loai_ngay == 'ngay_le'"/>
+                    <field name="gio_bat_dau" widget="float_time"/>
+                    <field name="gio_ket_thuc" widget="float_time"/>
+                    <field name="so_gio_tang_ca" widget="float_time" sum="Tổng giờ"/>
+                    <field name="he_so_tang_ca"/>
+                    <field name="trang_thai" widget="badge"
+                           decoration-success="trang_thai == 'hoan_thanh'"
+                           decoration-info="trang_thai == 'da_duyet'"
+                           decoration-warning="trang_thai == 'cho_duyet'"
+                           decoration-danger="trang_thai == 'tu_choi'"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Kanban View - Đăng ký tăng ca -->
+        <record id="view_dang_ky_tang_ca_kanban" model="ir.ui.view">
+            <field name="name">dang_ky_tang_ca.kanban</field>
+            <field name="model">dang_ky_tang_ca</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="trang_thai" class="o_kanban_small_column">
+                    <field name="id"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="ngay_tang_ca"/>
+                    <field name="loai_ngay"/>
+                    <field name="so_gio_tang_ca"/>
+                    <field name="he_so_tang_ca"/>
+                    <field name="trang_thai"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top" style="padding: 8px;">
+                                    <strong><field name="nhan_vien_id"/></strong>
+                                </div>
+                                <div class="o_kanban_record_body" style="padding: 0 8px 8px;">
+                                    <div class="mb-1">
+                                        <i class="fa fa-calendar mr-1" title="Ngày"/>
+                                        <field name="ngay_tang_ca"/>
+                                    </div>
+                                    <div class="mb-1">
+                                        <span t-attf-class="badge #{record.loai_ngay.raw_value == 'ngay_thuong' ? 'badge-success' : (record.loai_ngay.raw_value == 'cuoi_tuan' ? 'badge-warning' : 'badge-danger')}">
+                                            <field name="loai_ngay"/>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="badge badge-primary">
+                                            <field name="so_gio_tang_ca" widget="float_time"/> giờ
+                                        </span>
+                                        <span class="badge badge-info">
+                                            x<field name="he_so_tang_ca"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Calendar View - Đăng ký tăng ca -->
+        <record id="view_dang_ky_tang_ca_calendar" model="ir.ui.view">
+            <field name="name">dang_ky_tang_ca.calendar</field>
+            <field name="model">dang_ky_tang_ca</field>
+            <field name="arch" type="xml">
+                <calendar string="Lịch tăng ca" date_start="ngay_tang_ca" color="trang_thai" mode="month">
+                    <field name="nhan_vien_id"/>
+                    <field name="so_gio_tang_ca"/>
+                    <field name="trang_thai"/>
+                </calendar>
+            </field>
+        </record>
+        
+        <!-- Pivot View - Đăng ký tăng ca -->
+        <record id="view_dang_ky_tang_ca_pivot" model="ir.ui.view">
+            <field name="name">dang_ky_tang_ca.pivot</field>
+            <field name="model">dang_ky_tang_ca</field>
+            <field name="arch" type="xml">
+                <pivot string="Thống kê tăng ca">
+                    <field name="phong_ban_id" type="row"/>
+                    <field name="loai_ngay" type="col"/>
+                    <field name="so_gio_tang_ca" type="measure"/>
+                    <field name="so_gio_thuc_te" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        
+        <!-- Search View - Đăng ký tăng ca -->
+        <record id="view_dang_ky_tang_ca_search" model="ir.ui.view">
+            <field name="name">dang_ky_tang_ca.search</field>
+            <field name="model">dang_ky_tang_ca</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm đăng ký tăng ca">
+                    <field name="nhan_vien_id"/>
+                    <field name="phong_ban_id"/>
+                    <field name="ngay_tang_ca"/>
+                    <separator/>
+                    <filter string="Chờ duyệt" name="cho_duyet" domain="[('trang_thai', '=', 'cho_duyet')]"/>
+                    <filter string="Đã duyệt" name="da_duyet" domain="[('trang_thai', '=', 'da_duyet')]"/>
+                    <filter string="Hoàn thành" name="hoan_thanh" domain="[('trang_thai', '=', 'hoan_thanh')]"/>
+                    <separator/>
+                    <filter string="Ngày thường" name="ngay_thuong" domain="[('loai_ngay', '=', 'ngay_thuong')]"/>
+                    <filter string="Cuối tuần" name="cuoi_tuan" domain="[('loai_ngay', '=', 'cuoi_tuan')]"/>
+                    <filter string="Ngày lễ" name="ngay_le" domain="[('loai_ngay', '=', 'ngay_le')]"/>
+                    <separator/>
+                    <filter string="Tháng này" name="thang_nay" domain="[('ngay_tang_ca', '&gt;=', (context_today() - datetime.timedelta(days=context_today().day-1)).strftime('%%Y-%%m-%%d'))]"/>
+                    <separator/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter string="Nhân viên" name="group_nhan_vien" context="{'group_by': 'nhan_vien_id'}"/>
+                        <filter string="Phòng ban" name="group_phong_ban" context="{'group_by': 'phong_ban_id'}"/>
+                        <filter string="Trạng thái" name="group_trang_thai" context="{'group_by': 'trang_thai'}"/>
+                        <filter string="Loại ngày" name="group_loai_ngay" context="{'group_by': 'loai_ngay'}"/>
+                        <filter string="Tháng" name="group_thang" context="{'group_by': 'ngay_tang_ca:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action - Đăng ký tăng ca -->
+        <record id="action_dang_ky_tang_ca" model="ir.actions.act_window">
+            <field name="name">Đăng ký tăng ca</field>
+            <field name="res_model">dang_ky_tang_ca</field>
+            <field name="view_mode">tree,kanban,calendar,pivot,form</field>
+            <field name="search_view_id" ref="view_dang_ky_tang_ca_search"/>
+            <field name="context">{'search_default_thang_nay': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Đăng ký tăng ca mới
+                </p>
+                <p class="text-muted">
+                    Quản lý đăng ký làm thêm giờ của nhân viên.
+                    <br/>Hệ số: Ngày thường 150%, Cuối tuần 200%, Ngày lễ 300%
+                </p>
+            </field>
+        </record>
+        
+        <!-- Action - Tăng ca chờ duyệt -->
+        <record id="action_tang_ca_cho_duyet" model="ir.actions.act_window">
+            <field name="name">Tăng ca chờ duyệt</field>
+            <field name="res_model">dang_ky_tang_ca</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('trang_thai', '=', 'cho_duyet')]</field>
+            <field name="context">{'search_default_cho_duyet': 1}</field>
+        </record>
+        
+    </data>
+</odoo>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Action cho Tính Lương -->
+    <record id="action_tinh_luong_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Tính Lương</field>
+        <field name="res_model">chi_tiet_luong</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{
+            'search_default_group_phong_ban': 1,
+        }</field>
+    </record>
+
+    <!-- Pivot View cho Dashboard Chi tiết lương -->
+    <record id="view_chi_tiet_luong_dashboard_pivot" model="ir.ui.view">
+        <field name="name">chi_tiet_luong.dashboard.pivot</field>
+        <field name="model">chi_tiet_luong</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích lương" display_quantity="true">
+                <field name="phong_ban_id" type="row"/>
+                <field name="thang" type="col"/>
+                <field name="tong_thu_nhap" type="measure"/>
+                <field name="tong_bao_hiem" type="measure"/>
+                <field name="tong_tien_phat" type="measure"/>
+                <field name="thue_tncn" type="measure"/>
+                <field name="luong_thuc_nhan" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View cho Dashboard Chi tiết lương -->
+    <record id="view_chi_tiet_luong_dashboard_graph" model="ir.ui.view">
+        <field name="name">chi_tiet_luong.dashboard.graph</field>
+        <field name="model">chi_tiet_luong</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <graph string="Biểu đồ lương" type="bar" stacked="True">
+                <field name="phong_ban_id" type="row"/>
+                <field name="luong_thuc_nhan" type="measure"/>
+                <field name="tong_bao_hiem" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Dashboard Thống kê Bảng lương -->
+    <record id="action_bang_luong_thong_ke" model="ir.actions.act_window">
+        <field name="name">Thống kê bảng lương</field>
+        <field name="res_model">bang_luong</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+    <!-- Pivot View Bảng lương -->
+    <record id="view_bang_luong_pivot" model="ir.ui.view">
+        <field name="name">bang_luong.pivot</field>
+        <field name="model">bang_luong</field>
+        <field name="arch" type="xml">
+            <pivot string="Thống kê bảng lương">
+                <field name="nam" type="row"/>
+                <field name="thang" type="col"/>
+                <field name="tong_nhan_vien" type="measure"/>
+                <field name="tong_luong_gross" type="measure"/>
+                <field name="tong_luong_net" type="measure"/>
+                <field name="tong_bao_hiem" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View Bảng lương -->
+    <record id="view_bang_luong_graph" model="ir.ui.view">
+        <field name="name">bang_luong.graph</field>
+        <field name="model">bang_luong</field>
+        <field name="arch" type="xml">
+            <graph string="Biểu đồ bảng lương theo tháng" type="line">
+                <field name="ten_bang_luong" type="row"/>
+                <field name="tong_luong_net" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- NOTE: Các menuitem được định nghĩa trong menu.xml để tránh lỗi dependency -->
+</odoo>

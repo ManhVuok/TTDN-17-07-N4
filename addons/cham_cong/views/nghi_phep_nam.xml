@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_nghi_phep_nam_form" model="ir.ui.view">
+            <field name="name">nghi_phep_nam.form</field>
+            <field name="model">nghi_phep_nam</field>
+            <field name="arch" type="xml">
+                <form string="Quản lý nghỉ phép năm">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" 
+                                    name="action_xem_don_nghi" icon="fa-calendar-times-o">
+                                <div class="o_stat_info">
+                                    <field name="so_ngay_da_nghi" class="o_stat_value"/>
+                                    <span class="o_stat_text">Ngày đã nghỉ</span>
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <widget name="web_ribbon" title="HẾT PHÉP" bg_color="bg-danger" attrs="{'invisible': [('so_ngay_con_lai', '&gt;', 0)]}"/>
+                        <widget name="web_ribbon" title="SẮP HẾT PHÉP" bg_color="bg-warning" attrs="{'invisible': ['|', ('so_ngay_con_lai', '&lt;=', 0), ('so_ngay_con_lai', '&gt;', 3)]}"/>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="display_name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Thông tin nhân viên">
+                                <field name="nhan_vien_id"/>
+                                <field name="phong_ban_id"/>
+                                <field name="nam"/>
+                            </group>
+                            <group string="Số ngày phép được hưởng">
+                                <field name="so_ngay_phep_nam"/>
+                                <field name="so_ngay_phep_them"/>
+                                <field name="so_ngay_phep_chuyen"/>
+                                <field name="tong_ngay_phep" class="text-primary fw-bold"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group string="Tình trạng sử dụng">
+                                <field name="so_ngay_da_nghi" class="text-danger"/>
+                                <field name="so_ngay_cho_duyet" class="text-warning"/>
+                                <field name="so_ngay_con_lai" class="text-success fw-bold"/>
+                            </group>
+                            <group string="Ghi chú">
+                                <field name="ghi_chu" nolabel="1" placeholder="Ghi chú về nghỉ phép..."/>
+                            </group>
+                        </group>
+                        
+                        <div class="alert alert-info" role="alert">
+                            <strong>Lưu ý:</strong>
+                            <ul>
+                                <li>Số ngày phép năm mặc định là 12 ngày/năm</li>
+                                <li>Số ngày phép chuyển từ năm trước tối đa 5 ngày</li>
+                                <li>Ngày đã nghỉ được tính từ các đơn nghỉ phép năm đã duyệt</li>
+                            </ul>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_nghi_phep_nam_tree" model="ir.ui.view">
+            <field name="name">nghi_phep_nam.tree</field>
+            <field name="model">nghi_phep_nam</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách nghỉ phép năm"
+                      decoration-danger="so_ngay_con_lai &lt;= 0"
+                      decoration-warning="so_ngay_con_lai &gt; 0 and so_ngay_con_lai &lt;= 3"
+                      decoration-success="so_ngay_con_lai &gt; 3">
+                    <field name="nhan_vien_id"/>
+                    <field name="phong_ban_id" widget="badge"/>
+                    <field name="nam"/>
+                    <field name="tong_ngay_phep" sum="Tổng"/>
+                    <field name="so_ngay_da_nghi" sum="Tổng đã nghỉ"/>
+                    <field name="so_ngay_cho_duyet" sum="Tổng chờ duyệt"/>
+                    <field name="so_ngay_con_lai" sum="Tổng còn lại" decoration-bf="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Kanban View -->
+        <record id="view_nghi_phep_nam_kanban" model="ir.ui.view">
+            <field name="name">nghi_phep_nam.kanban</field>
+            <field name="model">nghi_phep_nam</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_small_column" default_group_by="phong_ban_id">
+                    <field name="id"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="nam"/>
+                    <field name="tong_ngay_phep"/>
+                    <field name="so_ngay_da_nghi"/>
+                    <field name="so_ngay_con_lai"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top mb-2">
+                                        <strong><field name="nhan_vien_id"/></strong>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <div class="text-muted">Năm: <field name="nam"/></div>
+                                        <div class="mt-2">
+                                            <span class="badge badge-secondary" title="Tổng phép">
+                                                <field name="tong_ngay_phep"/> ngày
+                                            </span>
+                                        </div>
+                                        <div class="mt-1">
+                                            <span t-attf-class="badge #{record.so_ngay_con_lai.raw_value &lt;= 0 ? 'badge-danger' : (record.so_ngay_con_lai.raw_value &lt;= 3 ? 'badge-warning' : 'badge-success')}" title="Còn lại">
+                                                Còn: <field name="so_ngay_con_lai"/> ngày
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Pivot View -->
+        <record id="view_nghi_phep_nam_pivot" model="ir.ui.view">
+            <field name="name">nghi_phep_nam.pivot</field>
+            <field name="model">nghi_phep_nam</field>
+            <field name="arch" type="xml">
+                <pivot string="Thống kê nghỉ phép">
+                    <field name="phong_ban_id" type="row"/>
+                    <field name="tong_ngay_phep" type="measure"/>
+                    <field name="so_ngay_da_nghi" type="measure"/>
+                    <field name="so_ngay_con_lai" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record model="ir.ui.view" id="nghi_phep_nam_search">
+            <field name="name">nghi_phep_nam.search</field>
+            <field name="model">nghi_phep_nam</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm nghỉ phép">
+                    <field name="nhan_vien_id"/>
+                    <field name="phong_ban_id"/>
+                    <field name="nam"/>
+                    <separator/>
+                    <filter string="Năm nay" name="nam_nay" 
+                            domain="[('nam', '=', (context_today()).year)]"/>
+                    <filter string="Hết phép" name="het_phep" 
+                            domain="[('so_ngay_con_lai', '&lt;=', 0)]"/>
+                    <filter string="Sắp hết phép" name="sap_het_phep" 
+                            domain="[('so_ngay_con_lai', '&gt;', 0), ('so_ngay_con_lai', '&lt;=', 3)]"/>
+                    <filter string="Còn phép" name="con_phep" 
+                            domain="[('so_ngay_con_lai', '&gt;', 3)]"/>
+                    <separator/>
+                    <group expand="1" string="Nhóm theo">
+                        <filter string="Phòng ban" name="group_phong_ban" context="{'group_by':'phong_ban_id'}"/>
+                        <filter string="Năm" name="group_nam" context="{'group_by':'nam'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_nghi_phep_nam" model="ir.actions.act_window">
+            <field name="name">Quản lý nghỉ phép</field>
+            <field name="res_model">nghi_phep_nam</field>
+            <field name="view_mode">tree,kanban,pivot,form</field>
+            <field name="search_view_id" ref="nghi_phep_nam_search"/>
+            <field name="context">{'search_default_nam_nay': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo bản ghi nghỉ phép năm
+                </p>
+                <p class="text-muted">
+                    Quản lý số ngày phép của từng nhân viên theo năm.
+                    Số ngày đã nghỉ được tính tự động từ các đơn nghỉ phép năm đã duyệt.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

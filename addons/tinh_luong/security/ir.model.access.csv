@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cau_hinh_luong,access_cau_hinh_luong,model_cau_hinh_luong,base.group_user,1,1,1,1
+access_cau_hinh_thue,access_cau_hinh_thue,model_cau_hinh_thue,base.group_user,1,1,1,1
+access_hop_dong_lao_dong,access_hop_dong_lao_dong,model_hop_dong_lao_dong,base.group_user,1,1,1,1
+access_phu_cap,access_phu_cap,model_phu_cap,base.group_user,1,1,1,1
+access_loai_khau_tru,access_loai_khau_tru,model_loai_khau_tru,base.group_user,1,1,1,1
+access_bang_luong,access_bang_luong,model_bang_luong,base.group_user,1,1,1,1
+access_chi_tiet_luong,access_chi_tiet_luong,model_chi_tiet_luong,base.group_user,1,1,1,1
