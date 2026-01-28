@@ -156,7 +156,9 @@ Người sử dụng truy cập theo đường dẫn _http://localhost:8069/_ đ
 
 ## 📝 5. License
 
-© 2024 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+- 👨‍🎓 **Sinh viên thực hiện**: Nguyễn Đức Hoàn
+- 🎓 **Khoa**: Công nghệ thông tin – Đại học Đại Nam
+- 📧 **Email**: nguyenduchoan2050@gmail.com
 
 ---
 
