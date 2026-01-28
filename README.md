@@ -4,7 +4,7 @@
     </a>
 </h2>
 <h2 align="center">
-    PLATFORM ERP
+    Hệ thống quản lý nhân sự, chấm công và tính lương trên nền tảng Odoo 15
 </h2>
 <div align="center">
     <p align="center">
@@ -20,7 +20,11 @@
 </div>
 
 ## 📖 1. Giới thiệu
-Platform ERP được áp dụng vào học phần Thực tập doanh nghiệp dựa trên mã nguồn mở Odoo. 
+Hệ thống Quản lý Chấm công – Tính lương được xây dựng nhằm hỗ trợ doanh nghiệp quản lý nhân sự, theo dõi thời gian làm việc và tính lương cho người lao động một cách chính xác, minh bạch và hiệu quả. Hệ thống giúp thay thế các phương pháp quản lý thủ công, giảm sai sót và tiết kiệm thời gian cho bộ phận nhân sự.
+
+Hệ thống được phát triển trên nền tảng Odoo ERP, gồm ba module chính: Nhân sự, Chấm công và Tính lương. Module Nhân sự quản lý hồ sơ nhân viên, phòng ban, chức vụ và dữ liệu nền. Module Chấm công ghi nhận ca làm việc, giờ vào – ra, nghỉ phép, đơn từ và tăng ca. Module Tính lương tự động tính bảng lương và phiếu lương dựa trên dữ liệu chấm công, hợp đồng lao động, phụ cấp, khấu trừ và thuế.
+
+Với kiến trúc module hóa và khả năng mở rộng cao, hệ thống phù hợp với các doanh nghiệp vừa và nhỏ, đồng thời là nền tảng cho việc phát triển và tích hợp các chức năng nâng cao trong tương lai.
 
 ## 🔧 2. Các công nghệ được sử dụng
 <div align="center">
@@ -36,19 +40,75 @@ Platform ERP được áp dụng vào học phần Thực tập doanh nghiệp d
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 </div>
 
-## 🚀 3. Các project đã thực hiện dựa trên Platform
+## 🚀 3. Các chức năng chính
 
-Một số project sinh viên đã thực hiện:
-- #### [Khoá 15](./docs/projects/K15/README.md)
-- #### [Khoá 16](./docs/projects/K16/README.md)
-- #### [Khoá 17](./docs/projects/K17/README.md)
+Hệ thống cung cấp các chức năng quản lý nghiệp vụ cốt lõi của doanh nghiệp, được triển khai dưới dạng các module độc lập nhưng có khả năng liên kết và chia sẻ dữ liệu với nhau.
+
+### 3.1. Quản lý nhân sự
+    Quản lý hồ sơ nhân viên đầy đủ: thông tin cá nhân, liên hệ, ngân hàng, tình trạng làm việc
+    
+    Quản lý phòng ban, chức vụ theo mô hình phân cấp
+    
+    Theo dõi lịch sử công tác, điều chuyển, thăng chức
+    
+    Quản lý bằng cấp, chứng chỉ của nhân viên
+    
+    Dashboard thống kê nhân sự và xuất báo cáo PDF
+### 3.2. Quản lý Chấm công & Ca làm việc
+
+    Tổ chức đợt đăng ký ca làm theo tháng/năm
+    
+    Đăng ký ca làm việc theo ngày cho từng nhân viên
+    
+    Ghi nhận giờ vào – giờ ra, tự động tính đi muộn/về sớm
+    
+    Quản lý ca làm việc (hành chính, ca sáng, chiều, đêm) và hệ số lương
+    
+    Xem chấm công trực quan bằng Calendar và Dashboard
+
+### 3.3. Quản lý Đơn từ & Nghỉ phép
+
+    Quản lý các loại đơn: nghỉ phép, đi muộn, về sớm, công tác, báo ốm
+    
+    Quy trình duyệt đơn rõ ràng: Nháp → Chờ duyệt → Đã duyệt/Từ chối
+    
+    Quản lý phép năm, phép cộng thêm, phép chuyển năm
+    
+    Tự động tính số ngày đã nghỉ và số ngày còn lại
+    
+    Cảnh báo nhân viên sắp hết hoặc hết phép
+
+### 3.4. Tính lương & Làm thêm giờ
+
+    Quản lý hợp đồng lao động và mức lương theo từng nhân viên
+    
+    Tính lương theo tháng dựa trên chấm công, ca làm và tăng ca
+    
+    Tính lương làm thêm giờ theo ngày thường, cuối tuần, ngày lễ
+    
+    Hỗ trợ cấu hình phụ cấp, khấu trừ, bảo hiểm và thuế TNCN
+    
+    Theo dõi chi tiết bảng lương và phiếu lương (Payslip)
+
+### 3.5. Tính lương & Làm thêm giờ
+    Dashboard tổng hợp: nhân sự, chấm công, quỹ lương theo thời gian
+    
+    Biểu đồ phân tích theo phòng ban, chức vụ, thu nhập
+    
+    Xuất phiếu lương và báo cáo hệ thống dưới dạng PDF
+    
+    Tích hợp AI Assistant hỗ trợ tra cứu và hỏi đáp dữ liệu hệ thống
+    
+    Lưu lịch sử chat AI phục vụ quản trị và phân tích
+
 ## ⚙️ 4. Cài đặt
 
 ### 4.1. Cài đặt công cụ, môi trường và các thư viện cần thiết
 
 #### 4.1.1. Tải project.
 ```
-git clone https://github.com/FIT-DNU/Business-Internship.git
+git clone https://github.com/duchoan25/TTDN-16-01-N14
+git checkout 
 ```
 #### 4.1.2. Cài đặt các thư viện cần thiết
 Người sử dụng thực thi các lệnh sau đề cài đặt các thư viện cần thiết
