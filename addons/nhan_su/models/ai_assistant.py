@@ -18,7 +18,7 @@ class AICauHinhAPI(models.Model):
     api_key = fields.Char("API Key", required=True)
     api_url = fields.Char(
         "API URL", 
-        required=True, 
+        required=False, 
         default="https://openrouter.ai/api/v1/chat/completions"
     )
     model_name = fields.Char(
@@ -284,43 +284,99 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
 7. Format câu trả lời bằng Markdown đẹp, dễ đọc, có tiêu đề và bảng biểu nếu cần.
 """
         
-        headers = {
-            "Authorization": f"Bearer {config.api_key}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "http://localhost:8069",
-            "X-Title": "Odoo AI Assistant"
-        }
-        
-        data = {
-            "model": config.model_name,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": cau_hoi}
-            ],
-            "temperature": 0.7,
-            "max_tokens": 2000
-        }
-        
-        try:
-            response = requests.post(
-                config.api_url,
-                headers=headers,
-                json=data,
-                timeout=60
-            )
+        api_key = (config.api_key or "").strip()
+        if not api_key:
+            raise UserError("API Key đang trống. Vui lòng kiểm tra lại cấu hình AI.")
             
-            if response.status_code == 200:
-                result = response.json()
-                return result['choices'][0]['message']['content']
-            else:
-                error_msg = f"API Error: {response.status_code} - {response.text}"
-                _logger.error(error_msg)
-                raise UserError(error_msg)
+        # Xác định xem đang dùng OpenRouter hay Gemini Native
+        api_url = (config.api_url or "").strip()
+        model_name = (config.model_name or "gemini-1.5-flash").strip()
+        is_gemini_native = "googleapis.com" in api_url or not api_url
+        
+        if is_gemini_native:
+            # Danh sách các model để thử theo thứ tự ưu tiên
+            models_to_try = [model_name]
+            # Thêm các version mới nhất mà API key này hỗ trợ
+            models_to_try.extend(["gemini-2.0-flash", "gemini-2.5-flash", "gemini-flash-latest"])
+            if "gemini-1.5-flash" not in models_to_try:
+                models_to_try.append("gemini-1.5-flash")
+            models_to_try.extend(["gemini-1.5-flash-latest", "gemini-1.5-pro", "gemini-pro-latest"])
+            
+            last_error = ""
+            for m in models_to_try:
+                # Dùng v1beta cho tất cả để rộng đường
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent"
+                params = {"key": api_key}
+                headers = {"Content-Type": "application/json"}
+                data = {
+                    "contents": [{
+                        "parts": [{
+                            "text": f"{system_prompt}\n\nCâu hỏi: {cau_hoi}"
+                        }]
+                    }]
+                }
                 
-        except requests.exceptions.Timeout:
-            raise UserError("API timeout. Vui lòng thử lại sau.")
-        except requests.exceptions.RequestException as e:
-            raise UserError(f"Lỗi kết nối API: {str(e)}")
+                print(f"DEBUG: Trình thử model: {m}...")
+                try:
+                    response = requests.post(url, headers=headers, params=params, json=data, timeout=60)
+                    if response.status_code == 200:
+                        result = response.json()
+                        print(f"DEBUG: ===> THÀNH CÔNG VỚI {m}!")
+                        return result['candidates'][0]['content']['parts'][0]['text']
+                    else:
+                        last_error = f"API Error ({m}): {response.status_code} - {response.text}"
+                        print(f"DEBUG: {m} thất bại, thử tiếp...")
+                        continue
+                except Exception as e:
+                    last_error = str(e)
+                    continue
+            
+            # Nếu chạy hết vòng lặp mà không được
+            raise UserError(f"Không có model Gemini nào hoạt động. Lỗi cuối cùng: {last_error}")
+
+        else:
+            # Cấu hình cho OpenRouter / OpenAI format
+            url = api_url
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "http://localhost:8069",
+                "X-Title": "Odoo AI Assistant"
+            }
+            data = {
+                "model": model_name,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": cau_hoi}
+                ],
+                "temperature": 0.7,
+                "max_tokens": 2000
+            }
+
+            # DEBUG: Print to terminal directly
+            print("\n" + "="*50)
+            print(f"DEBUG AI TYPE: OpenRouter")
+            print(f"DEBUG URL: {url}")
+            print(f"DEBUG API_URL_INPUT: '{api_url}'")
+            print("="*50 + "\n")
+            
+            try:
+                response = requests.post(
+                    url,
+                    headers=headers,
+                    json=data,
+                    timeout=60
+                )
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    return result['choices'][0]['message']['content']
+                else:
+                    error_msg = f"API Error: {response.status_code} - {response.text}"
+                    _logger.error(error_msg)
+                    raise UserError(error_msg)
+            except Exception as e:
+                raise UserError(f"Lỗi kết nối API: {str(e)}")
     
     # ==================== ACTION ====================
     def action_hoi_ai(self):
