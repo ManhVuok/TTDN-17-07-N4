@@ -291,7 +291,9 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
         # Xác định xem đang dùng OpenRouter hay Gemini Native
         api_url = (config.api_url or "").strip()
         model_name = (config.model_name or "gemini-1.5-flash").strip()
-        is_gemini_native = "googleapis.com" in api_url or not api_url
+        
+        # TỰ ĐỘNG NHẬN DIỆN: Nếu Key bắt đầu bằng AIzaSy thì coi như dùng Gemini Native
+        is_gemini_native = api_key.startswith("AIzaSy") or "googleapis.com" in api_url or not api_url
         
         if is_gemini_native:
             # Danh sách các model để thử theo thứ tự ưu tiên
