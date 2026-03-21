@@ -169,8 +169,8 @@ Quá trình "Chấm Công - Tính Lương" được thực hiện với các bư
 
 ## 📝 6. License
 
-- 👨‍🎓 **Sinh viên thực hiện**: Nguyễn Đức Hoàn
+- 👨‍🎓 **Sinh viên thực hiện**: Nguyễn Văn Thuyết, Vũ Duy Mạnh
 - 🎓 **Khoa**: Công nghệ thông tin – Đại học Đại Nam
-- 📧 **Email**: nguyenduchoan2050@gmail.com
+- 📧 **Email**: thuyet1230@gmail.com
 
 ---
