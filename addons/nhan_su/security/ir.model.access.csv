@@ -8,5 +8,6 @@ access_danh_sach_chung_chi_bang_cap,danh_sach_chung_chi_bang_cap.danh_sach_chung
 access_ai_cau_hinh_api,ai.cau_hinh_api,model_ai_cau_hinh_api,base.group_user,1,1,1,1
 access_ai_lich_su_chat,ai.lich_su_chat,model_ai_lich_su_chat,base.group_user,1,1,1,0
 access_ai_assistant,ai.assistant,model_ai_assistant,base.group_user,1,1,1,1
+access_telegram_config,telegram.config,model_telegram_config,base.group_user,1,1,1,1
 
 

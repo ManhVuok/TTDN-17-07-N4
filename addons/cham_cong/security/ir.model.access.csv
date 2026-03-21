@@ -7,6 +7,7 @@ access_trang_thai_cham_cong,trang_thai_cham_cong.trang_thai_cham_cong,model_tran
 access_nghi_phep_nam,nghi_phep_nam.nghi_phep_nam,model_nghi_phep_nam,base.group_user,1,1,1,1
 access_ca_lam_viec,ca_lam_viec.ca_lam_viec,model_ca_lam_viec,base.group_user,1,1,1,1
 access_dang_ky_tang_ca,dang_ky_tang_ca.dang_ky_tang_ca,model_dang_ky_tang_ca,base.group_user,1,1,1,1
+access_attendance_automation,attendance.automation,model_attendance_automation,base.group_user,1,1,1,1
 
 
 

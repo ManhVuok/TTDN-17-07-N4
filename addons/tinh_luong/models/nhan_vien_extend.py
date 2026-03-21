@@ -80,3 +80,24 @@ class NhanVienTinhLuong(models.Model):
             },
             'target': 'current',
         }
+
+    def write(self, vals):
+        """
+        Ghi đè phương thức write để tự động đóng hợp đồng khi nhân viên nghỉ việc (Mức 2)
+        """
+        res = super(NhanVienTinhLuong, self).write(vals)
+        
+        # Nếu trạng thái chuyển sang 'nghi_viec' (Đã nghỉ việc)
+        if 'trang_thai' in vals and vals.get('trang_thai') == 'nghi_viec':
+            for record in self:
+                # Tìm các hợp đồng đang hiệu lực
+                active_contracts = self.env['hop_dong_lao_dong'].search([
+                    ('nhan_vien_id', '=', record.id),
+                    ('trang_thai', '=', 'hieu_luc')
+                ])
+                if active_contracts:
+                    active_contracts.write({
+                        'ngay_cham_dut': fields.Date.today(),
+                        'ghi_chu': f"Tự động đóng hợp đồng ngày {fields.Date.today()} do nhân viên nghỉ việc."
+                    })
+        return res

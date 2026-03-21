@@ -24,7 +24,7 @@ class AICauHinhAPI(models.Model):
     model_name = fields.Char(
         "Model Name", 
         required=True, 
-        default="xiaomi/mimo-v2-flash:free"
+        default="google/gemini-2.0-flash-lite-preview-02-05:free"
     )
     active = fields.Boolean("Đang sử dụng", default=True)
     
@@ -65,10 +65,31 @@ class AIAssistant(models.TransientModel):
         ('phong_ban', 'Thống kê phòng ban'),
         ('cham_cong', 'Dữ liệu chấm công'),
         ('luong', 'Thông tin lương'),
+        ('noi_quy', 'Tra cứu nội quy công ty'),
         ('tong_hop', 'Tổng hợp tất cả'),
     ], string="Loại dữ liệu", default='tong_hop', required=True)
     
     # ==================== LẤY DỮ LIỆU CONTEXT ====================
+    def _get_noi_quy_context(self):
+        """Lấy thông tin nội quy công ty (Mức 3 - Trợ lý thông minh)"""
+        return """
+=== NỘI QUY CÔNG TY (TÓM TẮT) ===
+1. Giờ làm việc: 
+   - Sáng: 08:00 - 12:00
+   - Chiều: 13:30 - 17:30
+   - Làm việc từ Thứ 2 đến Thứ 6. Thứ 7 làm việc buổi sáng.
+2. Quy định đi muộn/về sớm:
+   - Đi muộn trên 15 phút mà không có đơn xin phép sẽ bị tính là đi muộn.
+   - Đi muộn quá 3 lần/tháng sẽ bị nhắc nhở văn bản.
+3. Chế độ nghỉ phép:
+   - Mỗi năm có 12 ngày phép hưởng nguyên lương.
+   - Nghỉ thai sản: Theo quy định nhà nước (6 tháng).
+4. Quy định trang phục:
+   - Lịch sự, gọn gàng. Thứ 2 và Thứ 6 mặc đồng phục công ty.
+5. Khen thưởng/Kỷ luật:
+   - Thưởng chuyên cần: 500.000 VNĐ nếu không đi muộn buổi nào trong tháng.
+"""
+
     def _get_nhan_vien_context(self):
         """Lấy thông tin tổng hợp về nhân viên"""
         NhanVien = self.env['nhan_vien']
@@ -223,7 +244,8 @@ Tổng số phòng ban: {len(ds_phong_ban)}
             self._get_nhan_vien_context() + "\n\n" +
             self._get_phong_ban_context() + "\n\n" +
             self._get_cham_cong_context() + "\n\n" +
-            self._get_luong_context()
+            self._get_luong_context() + "\n\n" +
+            self._get_noi_quy_context()
         )
     
     def _get_context_by_type(self):
@@ -236,6 +258,8 @@ Tổng số phòng ban: {len(ds_phong_ban)}
             return self._get_cham_cong_context()
         elif self.loai_context == 'luong':
             return self._get_luong_context()
+        elif self.loai_context == 'noi_quy':
+            return self._get_noi_quy_context()
         else:
             return self._get_all_context()
     
@@ -254,16 +278,17 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
 1. Trả lời dựa trên dữ liệu thực tế được cung cấp ở trên
 2. Nếu không có thông tin trong dữ liệu, hãy nói rõ là không có thông tin
 3. Trả lời ngắn gọn, rõ ràng, dễ hiểu
-4. Sử dụng tiếng Việt
-5. Nếu cần thống kê, hãy tính toán dựa trên dữ liệu được cung cấp
-6. Format câu trả lời dễ đọc, có thể dùng bullet points nếu cần
+4. Sử dụng tiếng Việt chuẩn, chuyên nghiệp
+5. Nếu cần thống kê, hãy tính toán và đưa ra các so sánh (ví dụ: tháng này so với tháng trước nếu có dữ liệu)
+6. ĐẶC BIỆT: Hãy đóng vai trò là một cố vấn nhân sự cấp cao, đưa ra các nhận xét về tình hình kỷ luật (đi muộn), chi phí lương, và đề xuất các giải pháp cải thiện môi trường làm việc.
+7. Format câu trả lời bằng Markdown đẹp, dễ đọc, có tiêu đề và bảng biểu nếu cần.
 """
         
         headers = {
             "Authorization": f"Bearer {config.api_key}",
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://odoo-hr-system.com",
-            "X-Title": "Odoo HR AI Assistant"
+            "HTTP-Referer": "http://localhost:8069",
+            "X-Title": "Odoo AI Assistant"
         }
         
         data = {

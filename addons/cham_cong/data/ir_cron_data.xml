@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Scheduled Action to send daily attendance summary to Telegram -->
+        <record id="ir_cron_daily_attendance_summary" model="ir.cron">
+            <field name="name">Chấm công: Gửi tóm tắt điểm danh hàng ngày qua Telegram</field>
+            <field name="model_id" ref="model_attendance_automation"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_daily_attendance_summary()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <!-- Schedue for 18:00 today or tomorrow -->
+            <field name="nextcall" eval="(datetime.now().replace(hour=11, minute=0, second=0)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

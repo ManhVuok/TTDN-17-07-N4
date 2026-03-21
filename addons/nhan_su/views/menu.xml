@@ -145,11 +145,11 @@
             action="action_chung_chi_bang_cap"
         />
         
-        <!-- ===================== AI ASSISTANT ===================== -->
-        <menuitem name="AI Assistant" 
+        <!-- ===================== AI & API ===================== -->
+        <menuitem name="AI &amp; Kết nối API" 
             id="menu_ai_assistant_root" 
             parent="menu_root" 
-            sequence="2"
+            sequence="20"
         />
         
         <menuitem name="Hỏi AI" 
@@ -165,11 +165,18 @@
             sequence="2"
             action="action_ai_lich_su_chat"
         />
-        
-        <menuitem name="Cấu hình API" 
-            id="menu_cau_hinh_api" 
+
+        <menuitem name="Cấu hình Telegram" 
+            id="menu_telegram_config" 
             parent="menu_ai_assistant_root" 
             sequence="3"
+            action="action_telegram_config"
+        />
+        
+        <menuitem name="Cấu hình API AI" 
+            id="menu_cau_hinh_api" 
+            parent="menu_ai_assistant_root" 
+            sequence="4"
             action="action_ai_cau_hinh_api"
         />
     </data>

@@ -1,8 +1,10 @@
-# -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import date
 import calendar
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class BangLuong(models.Model):
@@ -218,6 +220,31 @@ class BangLuong(models.Model):
             'nguoi_duyet_id': self.env.user.id,
             'ngay_duyet': fields.Datetime.now(),
         })
+        # Gửi thông báo Telegram
+        self._send_telegram_notification()
+
+    def _send_telegram_notification(self):
+        """Tính toán nội dung và gửi thông báo qua Telegram"""
+        self.ensure_one()
+        config = self.env['telegram.config'].get_active_config()
+        _logger.info(f"--- Bắt đầu gửi thông báo Telegram cho bảng lương {self.ma_bang_luong} ---")
+        if not config:
+            _logger.warning("Không tìm thấy cấu hình Telegram Bot nào đang hoạt động.")
+            return
+        
+        _logger.info(f"Đang sử dụng cấu hình Telegram: {config.ten} (Chat ID: {config.chat_id})")
+
+        message = f"<b>📢 THÔNG BÁO DUYỆT LƯƠNG</b>\n"
+        message += f"--------------------------------\n"
+        message += f"🗓 <b>Kỳ lương:</b> Tháng {self.thang}/{self.nam}\n"
+        message += f"👤 <b>Số nhân viên:</b> {self.tong_nhan_vien}\n"
+        message += f"💰 <b>Tổng lương Net:</b> {self.tong_luong_net:,.0f} VNĐ\n"
+        message += f"✅ <b>Người duyệt:</b> {self.env.user.name}\n"
+        message += f"--------------------------------\n"
+        message += f"<i>Hệ thống Quản trị Odoo ERP</i>"
+
+        _logger.info(f"Nội dung thông báo: {message}")
+        config.send_message(message)
     
     def action_tra_luong(self):
         """Xác nhận đã trả lương"""
@@ -239,6 +266,39 @@ class BangLuong(models.Model):
         if self.trang_thai == 'da_tra':
             raise UserError("Không thể reset bảng lương đã trả!")
         self.trang_thai = 'nhap'
+
+    @api.model
+    def _cron_generate_monthly_payroll(self):
+        """
+        Phương thức cho Scheduled Action: Tự động tạo bảng lương nháp vào ngày đầu tháng.
+        """
+        today = date.today()
+        thang = str(today.month)
+        nam = str(today.year)
+        
+        # Kiểm tra xem đã có bảng lương cho tháng này chưa
+        existing = self.search([('thang', '=', thang), ('nam', '=', nam)], limit=1)
+        if existing:
+            _logger.info(f"Bảng lương tháng {thang}/{nam} đã tồn tại, bỏ qua tự động tạo.")
+            return
+            
+        # Tạo bảng lương mới
+        ma_bang_luong = f"BL{nam}{thang.zfill(2)}"
+        vals = {
+            'ma_bang_luong': ma_bang_luong,
+            'thang': thang,
+            'nam': nam,
+            'trang_thai': 'nhap',
+            'ghi_chu': f"Bảng lương được tạo tự động bởi hệ thống vào ngày {today.strftime('%d/%m/%Y')}"
+        }
+        
+        try:
+            new_payroll = self.create(vals)
+            # Tự động tạo chi tiết nhân viên
+            new_payroll.action_tao_chi_tiet()
+            _logger.info(f"Đã tự động tạo bảng lương: {ma_bang_luong}")
+        except Exception as e:
+            _logger.error(f"Lỗi khi tự động tạo bảng lương: {str(e)}")
     
     _sql_constraints = [
         ('ma_bang_luong_unique', 'UNIQUE(ma_bang_luong)', 'Mã bảng lương phải là duy nhất!'),

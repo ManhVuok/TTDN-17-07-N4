@@ -38,6 +38,7 @@
         'views/chi_tiet_luong.xml',
         'views/nhan_vien_extend.xml',
         'views/dashboard.xml',
+        'data/ir_cron_data.xml',
         'report/phieu_luong_report.xml',
         'views/menu.xml',
         'data/sample_data.xml',

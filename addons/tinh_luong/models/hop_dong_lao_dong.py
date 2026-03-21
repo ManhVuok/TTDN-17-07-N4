@@ -72,6 +72,8 @@ class HopDongLaoDong(models.Model):
         ('cham_dut', 'Chấm dứt'),
     ], string="Trạng thái", compute="_compute_trang_thai", store=True)
     
+    ngay_cham_dut = fields.Date("Ngày chấm dứt")
+    
     # Thông tin bổ sung
     so_nguoi_phu_thuoc = fields.Integer(
         "Số người phụ thuộc",
@@ -99,11 +101,13 @@ class HopDongLaoDong(models.Model):
     file_hop_dong = fields.Binary("File hợp đồng")
     file_hop_dong_name = fields.Char("Tên file")
     
-    @api.depends('ngay_hieu_luc', 'ngay_het_han')
+    @api.depends('ngay_hieu_luc', 'ngay_het_han', 'ngay_cham_dut')
     def _compute_trang_thai(self):
         today = date.today()
         for record in self:
-            if not record.ngay_hieu_luc:
+            if record.ngay_cham_dut:
+                record.trang_thai = 'cham_dut'
+            elif not record.ngay_hieu_luc:
                 record.trang_thai = 'moi'
             elif record.ngay_hieu_luc > today:
                 record.trang_thai = 'moi'

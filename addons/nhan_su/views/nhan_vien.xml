@@ -240,6 +240,31 @@
             </field>
         </record>
 
+        <!-- Graph View - Phân tích nhân sự -->
+        <record id="view_nhan_vien_graph" model="ir.ui.view">
+            <field name="name">nhan_vien.graph</field>
+            <field name="model">nhan_vien</field>
+            <field name="arch" type="xml">
+                <graph string="Thống kê nhân sự" type="pie" sample="1">
+                    <field name="phong_ban_id"/>
+                    <field name="trang_thai"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Pivot View - Phân tích chuyên sâu -->
+        <record id="view_nhan_vien_pivot" model="ir.ui.view">
+            <field name="name">nhan_vien.pivot</field>
+            <field name="model">nhan_vien</field>
+            <field name="arch" type="xml">
+                <pivot string="Bảng phân tích nhân sự" sample="1">
+                    <field name="phong_ban_id" type="row"/>
+                    <field name="trang_thai" type="col"/>
+                    <field name="id" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
         <!-- Search View -->
         <record model="ir.ui.view" id="nhan_vien_search">
             <field name="name">nhan_vien.search</field>
@@ -274,7 +299,7 @@
         <record id="action_nhan_vien" model="ir.actions.act_window">
             <field name="name">Nhân viên</field>
             <field name="res_model">nhan_vien</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,tree,graph,pivot,form</field>
             <field name="search_view_id" ref="nhan_vien_search"/>
             <field name="context">{'search_default_dang_lam': 1}</field>
             <field name="help" type="html">

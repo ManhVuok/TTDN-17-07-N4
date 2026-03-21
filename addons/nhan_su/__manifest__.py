@@ -35,6 +35,7 @@
         'views/danh_sach_chung_chi_bang_cap.xml',
         'views/ai_assistant.xml',
         'views/dashboard.xml',
+        'views/telegram_config.xml',
         'report/ho_so_nhan_vien_report.xml',
         'views/menu.xml',
         'data/sample_data.xml',

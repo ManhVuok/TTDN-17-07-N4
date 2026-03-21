@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
+    <data noupdate="0">
         
         <!-- Demo Cấu hình lương -->
         <record id="demo_cau_hinh_luong" model="cau_hinh_luong">
@@ -26,42 +26,36 @@
             <field name="muc_den">5000000</field>
             <field name="ty_le_thue">5</field>
         </record>
-        
         <record id="demo_cau_hinh_thue_bac2" model="cau_hinh_thue">
             <field name="ten_bac">Bậc 2 (5-10 triệu)</field>
             <field name="muc_tu">5000001</field>
             <field name="muc_den">10000000</field>
             <field name="ty_le_thue">10</field>
         </record>
-        
         <record id="demo_cau_hinh_thue_bac3" model="cau_hinh_thue">
             <field name="ten_bac">Bậc 3 (10-18 triệu)</field>
             <field name="muc_tu">10000001</field>
             <field name="muc_den">18000000</field>
             <field name="ty_le_thue">15</field>
         </record>
-        
         <record id="demo_cau_hinh_thue_bac4" model="cau_hinh_thue">
             <field name="ten_bac">Bậc 4 (18-32 triệu)</field>
             <field name="muc_tu">18000001</field>
             <field name="muc_den">32000000</field>
             <field name="ty_le_thue">20</field>
         </record>
-        
         <record id="demo_cau_hinh_thue_bac5" model="cau_hinh_thue">
             <field name="ten_bac">Bậc 5 (32-52 triệu)</field>
             <field name="muc_tu">32000001</field>
             <field name="muc_den">52000000</field>
             <field name="ty_le_thue">25</field>
         </record>
-        
         <record id="demo_cau_hinh_thue_bac6" model="cau_hinh_thue">
             <field name="ten_bac">Bậc 6 (52-80 triệu)</field>
             <field name="muc_tu">52000001</field>
             <field name="muc_den">80000000</field>
             <field name="ty_le_thue">30</field>
         </record>
-        
         <record id="demo_cau_hinh_thue_bac7" model="cau_hinh_thue">
             <field name="ten_bac">Bậc 7 (trên 80 triệu)</field>
             <field name="muc_tu">80000001</field>
@@ -79,7 +73,6 @@
             <field name="tinh_bao_hiem">False</field>
             <field name="active">True</field>
         </record>
-        
         <record id="demo_phu_cap_di_lai" model="phu_cap">
             <field name="ma_phu_cap">PC002</field>
             <field name="ten_phu_cap">Phụ cấp đi lại</field>
@@ -89,135 +82,189 @@
             <field name="tinh_bao_hiem">False</field>
             <field name="active">True</field>
         </record>
-        
-        <record id="demo_phu_cap_dien_thoai" model="phu_cap">
-            <field name="ma_phu_cap">PC003</field>
-            <field name="ten_phu_cap">Phụ cấp điện thoại</field>
-            <field name="loai_phu_cap">co_dinh</field>
-            <field name="so_tien">300000</field>
-            <field name="tinh_thue">False</field>
-            <field name="tinh_bao_hiem">False</field>
-            <field name="active">True</field>
-        </record>
-        
-        <record id="demo_phu_cap_chuc_vu_tp" model="phu_cap">
-            <field name="ma_phu_cap">PC004</field>
-            <field name="ten_phu_cap">Phụ cấp trưởng phòng</field>
-            <field name="loai_phu_cap">theo_chuc_vu</field>
-            <field name="so_tien">5000000</field>
-            <field name="tinh_thue">True</field>
-            <field name="tinh_bao_hiem">False</field>
-            <field name="active">True</field>
-        </record>
 
-        <!-- Demo Loại khấu trừ -->
-        <record id="demo_khau_tru_cong_doan" model="loai_khau_tru">
-            <field name="ma_khau_tru">KT001</field>
-            <field name="ten_khau_tru">Phí công đoàn</field>
-            <field name="loai">phan_tram</field>
-            <field name="gia_tri">1</field>
-            <field name="mo_ta">Phí công đoàn 1% lương</field>
-            <field name="active">True</field>
-        </record>
-
-        <!-- Demo Hợp đồng lao động 
-             loai_hop_dong: thu_viec, co_thoi_han, khong_thoi_han, thoi_vu
-             trang_thai: computed field nên không cần gán
-             phong_ban_id, chuc_vu_id: related readonly nên không gán
-        -->
+        <!-- Demo Hợp đồng lao động (10 Records correlate with nhan_su) -->
         <record id="demo_hop_dong_nv1" model="hop_dong_lao_dong">
-            <field name="ma_hop_dong">HD-NV001-2020</field>
+            <field name="ma_hop_dong">HD-NV001</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
             <field name="loai_hop_dong">khong_thoi_han</field>
             <field name="ngay_ky">2020-01-01</field>
             <field name="ngay_hieu_luc">2020-01-01</field>
-            <field name="luong_co_ban">25000000</field>
-            <field name="luong_dong_bao_hiem">20000000</field>
-            <field name="so_nguoi_phu_thuoc">2</field>
-            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai'), ref('demo_phu_cap_chuc_vu_tp')])]"/>
+            <field name="luong_co_ban">50000000</field>
+            <field name="luong_dong_bao_hiem">40000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
         </record>
-        
         <record id="demo_hop_dong_nv2" model="hop_dong_lao_dong">
-            <field name="ma_hop_dong">HD-NV002-2021</field>
+            <field name="ma_hop_dong">HD-NV002</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
             <field name="loai_hop_dong">co_thoi_han</field>
             <field name="ngay_ky">2021-06-15</field>
             <field name="ngay_hieu_luc">2021-06-15</field>
-            <field name="ngay_het_han">2027-06-14</field>
-            <field name="luong_co_ban">12000000</field>
-            <field name="luong_dong_bao_hiem">12000000</field>
-            <field name="so_nguoi_phu_thuoc">0</field>
+            <field name="luong_co_ban">25000000</field>
+            <field name="luong_dong_bao_hiem">20000000</field>
             <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
         </record>
-        
         <record id="demo_hop_dong_nv3" model="hop_dong_lao_dong">
-            <field name="ma_hop_dong">HD-NV003-2019</field>
+            <field name="ma_hop_dong">HD-NV003</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_3"/>
-            <field name="loai_hop_dong">khong_thoi_han</field>
+            <field name="loai_hop_dong">co_thoi_han</field>
             <field name="ngay_ky">2019-03-01</field>
             <field name="ngay_hieu_luc">2019-03-01</field>
-            <field name="luong_co_ban">18000000</field>
-            <field name="luong_dong_bao_hiem">15000000</field>
-            <field name="so_nguoi_phu_thuoc">1</field>
-            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai'), ref('demo_phu_cap_dien_thoai')])]"/>
+            <field name="luong_co_ban">22000000</field>
+            <field name="luong_dong_bao_hiem">18000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
         </record>
-        
         <record id="demo_hop_dong_nv4" model="hop_dong_lao_dong">
-            <field name="ma_hop_dong">HD-NV004-2024</field>
+            <field name="ma_hop_dong">HD-NV004</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_4"/>
-            <field name="loai_hop_dong">thu_viec</field>
+            <field name="loai_hop_dong">co_thoi_han</field>
             <field name="ngay_ky">2024-01-01</field>
             <field name="ngay_hieu_luc">2024-01-01</field>
-            <field name="ngay_het_han">2027-03-31</field>
-            <field name="luong_co_ban">10000000</field>
-            <field name="luong_dong_bao_hiem">10000000</field>
-            <field name="so_nguoi_phu_thuoc">0</field>
-            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua')])]"/>
+            <field name="luong_co_ban">15000000</field>
+            <field name="luong_dong_bao_hiem">12000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
         </record>
-        
         <record id="demo_hop_dong_nv5" model="hop_dong_lao_dong">
-            <field name="ma_hop_dong">HD-NV005-2025</field>
+            <field name="ma_hop_dong">HD-NV005</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_5"/>
-            <field name="loai_hop_dong">thu_viec</field>
+            <field name="loai_hop_dong">co_thoi_han</field>
             <field name="ngay_ky">2025-12-01</field>
             <field name="ngay_hieu_luc">2025-12-01</field>
-            <field name="ngay_het_han">2026-05-31</field>
-            <field name="luong_co_ban">5000000</field>
+            <field name="luong_co_ban">14000000</field>
+            <field name="luong_dong_bao_hiem">10000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
+        </record>
+        <record id="demo_hop_dong_nv6" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD-NV006</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_6"/>
+            <field name="loai_hop_dong">co_thoi_han</field>
+            <field name="ngay_ky">2022-05-10</field>
+            <field name="ngay_hieu_luc">2022-05-10</field>
+            <field name="luong_co_ban">12000000</field>
+            <field name="luong_dong_bao_hiem">10000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
+        </record>
+        <record id="demo_hop_dong_nv7" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD-NV007</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_7"/>
+            <field name="loai_hop_dong">co_thoi_han</field>
+            <field name="ngay_ky">2021-10-01</field>
+            <field name="ngay_hieu_luc">2021-10-01</field>
+            <field name="luong_co_ban">12000000</field>
+            <field name="luong_dong_bao_hiem">10000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
+        </record>
+        <record id="demo_hop_dong_nv8" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD-NV008</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_8"/>
+            <field name="loai_hop_dong">co_thoi_han</field>
+            <field name="ngay_ky">2023-03-15</field>
+            <field name="ngay_hieu_luc">2023-03-15</field>
+            <field name="luong_co_ban">12000000</field>
+            <field name="luong_dong_bao_hiem">10000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
+        </record>
+        <record id="demo_hop_dong_nv9" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD-NV009</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_9"/>
+            <field name="loai_hop_dong">co_thoi_han</field>
+            <field name="ngay_ky">2022-01-01</field>
+            <field name="ngay_hieu_luc">2022-01-01</field>
+            <field name="luong_co_ban">18000000</field>
+            <field name="luong_dong_bao_hiem">15000000</field>
+            <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua'), ref('demo_phu_cap_di_lai')])]"/>
+        </record>
+        <record id="demo_hop_dong_nv10" model="hop_dong_lao_dong">
+            <field name="ma_hop_dong">HD-NV010</field>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_10"/>
+            <field name="loai_hop_dong">thu_viec</field>
+            <field name="ngay_ky">2025-06-01</field>
+            <field name="ngay_hieu_luc">2025-06-01</field>
+            <field name="luong_co_ban">6000000</field>
             <field name="luong_dong_bao_hiem">0</field>
-            <field name="so_nguoi_phu_thuoc">0</field>
             <field name="phu_cap_ids" eval="[(6, 0, [ref('demo_phu_cap_an_trua')])]"/>
         </record>
 
-        <!-- Demo Bảng lương tháng 1/2026 -->
+        <!-- Demo Bảng lương tháng 01/2026 -->
         <record id="demo_bang_luong_01_2026" model="bang_luong">
             <field name="ma_bang_luong">BL-2026-01</field>
+            <field name="ten_bang_luong">Bảng lương tháng 01/2026</field>
             <field name="thang">1</field>
             <field name="nam">2026</field>
             <field name="cau_hinh_luong_id" ref="demo_cau_hinh_luong"/>
-            <field name="trang_thai">nhap</field>
-            <field name="ghi_chu">Bảng lương demo tháng 01/2026</field>
+            <field name="trang_thai">da_duyet</field>
         </record>
 
-        <!-- Demo Chi tiết lương cho nhân viên (tháng 1/2026) -->
-        <record id="demo_ctl_nv1_01_2026" model="chi_tiet_luong">
+        <!-- Chi tiết lương cho 10 nhân viên -->
+        <record id="demo_ctl_nv1" model="chi_tiet_luong">
             <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
             <field name="hop_dong_id" ref="demo_hop_dong_nv1"/>
-            <field name="ghi_chu">Chi tiết lương demo NV001</field>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">50000000</field>
         </record>
-        
-        <record id="demo_ctl_nv2_01_2026" model="chi_tiet_luong">
+        <record id="demo_ctl_nv2" model="chi_tiet_luong">
             <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
             <field name="hop_dong_id" ref="demo_hop_dong_nv2"/>
-            <field name="ghi_chu">Chi tiết lương demo NV002</field>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">25000000</field>
         </record>
-        
-        <record id="demo_ctl_nv3_01_2026" model="chi_tiet_luong">
+        <record id="demo_ctl_nv3" model="chi_tiet_luong">
             <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_3"/>
             <field name="hop_dong_id" ref="demo_hop_dong_nv3"/>
-            <field name="ghi_chu">Chi tiết lương demo NV003</field>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">22000000</field>
+        </record>
+        <record id="demo_ctl_nv4" model="chi_tiet_luong">
+            <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_4"/>
+            <field name="hop_dong_id" ref="demo_hop_dong_nv4"/>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">15000000</field>
+        </record>
+        <record id="demo_ctl_nv5" model="chi_tiet_luong">
+            <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_5"/>
+            <field name="hop_dong_id" ref="demo_hop_dong_nv5"/>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">14000000</field>
+        </record>
+        <record id="demo_ctl_nv6" model="chi_tiet_luong">
+            <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_6"/>
+            <field name="hop_dong_id" ref="demo_hop_dong_nv6"/>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">12000000</field>
+        </record>
+        <record id="demo_ctl_nv7" model="chi_tiet_luong">
+            <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_7"/>
+            <field name="hop_dong_id" ref="demo_hop_dong_nv7"/>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">12000000</field>
+        </record>
+        <record id="demo_ctl_nv8" model="chi_tiet_luong">
+            <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_8"/>
+            <field name="hop_dong_id" ref="demo_hop_dong_nv8"/>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">12000000</field>
+        </record>
+        <record id="demo_ctl_nv9" model="chi_tiet_luong">
+            <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_9"/>
+            <field name="hop_dong_id" ref="demo_hop_dong_nv9"/>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">18000000</field>
+        </record>
+        <record id="demo_ctl_nv10" model="chi_tiet_luong">
+            <field name="bang_luong_id" ref="demo_bang_luong_01_2026"/>
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_10"/>
+            <field name="hop_dong_id" ref="demo_hop_dong_nv10"/>
+            <field name="so_cong_thuc_te">22</field>
+            <field name="luong_co_ban">6000000</field>
         </record>
 
     </data>

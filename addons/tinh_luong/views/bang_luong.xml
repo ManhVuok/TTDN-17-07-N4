@@ -214,6 +214,32 @@
         </field>
     </record>
 
+    <!-- Graph View - Phân tích lương theo tháng -->
+    <record id="view_bang_luong_graph" model="ir.ui.view">
+        <field name="name">bang_luong.graph</field>
+        <field name="model">bang_luong</field>
+        <field name="arch" type="xml">
+            <graph string="Thống kê lương" type="bar" sample="1">
+                <field name="thang"/>
+                <field name="tong_luong_net" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View - Phân tích lương chuyên sâu -->
+    <record id="view_bang_luong_pivot" model="ir.ui.view">
+        <field name="name">bang_luong.pivot</field>
+        <field name="model">bang_luong</field>
+        <field name="arch" type="xml">
+            <pivot string="Bảng phân tích lương" sample="1">
+                <field name="nam" type="row"/>
+                <field name="thang" type="col"/>
+                <field name="tong_luong_net" type="measure"/>
+                <field name="tong_nhan_vien" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <!-- Search View -->
     <record id="view_bang_luong_search" model="ir.ui.view">
         <field name="name">bang_luong.search</field>
@@ -243,7 +269,7 @@
     <record id="action_bang_luong" model="ir.actions.act_window">
         <field name="name">Bảng lương</field>
         <field name="res_model">bang_luong</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">tree,kanban,graph,pivot,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Tạo bảng lương mới

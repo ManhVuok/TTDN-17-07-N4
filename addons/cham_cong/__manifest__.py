@@ -36,6 +36,7 @@
         'views/dot_dang_ky.xml',
         'views/don_tu.xml',
         'views/nghi_phep_nam.xml',
+        'data/ir_cron_data.xml',
         'views/dashboard.xml',
         'views/menu.xml',
         'data/sample_data.xml',
