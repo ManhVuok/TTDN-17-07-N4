@@ -8,6 +8,6 @@ access_nghi_phep_nam,nghi_phep_nam.nghi_phep_nam,model_nghi_phep_nam,base.group_
 access_ca_lam_viec,ca_lam_viec.ca_lam_viec,model_ca_lam_viec,base.group_user,1,1,1,1
 access_dang_ky_tang_ca,dang_ky_tang_ca.dang_ky_tang_ca,model_dang_ky_tang_ca,base.group_user,1,1,1,1
 access_attendance_automation,attendance.automation,model_attendance_automation,base.group_user,1,1,1,1
-
+access_don_tu_tu_choi_wizard,don_tu.tu_choi.wizard,model_don_tu_tu_choi_wizard,base.group_user,1,1,1,1
 
 

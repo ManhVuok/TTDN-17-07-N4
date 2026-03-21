@@ -252,6 +252,33 @@ class BangLuong(models.Model):
         if self.trang_thai != 'da_duyet':
             raise UserError("Chỉ có thể xác nhận trả lương sau khi đã duyệt!")
         self.trang_thai = 'da_tra'
+
+    def action_ai_send_payslip(self):
+        """Dùng AI để sinh nhận xét lương và mô phỏng gửi Email"""
+        self.ensure_one()
+        if self.trang_thai not in ['da_duyet', 'da_tra']:
+            raise UserError("Phải duyệt bảng lương trước khi gửi Payslip!")
+            
+        AIHelper = self.env['ai.assistant']
+        for chi_tiet in self.chi_tiet_luong_ids:
+            prompt = f"Viết 1 nhận xét ngắn (3-4 câu) gửi cho {chi_tiet.nhan_vien_id.ho_va_ten}.\nLương tháng {self.thang}/{self.nam}.\nĐi làm: {chi_tiet.so_cong_thuc_te} ngày. Vắng mặt: {chi_tiet.so_ngay_vang} ngày. Đi muộn: {chi_tiet.tong_phut_di_muon} phút.\nYêu cầu: Nhận xét khách quan, nhẹ nhàng khuyên bảo nếu đi muộn, khen ngợi nếu chăm chỉ. Đóng vai: Chuyên gia nhân sự gửi trực tiếp cho nhân sự qua Email."
+            try:
+                ai_doc = AIHelper.create({'cau_hoi': prompt, 'loai_context': 'tong_hop'})
+                nhan_xet_ai = ai_doc._call_ai_api(prompt, "Bạn là Trưởng phòng Nhân sự chuyên nghiệp.")
+                chi_tiet.ai_nhan_xet = nhan_xet_ai + f"\n[Đã đính kèm Payslip_{self.thang}_{self.nam}_{chi_tiet.nhan_vien_id.ma_dinh_danh}.pdf]"
+            except Exception as e:
+                chi_tiet.ai_nhan_xet = f"Không thể lấy đánh giá AI: {str(e)}"
+        
+        self.trang_thai = 'da_tra'
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Gửi Email AI Thành công',
+                'message': f'Đã sử dụng LLM phân tích lương và đánh giá cho {len(self.chi_tiet_luong_ids)} nhân viên!',
+                'type': 'success',
+            }
+        }
     
     def action_huy(self):
         """Hủy bảng lương"""

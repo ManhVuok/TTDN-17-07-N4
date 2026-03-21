@@ -103,12 +103,37 @@ class DonTu(models.Model):
                 record.ten_don = "Đơn mới"
     
     # ==================== WORKFLOW ACTIONS ====================
+    def _send_telegram_notification(self, title, detail):
+        """Tính toán nội dung và gửi thông báo qua Telegram"""
+        try:
+            config = self.env['telegram.config'].sudo().get_active_config()
+            if not config:
+                return
+            message = f"<b>{title}</b>\n"
+            message += f"--------------------------------\n"
+            message += f"👤 <b>Nhân viên:</b> {self.nhan_vien_id.ho_va_ten}\n"
+            message += f"{detail}\n"
+            message += f"--------------------------------\n"
+            message += f"<i>Odoo HR & Chấm công</i>"
+            config.send_message(message)
+        except Exception:
+            pass
+
     def action_gui_duyet(self):
         """Gửi đơn để duyệt"""
         for record in self:
             if record.trang_thai_duyet != 'nhap':
                 raise UserError("Chỉ có thể gửi duyệt đơn ở trạng thái nháp!")
             record.trang_thai_duyet = 'cho_duyet'
+            
+            # Thông báo Telegram
+            loai_don_dict = dict(self._fields['loai_don'].selection)
+            loai = loai_don_dict.get(record.loai_don, '')
+            detail = f"📝 <b>Loại đơn:</b> {loai}\n"
+            detail += f"🗓 <b>Ngày áp dụng:</b> {record.ngay_ap_dung}\n"
+            if record.ly_do:
+                detail += f"💬 <b>Lý do:</b> {record.ly_do}"
+            record._send_telegram_notification("🔔 CÓ YÊU CẦU ĐƠN TỪ MỚI CẦN DUYỆT", detail)
     
     def action_duyet(self):
         """Phê duyệt đơn"""
@@ -140,6 +165,12 @@ class DonTu(models.Model):
                             'don_tu_id': record.id,
                         })
                     current_date += timedelta(days=1)
+            
+            # Thông báo Telegram
+            loai_don_dict = dict(self._fields['loai_don'].selection)
+            loai = loai_don_dict.get(record.loai_don, '')
+            detail = f"📝 <b>Loại đơn:</b> {loai}\n🗓 <b>Ngày áp dụng:</b> {record.ngay_ap_dung}\n✅ <b>Trạng thái:</b> Đã được duyệt"
+            record._send_telegram_notification("✅ ĐƠN TỪ ĐÃ ĐƯỢC PHÊ DUYỆT", detail)
     
     def action_tu_choi(self):
         """Từ chối đơn - mở wizard nhập lý do"""
@@ -163,6 +194,12 @@ class DonTu(models.Model):
                 'ngay_duyet': fields.Datetime.now(),
                 'ly_do_tu_choi': ly_do,
             })
+            
+            # Thông báo Telegram
+            loai_don_dict = dict(self._fields['loai_don'].selection)
+            loai = loai_don_dict.get(record.loai_don, '')
+            detail = f"📝 <b>Loại đơn:</b> {loai}\n🗓 <b>Ngày áp dụng:</b> {record.ngay_ap_dung}\n❌ <b>Từ chối bởi:</b> {self.env.user.name}\n💬 <b>Lý do:</b> {ly_do}"
+            record._send_telegram_notification("❌ ĐƠN TỪ ĐÃ BỊ TỪ CHỐI", detail)
     
     def action_huy(self):
         """Hủy đơn"""

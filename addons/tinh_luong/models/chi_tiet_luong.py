@@ -237,15 +237,16 @@ class ChiTietLuong(models.Model):
         store=True
     )
     
-    # === LƯƠNG THỰC NHẬN ===
+    # LƯƠNG THỰC NHẬN ===
     luong_thuc_nhan = fields.Float(
         "Lương thực nhận (Net)",
         compute="_compute_luong_thuc_nhan",
         store=True
     )
     
-    # Ghi chú
+    # Ghi chú & AI
     ghi_chu = fields.Text("Ghi chú")
+    ai_nhan_xet = fields.Text("AI Nhận xét Email", help="Nội dung đánh giá sinh tự động bởi AI")
     
     # === COMPUTED METHODS ===
     

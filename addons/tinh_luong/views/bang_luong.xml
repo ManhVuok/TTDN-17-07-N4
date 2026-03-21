@@ -22,6 +22,9 @@
                     <button name="action_tra_luong" string="Xác nhận trả lương" type="object"
                             class="btn-success" icon="fa-money"
                             attrs="{'invisible': [('trang_thai', '!=', 'da_duyet')]}"/>
+                    <button name="action_ai_send_payslip" string="AI Đánh giá &amp; Gửi Email Payslip" type="object"
+                            class="btn-info" icon="fa-magic"
+                            attrs="{'invisible': [('trang_thai', 'not in', ['da_duyet', 'da_tra'])]}"/>
                     <button name="action_huy" string="Hủy bảng lương" type="object"
                             class="btn-danger" icon="fa-times"
                             attrs="{'invisible': [('trang_thai', 'in', ['da_tra', 'huy'])]}"/>

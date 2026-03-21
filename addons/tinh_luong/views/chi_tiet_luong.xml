@@ -116,8 +116,11 @@
                             </group>
                         </page>
                         
-                        <page string="Ghi chú">
-                            <field name="ghi_chu" placeholder="Ghi chú cho nhân viên này..."/>
+                        <page string="Ghi chú &amp; AI">
+                            <group>
+                                <field name="ghi_chu" placeholder="Ghi chú cho nhân viên này..."/>
+                                <field name="ai_nhan_xet" placeholder="AI sẽ tự động sinh nhận xét này khi ấn nút gửi Email từ Bảng lương..." readonly="1" force_save="1"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>

@@ -30,6 +30,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'wizard/tu_choi_wizard.xml',
         'views/ca_lam_viec.xml',
         'views/dang_ky_ca_lam_theo_ngay.xml',
         'views/bang_cham_cong.xml',
