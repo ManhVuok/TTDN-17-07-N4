@@ -189,12 +189,21 @@ class BangChamCong(models.Model):
         ('vang_mat_co_phep', 'Vắng mặt có phép'),
     ], string="Trạng thái", compute="_compute_trang_thai", store=True)
     
-    @api.depends('phut_di_muon', 'phut_ve_som', 'gio_vao', 'gio_ra')
+    @api.depends('phut_di_muon', 'phut_ve_som', 'gio_vao', 'gio_ra', 'don_tu_id.trang_thai_duyet', 'don_tu_id.loai_don')
     def _compute_trang_thai(self):
         for record in self:
-            if not record.gio_vao and not record.gio_ra:
+            is_vang_mat_co_phep = False
+            if record.don_tu_id and record.don_tu_id.trang_thai_duyet == 'da_duyet' and record.don_tu_id.loai_don in ['nghi', 'nghi_phep', 'nghi_khong_luong']:
+                is_vang_mat_co_phep = True
+
+            if is_vang_mat_co_phep:
+                record.trang_thai = 'vang_mat_co_phep'
+            elif not record.gio_vao and not record.gio_ra:
                 # Vắng mặt - không có giờ vào và ra
-                record.trang_thai = 'vang_mat'
+                if record.don_tu_id and record.don_tu_id.trang_thai_duyet == 'da_duyet' and record.don_tu_id.loai_don in ['nghi', 'nghi_phep', 'nghi_khong_luong']:
+                    record.trang_thai = 'vang_mat_co_phep'
+                else:
+                    record.trang_thai = 'vang_mat'
             elif record.phut_di_muon > 0 and record.phut_ve_som > 0:
                 # Kiểm tra cả đi muộn VÀ về sớm trước
                 record.trang_thai = 'di_muon_ve_som'

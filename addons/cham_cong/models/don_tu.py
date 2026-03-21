@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from datetime import datetime
+from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError, UserError
 
 class DonTu(models.Model):
@@ -121,6 +121,26 @@ class DonTu(models.Model):
                 'nguoi_duyet_id': self.env.user.id,
                 'ngay_duyet': fields.Datetime.now(),
             })
+            
+            # Tự động cập nhật Bảng chấm công
+            if record.loai_don in ['nghi', 'nghi_phep', 'nghi_khong_luong']:
+                start_date = record.ngay_ap_dung
+                end_date = record.ngay_ket_thuc or record.ngay_ap_dung
+                current_date = start_date
+                while current_date <= end_date:
+                    bcc = self.env['bang_cham_cong'].search([
+                        ('nhan_vien_id', '=', record.nhan_vien_id.id),
+                        ('ngay_cham_cong', '=', current_date)
+                    ], limit=1)
+                    if bcc:
+                        bcc.write({'don_tu_id': record.id})
+                    else:
+                        self.env['bang_cham_cong'].create({
+                            'nhan_vien_id': record.nhan_vien_id.id,
+                            'ngay_cham_cong': current_date,
+                            'don_tu_id': record.id,
+                        })
+                    current_date += timedelta(days=1)
     
     def action_tu_choi(self):
         """Từ chối đơn - mở wizard nhập lý do"""
