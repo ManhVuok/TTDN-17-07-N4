@@ -34,8 +34,7 @@ class DonTu(models.Model):
         "Ngày làm đơn", 
         required=True, 
         default=fields.Date.today,
-        readonly=True,
-        states={'nhap': [('readonly', False)]}
+        readonly=True
     )
     
     ngay_ap_dung = fields.Date(
