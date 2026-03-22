@@ -154,18 +154,18 @@ python3 odoo-bin.py -c odoo.conf -u all
 ```
 Người sử dụng truy cập theo đường dẫn _http://localhost:8069/_ để đăng nhập vào hệ thống.
 
-## 📈 5. Luồng Nghiệp Vụ Chấm Công - Tính Lương
+## 📈 5. Luồng Nghiệp Vụ Chấm Công - Tính Lương (End-to-End)
 
-Quá trình "Chấm Công - Tính Lương" được thực hiện với các bước chính và bao gồm điểm tích hợp trọng tâm giữa các module. Sơ đồ chi tiết được đánh kèm tại `docs/businessflow/Nhom01_BusinessFlow_ChamCong_TinhLuong.png`.
+Quá trình "Chấm Công - Tính Lương" được thực hiện với các bước chính và bao gồm điểm tích hợp trọng tâm giữa các module HRM, Chấm Công, Tính Lương cùng với các sự kiện tự động hoá/API. Sơ đồ chi tiết được đánh kèm tại `docs/businessflow/Nhom01_BusinessFlow_ChamCong_TinhLuong.png`.
 
-1. **Nhân viên (Actor)** cung cấp thông tin, **HR** tạo *Hồ sơ nhân sự* - Đây là dữ liệu gốc quan trọng nhất của toàn hệ thống (Module HRM).
-2. **Nhân viên** tạo các *Đơn từ* (như xin nghỉ phép, đi muộn, về sớm) nộp cho Quản lý.
-3. **Quản lý** nhận được thông báo, xem xét và *Phê duyệt Đơn từ*.
-4. **Hệ thống** tự động dựa vào sự kiện Đơn từ được duyệt (Event-driven): Tự động tạo/cập nhật *Bảng chấm công* của nhân viên trong ngày nghỉ đó với trạng thái "Vắng có phép" (đáp ứng Mức 2 - Tự động hóa quy trình).
-5. **Nhân viên** thực hiện *Check-in / Check-out* hằng ngày (nếu đi làm). **Hệ thống** ghi nhận giờ thực tế.
-6. Cuối tháng, **HR** tiến hành chốt dữ liệu công gửi sang cho **Kế toán**.
-7. **Kế toán** tính toán và chốt *Bảng lương* dựa trên dữ liệu công thực tế và dữ liệu gốc từ hồ sơ HR. Từ đó tự động tính các loại bảo hiểm, phụ cấp và thuế.
-8. Cuối cùng, Phiếu lương được tạo ra tự động hoàn tất quá trình Chấm công - Tính lương.
+1. **Nhân viên** tạo *Đơn xin nghỉ* nộp lên hệ thống.
+2. **Hệ thống** gọi External API (Telegram) để nổ tin nhắn thông báo có đơn mới đến Quản lý **[Tích hợp Mức 3: External API]**.
+3. **Quản lý/HR** nhận được thông báo, truy cập Odoo để *Phê duyệt Đơn từ*.
+4. **Hệ thống** tự động dựa vào sự kiện Đơn từ được duyệt (Event-driven): Tự động tạo/cập nhật *Bảng chấm công* của nhân viên trong ngày nghỉ đó với trạng thái "Vắng có phép" **[Tích hợp Mức 2: Tự động hóa tạo Record]**.
+5. Đầu tháng sau, **HR** tạo Bảng lương. **Hệ thống** tự dùng data thực tế từ *Hồ sơ nhân sự* và *Chấm công* để ra thu nhập (Net, Gross, Thuế).
+6. Sau khi chốt & Phê duyệt Lương, **HR** bấm nút xuất Payslip & Đánh giá AI.
+7. **Hệ thống** gửi Input (Số phút đi muộn, Ngày vắng, Lương net) tới Google Gemini API **[Tích hợp Mức 3: AI/LLM]**.
+8. **AI** đóng vai trò tự động trả về Output là 4 câu nhận xét/khuyên nhủ nhân viên. Cuối cùng Hệ thống sinh file Payslip PDF gửi Email kèm lời nhận xét của AI cho nhân viên!
 
 ## 📝 6. License
 

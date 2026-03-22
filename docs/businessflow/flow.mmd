@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    participant NV as Nhân viên
+    participant QL as Quản lý/HR
+    participant SYS as Hệ thống Odoo (HRM)
+    participant TELE as Nhóm Telegram (External API)
+    participant AI as AI LLM Assistant
+
+    Note over NV, SYS: QUÁ TRÌNH LÀM VIỆC & XIN PHÉP
+    NV->>SYS: Truy cập Hệ thống tạo Đơn xin nghỉ
+    SYS->>TELE: [API: Gửi] Bắn thông báo Có Đơn mới chờ duyệt tới HR
+    QL->>SYS: Phê duyệt Đơn xin nghỉ của nhân viên
+    SYS->>TELE: [API: Gửi] Bắn thông báo Kết quả duyệt cho Nhân viên
+    SYS->>SYS: [Tự động Lvl 2] Tự cập nhật Bảng chấm công: Vắng có phép
+
+    Note over QL, AI: QUÁ TRÌNH TÍNH LƯƠNG & TRẢ KẾT QUẢ
+    QL->>SYS: Cuối tháng: Bấm tạo Bảng lương tháng
+    SYS->>SYS: Đồng bộ dữ liệu Lương CB, Công đi làm, Vi phạm
+    QL->>SYS: Phê duyệt Chốt Bảng Lương (Trạng thái: Đã duyệt)
+    QL->>SYS: Bấm Nút "AI Đánh giá & Gửi Email Payslip"
+    SYS->>AI: [API: Gọi AI] Đẩy Data (Đi muộn, Lương Net, Vắng mặt)
+    AI-->>SYS: [API: Trả AI] Sinh ra đoạn văn nhận xét/nhắc nhở cá nhân
+    SYS->>SYS: Gắn đoạn Nhận xét AI + Cắt file PDF Báo cáo Lương
+    SYS-->>NV: Nhận Phiếu Lương (kèm đánh giá cá nhân) qua Email
