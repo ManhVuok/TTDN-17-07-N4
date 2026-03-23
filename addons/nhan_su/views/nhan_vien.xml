@@ -14,7 +14,16 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <!-- Placeholder for smart buttons from other modules -->
+                            <!-- Smart Button: Hợp đồng lao động -->
+                            <button name="%(tinh_luong.action_hop_dong_lao_dong)d"
+                                    type="action"
+                                    class="oe_stat_button"
+                                    icon="fa-file-text-o"
+                                    context="{'search_default_nhan_vien_id': active_id}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Hợp đồng</span>
+                                </div>
+                            </button>
                         </div>
                         
                         <widget name="web_ribbon" title="ĐANG LÀM VIỆC" bg_color="bg-success" attrs="{'invisible': [('trang_thai', '!=', 'dang_lam')]}"/>
@@ -24,7 +33,7 @@
                         
                         <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_1920', 'size': [200, 200]}"/>
                         <div class="oe_title">
-                            <label for="name" string="Họ và tên"/>
+                            <label for="name" string="Ho va ten"/>
                             <h1>
                                 <field name="name" readonly="1" class="text-primary"/>
                             </h1>
@@ -38,18 +47,18 @@
                                 </span>
                             </div>
                         </div>
-                        
+
                         <group>
-                            <group string="Thông tin cơ bản">
+                            <group string="Thong tin co ban">
                                 <field name="ma_dinh_danh" placeholder="NV-0001"/>
-                                <field name="ho_ten_dem" placeholder="VD: Nguyễn Văn"/>
+                                <field name="ho_ten_dem" placeholder="VD: Nguyen Van"/>
                                 <field name="ten" placeholder="VD: An"/>
                                 <field name="ngay_sinh"/>
                                 <field name="tuoi" readonly="1"/>
                                 <field name="gender" widget="radio" options="{'horizontal': true}"/>
                                 <field name="tinh_trang_hon_nhan"/>
                             </group>
-                            <group string="Thông tin làm việc">
+                            <group string="Thong tin lam viec">
                                 <field name="ngay_vao_lam"/>
                                 <field name="ngay_nghi_viec" attrs="{'invisible': [('trang_thai', '!=', 'nghi_viec')]}"/>
                                 <field name="email_cong_ty" widget="work_email" placeholder="an.nguyen@company.com"/>

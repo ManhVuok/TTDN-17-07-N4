@@ -28,12 +28,13 @@
                         </group>
                         
                         <div class="alert alert-info" role="alert">
-                            <strong>Hướng dẫn:</strong>
+                            <strong>Hướng dẫn lấy Gemini API Key:</strong>
                             <ol>
-                                <li>Đăng ký tài khoản tại <a href="https://openrouter.ai" target="_blank">openrouter.ai</a></li>
-                                <li>Tạo API Key trong mục "Keys"</li>
-                                <li>Copy API Key và paste vào trường trên</li>
-                                <li>Model mặc định: <code>xiaomi/mimo-v2-flash:free</code> (miễn phí)</li>
+                                <li>Truy cập <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></li>
+                                <li>Đăng nhập bằng tài khoản Google</li>
+                                <li>Nhấn <strong>"Create API Key"</strong> → copy key bắt đầu bằng <code>AIzaSy...</code></li>
+                                <li>Dán vào ô <strong>API Key</strong> bên trên, để trống <strong>API URL</strong></li>
+                                <li>Model mặc định: <code>gemini-1.5-flash</code> (miễn phí, không cần billing)</li>
                             </ol>
                         </div>
                     </sheet>
@@ -139,47 +140,150 @@
             <field name="arch" type="xml">
                 <form string="AI Assistant - Trợ lý thông minh">
                     <sheet>
-                        <div class="text-center mb-4">
-                            <h2 style="color: #2196F3;">
-                                <i class="fa fa-robot" style="margin-right: 10px;"/>
-                                AI Assistant
+                        <!-- HEADER -->
+                        <div style="
+                            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+                            border-radius: 16px;
+                            padding: 28px 32px;
+                            margin-bottom: 20px;
+                            text-align: center;
+                            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+                        ">
+                            <div style="
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 64px; height: 64px;
+                                background: rgba(255,255,255,0.15);
+                                border-radius: 50%;
+                                margin-bottom: 12px;
+                                backdrop-filter: blur(10px);
+                            ">
+                                <i class="fa fa-robot" style="font-size: 32px; color: #64b5f6;"/>
+                            </div>
+                            <h2 style="color: #ffffff; margin: 0 0 6px 0; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;">
+                                AI HR Assistant
                             </h2>
-                            <p class="text-muted">Hỏi đáp thông minh dựa trên dữ liệu hệ thống</p>
+                            <p style="color: rgba(255,255,255,0.65); margin: 0; font-size: 13px;">
+                                Trợ lý thông minh — hỏi về nhân viên, chấm công, lương...
+                            </p>
                         </div>
-                        
-                        <group>
-                            <group>
-                                <field name="loai_context" widget="radio" options="{'horizontal': true}"/>
-                            </group>
-                        </group>
-                        
-                        <group string="Câu hỏi của bạn">
-                            <field name="cau_hoi" nolabel="1" placeholder="VD: Có bao nhiêu nhân viên đang làm việc? Ai đi muộn nhiều nhất tháng này?..."/>
-                        </group>
-                        
-                        <group string="Trả lời từ AI" attrs="{'invisible': [('tra_loi', '=', False)]}">
-                            <field name="tra_loi" nolabel="1"/>
-                        </group>
-                        
-                        <div class="alert alert-secondary" role="alert">
-                            <strong>Gợi ý câu hỏi:</strong>
-                            <ul class="mb-0">
-                                <li>Có bao nhiêu nhân viên đang làm việc?</li>
-                                <li>Phòng ban nào có nhiều nhân viên nhất?</li>
-                                <li>Ai đi muộn nhiều nhất trong tháng này?</li>
-                                <li>Tổng quỹ lương tháng này là bao nhiêu?</li>
-                                <li>Thống kê nhân viên theo giới tính?</li>
-                            </ul>
+
+                        <!-- CONTEXT TYPE -->
+                        <div style="
+                            background: #f8f9fa;
+                            border-radius: 12px;
+                            padding: 14px 20px;
+                            margin-bottom: 16px;
+                            border: 1px solid #e9ecef;
+                        ">
+                            <div style="font-size: 12px; color: #6c757d; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                                CHU DE TIM KIEM
+                            </div>
+                            <field name="loai_context" widget="radio" options="{'horizontal': true}" nolabel="1"/>
+                        </div>
+
+                        <!-- QUESTION BOX -->
+                        <div style="position: relative; margin-bottom: 16px;">
+                            <div style="
+                                background: #ffffff;
+                                border: 2px solid #e3e8f0;
+                                border-radius: 14px;
+                                padding: 4px;
+                                transition: border-color 0.2s;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                            ">
+                                <field name="cau_hoi"
+                                       nolabel="1"
+                                       placeholder="Vi du: Ai di muon nhieu nhat thang nay? Tong quy luong la bao nhieu?..."
+                                       style="
+                                           border: none;
+                                           box-shadow: none;
+                                           font-size: 14px;
+                                           padding: 12px 16px;
+                                           min-height: 80px;
+                                           resize: vertical;
+                                       "/>
+                            </div>
+                        </div>
+
+                        <!-- ANSWER BOX -->
+                        <div attrs="{'invisible': [('tra_loi', '=', False)]}" style="
+                            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+                            border-radius: 14px;
+                            padding: 20px 24px;
+                            margin-bottom: 16px;
+                            box-shadow: 0 4px 20px rgba(21,101,192,0.3);
+                        ">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px; gap: 8px;">
+                                <div style="
+                                    width: 28px; height: 28px;
+                                    background: rgba(255,255,255,0.2);
+                                    border-radius: 50%;
+                                    display: flex; align-items: center; justify-content: center;
+                                ">
+                                    <i class="fa fa-comment" style="font-size: 13px; color: white;"/>
+                                </div>
+                                <span style="color: rgba(255,255,255,0.9); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    Trả lời từ AI
+                                </span>
+                            </div>
+                            <div style="
+                                background: rgba(255,255,255,0.1);
+                                border-radius: 10px;
+                                padding: 14px 16px;
+                            ">
+                                <field name="tra_loi" nolabel="1" style="
+                                    color: #ffffff !important;
+                                    font-size: 14px;
+                                    line-height: 1.7;
+                                    border: none !important;
+                                    background: transparent !important;
+                                    box-shadow: none !important;
+                                "/>
+                            </div>
+                        </div>
+
+                        <!-- SUGGESTION CHIPS -->
+                        <div style="
+                            background: #fff8e1;
+                            border-radius: 12px;
+                            padding: 14px 18px;
+                            border-left: 4px solid #ffc107;
+                        ">
+                            <div style="font-size: 12px; font-weight: 700; color: #856404; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Goi y cau hoi
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                <span style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #664d03;">Có bao nhiêu nhân viên đang làm việc?</span>
+                                <span style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #664d03;">Ai đi muộn nhiều nhất tháng này?</span>
+                                <span style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #664d03;">Tổng quỹ lương tháng này?</span>
+                                <span style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #664d03;">Phòng ban nào đông nhân viên nhất?</span>
+                                <span style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #664d03;">Thống kê nhân viên theo giới tính?</span>
+                            </div>
                         </div>
                     </sheet>
-                    
+
                     <footer>
-                        <button name="action_hoi_ai" string="Hỏi AI" type="object" class="btn-primary" icon="fa-paper-plane"/>
+                        <button name="action_hoi_ai"
+                                string="  Gửi câu hỏi"
+                                type="object"
+                                class="btn-primary"
+                                icon="fa-paper-plane"
+                                style="
+                                    background: linear-gradient(135deg, #1976d2, #1565c0) !important;
+                                    border: none !important;
+                                    border-radius: 8px !important;
+                                    padding: 8px 24px !important;
+                                    font-weight: 600 !important;
+                                    box-shadow: 0 4px 12px rgba(25,118,210,0.4) !important;
+                                "/>
                         <button string="Đóng" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
+
         
         <!-- Action - Mở AI Assistant -->
         <record id="action_ai_assistant" model="ir.actions.act_window">

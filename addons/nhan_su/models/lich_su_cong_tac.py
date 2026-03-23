@@ -16,7 +16,7 @@ class LichSuCongTac(models.Model):
         string="Loại chức vụ", default="Chính", 
         required=True
     )
-    nhan_vien_id = fields.Many2one("nhan_vien", string="Nhân viên", required=True)
+    nhan_vien_id = fields.Many2one("hr.employee", string="Nhân viên", required=True)
 
     ngay_bat_dau = fields.Date("Ngày bắt đầu", required=True)
     ngay_ket_thuc = fields.Date("Ngày kết thúc")

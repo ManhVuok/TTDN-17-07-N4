@@ -16,7 +16,7 @@ class BangChamCong(models.Model):
     _rec_name = 'Id_BCC'
 
     # Basic fields
-    nhan_vien_id = fields.Many2one('nhan_vien', string="Nhân viên", required=True)
+    nhan_vien_id = fields.Many2one('hr.employee', string="Nhân viên", required=True)
     ngay_cham_cong = fields.Date("Ngày chấm công", required=True)
 
     Id_BCC = fields.Char(string="ID BCC", compute="_compute_Id_BCC", store=True)
@@ -25,7 +25,7 @@ class BangChamCong(models.Model):
     def _compute_Id_BCC(self):
         for record in self:
             if record.nhan_vien_id and record.ngay_cham_cong:
-                record.Id_BCC = f"{record.nhan_vien_id.ho_va_ten}_{record.ngay_cham_cong.strftime('%Y-%m-%d')}"
+                record.Id_BCC = f"{record.nhan_vien_id.name}_{record.ngay_cham_cong.strftime('%Y-%m-%d')}"
             else:
                 record.Id_BCC = ""
     

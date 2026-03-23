@@ -117,6 +117,18 @@ class NhanVien(models.Model):
         for rec in self:
             rec.so_nguoi_phu_thuoc = len(rec.family_ids.filtered(lambda f: f.is_dependent))
 
+    # Ghi đè field 'children' chuẩn Odoo để tự tính từ danh sách thân nhân
+    children = fields.Integer(
+        string="Số lượng con",
+        compute="_compute_children",
+    )
+
+    @api.depends('family_ids', 'family_ids.relationship')
+    def _compute_children(self):
+        for rec in self:
+            rec.children = len(rec.family_ids.filtered(lambda f: f.relationship == 'con'))
+
+
     
     # ==================== SQL CONSTRAINTS ====================
     _sql_constraints = [

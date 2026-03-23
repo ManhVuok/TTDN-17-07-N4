@@ -81,69 +81,74 @@
         </record>
 
         <!-- Demo Nhân viên -->
-        <record id="demo_nhan_vien_1" model="nhan_vien">
+        <record id="demo_nhan_vien_1" model="hr.employee">
+            <field name="name">Nguyễn Văn An</field>
             <field name="ma_dinh_danh">NV001</field>
             <field name="ho_ten_dem">Nguyễn Văn</field>
             <field name="ten">An</field>
             <field name="ngay_sinh">1990-05-15</field>
-            <field name="gioi_tinh">Nam</field>
-            <field name="email">nguyenvanan@company.com</field>
-            <field name="so_dien_thoai">0901234567</field>
+            <field name="gender">male</field>
+            <field name="work_email">nguyenvanan@company.com</field>
+            <field name="work_phone">0901234567</field>
             <field name="que_quan">Hà Nội</field>
-            <field name="phong_ban_id" ref="demo_phong_ban_it"/>
-            <field name="chuc_vu_id" ref="demo_chuc_vu_tp"/>
+            <field name="department_id" ref="demo_phong_ban_it"/>
+            <field name="job_id" ref="demo_chuc_vu_tp"/>
         </record>
         
-        <record id="demo_nhan_vien_2" model="nhan_vien">
+        <record id="demo_nhan_vien_2" model="hr.employee">
+            <field name="name">Trần Thị Bình</field>
             <field name="ma_dinh_danh">NV002</field>
             <field name="ho_ten_dem">Trần Thị</field>
             <field name="ten">Bình</field>
             <field name="ngay_sinh">1992-08-20</field>
-            <field name="gioi_tinh">Nữ</field>
-            <field name="email">tranthibinh@company.com</field>
-            <field name="so_dien_thoai">0912345678</field>
+            <field name="gender">female</field>
+            <field name="work_email">tranthibinh@company.com</field>
+            <field name="work_phone">0912345678</field>
             <field name="que_quan">Hồ Chí Minh</field>
-            <field name="phong_ban_id" ref="demo_phong_ban_ke_toan"/>
-            <field name="chuc_vu_id" ref="demo_chuc_vu_nv"/>
+            <field name="department_id" ref="demo_phong_ban_ke_toan"/>
+            <field name="job_id" ref="demo_chuc_vu_nv"/>
         </record>
         
-        <record id="demo_nhan_vien_3" model="nhan_vien">
+        <record id="demo_nhan_vien_3" model="hr.employee">
+            <field name="name">Lê Hoàng Cường</field>
             <field name="ma_dinh_danh">NV003</field>
             <field name="ho_ten_dem">Lê Hoàng</field>
             <field name="ten">Cường</field>
             <field name="ngay_sinh">1988-03-10</field>
-            <field name="gioi_tinh">Nam</field>
-            <field name="email">lehoangcuong@company.com</field>
-            <field name="so_dien_thoai">0923456789</field>
+            <field name="gender">male</field>
+            <field name="work_email">lehoangcuong@company.com</field>
+            <field name="work_phone">0923456789</field>
             <field name="que_quan">Đà Nẵng</field>
-            <field name="phong_ban_id" ref="demo_phong_ban_kinh_doanh"/>
-            <field name="chuc_vu_id" ref="demo_chuc_vu_pp"/>
+            <field name="department_id" ref="demo_phong_ban_kinh_doanh"/>
+            <field name="job_id" ref="demo_chuc_vu_pp"/>
         </record>
         
-        <record id="demo_nhan_vien_4" model="nhan_vien">
+        <record id="demo_nhan_vien_4" model="hr.employee">
+            <field name="name">Phạm Thị Dung</field>
             <field name="ma_dinh_danh">NV004</field>
             <field name="ho_ten_dem">Phạm Thị</field>
             <field name="ten">Dung</field>
             <field name="ngay_sinh">1995-12-01</field>
-            <field name="gioi_tinh">Nữ</field>
-            <field name="email">phamthidung@company.com</field>
-            <field name="so_dien_thoai">0934567890</field>
+            <field name="gender">female</field>
+            <field name="work_email">phamthidung@company.com</field>
+            <field name="work_phone">0934567890</field>
             <field name="que_quan">Hải Phòng</field>
-            <field name="phong_ban_id" ref="demo_phong_ban_nhan_su"/>
-            <field name="chuc_vu_id" ref="demo_chuc_vu_nv"/>
+            <field name="department_id" ref="demo_phong_ban_nhan_su"/>
+            <field name="job_id" ref="demo_chuc_vu_nv"/>
         </record>
         
-        <record id="demo_nhan_vien_5" model="nhan_vien">
+        <record id="demo_nhan_vien_5" model="hr.employee">
+            <field name="name">Hoàng Minh Đức</field>
             <field name="ma_dinh_danh">NV005</field>
             <field name="ho_ten_dem">Hoàng Minh</field>
             <field name="ten">Đức</field>
             <field name="ngay_sinh">2000-07-25</field>
-            <field name="gioi_tinh">Nam</field>
-            <field name="email">hoangminhduc@company.com</field>
-            <field name="so_dien_thoai">0945678901</field>
+            <field name="gender">male</field>
+            <field name="work_email">hoangminhduc@company.com</field>
+            <field name="work_phone">0945678901</field>
             <field name="que_quan">Nghệ An</field>
-            <field name="phong_ban_id" ref="demo_phong_ban_it"/>
-            <field name="chuc_vu_id" ref="demo_chuc_vu_thuc_tap"/>
+            <field name="department_id" ref="demo_phong_ban_it"/>
+            <field name="job_id" ref="demo_chuc_vu_thuc_tap"/>
         </record>
 
         <!-- Demo Lịch sử công tác -->

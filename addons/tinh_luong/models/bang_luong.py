@@ -143,7 +143,7 @@ class BangLuong(models.Model):
         
         # Lấy tất cả nhân viên có hợp đồng hiệu lực
         hop_dong_model = self.env['hop_dong_lao_dong']
-        nhan_vien_model = self.env['nhan_vien']
+        nhan_vien_model = self.env['hr.employee']
         
         # Lấy tất cả nhân viên
         all_nhan_vien = nhan_vien_model.search([])
@@ -267,28 +267,164 @@ class BangLuong(models.Model):
             count += 1
             # Để demo nhanh (tránh load 30s), chỉ gọi AI thật cho 2 người đầu tiên. Những người sau dùng mẫu có sẵn.
             if count <= 2:
-                prompt = f"Viết 1 nhận xét ngắn (3-4 câu) gửi cho {chi_tiet.nhan_vien_id.ho_va_ten}.\nLương tháng {self.thang}/{self.nam}.\nĐi làm: {chi_tiet.so_cong_thuc_te} ngày. Vắng mặt: {chi_tiet.so_ngay_vang} ngày. Đi muộn: {chi_tiet.tong_phut_di_muon} phút.\nYêu cầu: Nhận xét khách quan, nhẹ nhàng khuyên bảo nếu đi muộn, khen ngợi nếu chăm chỉ. Đóng vai: Chuyên gia nhân sự gửi theo dạng văn bản Email (bắt đầu bằng tên người nhận)."
+                prompt = f"Viết 1 nhận xét ngắn (3-4 câu) gửi cho {chi_tiet.nhan_vien_id.name}.\nLương tháng {self.thang}/{self.nam}.\nĐi làm: {chi_tiet.so_cong_thuc_te} ngày. Vắng mặt: {chi_tiet.so_ngay_vang} ngày. Đi muộn: {chi_tiet.tong_phut_di_muon} phút.\nYêu cầu: Nhận xét khách quan, nhẹ nhàng khuyên bảo nếu đi muộn, khen ngợi nếu chăm chỉ. Đóng vai: Chuyên gia nhân sự gửi theo dạng văn bản Email (bắt đầu bằng tên người nhận)."
                 try:
                     ai_doc = AIHelper.create({'cau_hoi': prompt, 'loai_context': 'tong_hop'})
                     nhan_xet = ai_doc._call_ai_api(prompt, "Bạn là Trưởng phòng Nhân sự chuyên nghiệp.")
                 except Exception as e:
                     nhan_xet = f"Không thể lấy đánh giá AI: {str(e)}"
             else:
-                nhan_xet = f"Kính gửi {chi_tiet.nhan_vien_id.ho_va_ten},\n\nPhòng nhân sự gửi anh/chị thông tin lương tháng {self.thang}/{self.nam}. Trong tháng anh/chị có {chi_tiet.so_cong_thuc_te} ngày công. Cảm ơn sự đóng góp của anh/chị!\n\nTrân trọng,\nPhòng Nhân sự"
+                nhan_xet = f"Kính gửi {chi_tiet.nhan_vien_id.name},\n\nPhòng nhân sự gửi anh/chị thông tin lương tháng {self.thang}/{self.nam}. Trong tháng anh/chị có {chi_tiet.so_cong_thuc_te} ngày công. Cảm ơn sự đóng góp của anh/chị!\n\nTrân trọng,\nPhòng Nhân sự"
 
-            chi_tiet.ai_nhan_xet = nhan_xet + f"\n\n[Đã đính kèm Payslip_{self.thang}_{self.nam}.pdf]"
+            chi_tiet.ai_nhan_xet = nhan_xet
 
-            # 2. Lệnh tạo Email đẩy vào hàng đợi của Odoo
-            # Dùng getattr để tránh triệt để lỗi kẹt cache attribute cũ trong Python
+            # 2. Tạo PDF phiếu lương bằng ReportLab (không cần wkhtmltopdf)
+            try:
+                import io
+                import base64
+                from reportlab.lib.pagesizes import A4
+                from reportlab.lib import colors
+                from reportlab.lib.units import mm
+                from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+                from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+                from reportlab.pdfbase import pdfmetrics
+                from reportlab.pdfbase.ttfonts import TTFont
+                from reportlab.lib.enums import TA_CENTER, TA_LEFT
+
+                buf = io.BytesIO()
+                doc = SimpleDocTemplate(buf, pagesize=A4,
+                                        rightMargin=15*mm, leftMargin=15*mm,
+                                        topMargin=15*mm, bottomMargin=15*mm)
+
+                # Đăng ký font Arial hỗ trợ tiếng Việt (Unicode)
+                import os as _os
+                font_paths = [
+                    r'C:\Windows\Fonts\arial.ttf',
+                    r'C:\Windows\Fonts\Arial.ttf',
+                    '/usr/share/fonts/truetype/msttcorefonts/Arial.ttf',
+                    '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
+                ]
+                font_bold_paths = [
+                    r'C:\Windows\Fonts\arialbd.ttf',
+                    r'C:\Windows\Fonts\ArialBD.ttf',
+                    '/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf',
+                    '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf',
+                ]
+                vn_font = 'Helvetica'
+                vn_font_bold = 'Helvetica-Bold'
+                for fp in font_paths:
+                    if _os.path.exists(fp):
+                        pdfmetrics.registerFont(TTFont('ArialVN', fp))
+                        vn_font = 'ArialVN'
+                        break
+                for fp in font_bold_paths:
+                    if _os.path.exists(fp):
+                        pdfmetrics.registerFont(TTFont('ArialVN-Bold', fp))
+                        vn_font_bold = 'ArialVN-Bold'
+                        break
+
+                styles = getSampleStyleSheet()
+                title_style = ParagraphStyle('title', parent=styles['Heading1'],
+                                             fontName=vn_font_bold,
+                                             alignment=TA_CENTER, fontSize=16, spaceAfter=6)
+                subtitle_style = ParagraphStyle('subtitle', parent=styles['Normal'],
+                                                fontName=vn_font,
+                                                alignment=TA_CENTER, fontSize=12, spaceAfter=12)
+                normal = ParagraphStyle('normal_vn', parent=styles['Normal'],
+                                        fontName=vn_font, fontSize=10)
+
+                nv = chi_tiet.nhan_vien_id
+                content = []
+
+                # Tiêu đề
+                content.append(Paragraph("PHIẾU LƯƠNG", title_style))
+                content.append(Paragraph(f"Kỳ lương: Tháng {self.thang}/{self.nam}", subtitle_style))
+                content.append(Spacer(1, 6*mm))
+
+                # Thông tin nhân viên
+                emp_data = [
+                    ['Mã nhân viên:', nv.ma_dinh_danh or '', 'Họ và tên:', nv.name or ''],
+                    ['Phòng ban:', chi_tiet.phong_ban_id.ten_phong_ban if chi_tiet.phong_ban_id else '', 'Chức vụ:', chi_tiet.chuc_vu_id.ten_chuc_vu if chi_tiet.chuc_vu_id else ''],
+                    ['Số ngày công CĐ:', str(chi_tiet.so_cong_chuan), 'Ngày công TT:', str(chi_tiet.so_cong_thuc_te)],
+                ]
+                emp_table = Table(emp_data, colWidths=[40*mm, 50*mm, 40*mm, 50*mm])
+                emp_table.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,-1), colors.whitesmoke),
+                    ('FONTSIZE', (0,0), (-1,-1), 10),
+                    ('FONTNAME', (0,0), (-1,-1), vn_font),
+                    ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
+                    ('FONTNAME', (0,0), (0,-1), vn_font_bold),
+                    ('FONTNAME', (2,0), (2,-1), vn_font_bold),
+                    ('PADDING', (0,0), (-1,-1), 4),
+                ]))
+                content.append(emp_table)
+                content.append(Spacer(1, 6*mm))
+
+                # Chi tiết lương
+                luong_data = [
+                    ['Khoản mục', 'Số tiền (VNĐ)'],
+                    ['Lương cơ bản', f"{chi_tiet.luong_co_ban:,.0f}"],
+                    ['Lương theo công', f"{chi_tiet.luong_theo_cong:,.0f}"],
+                    ['Tổng phụ cấp', f"{chi_tiet.tong_phu_cap:,.0f}"],
+                    ['TỔNG THU NHẬP (GROSS)', f"{chi_tiet.tong_thu_nhap:,.0f}"],
+                    ['BHXH (8%)', f"- {chi_tiet.tien_bhxh:,.0f}"],
+                    ['BHYT (1.5%)', f"- {chi_tiet.tien_bhyt:,.0f}"],
+                    ['BHTN (1%)', f"- {chi_tiet.tien_bhtn:,.0f}"],
+                    ['Phạt đi muộn/về sớm', f"- {(chi_tiet.tien_phat_di_muon + chi_tiet.tien_phat_ve_som):,.0f}"],
+                    ['Thuế TNCN', f"- {chi_tiet.thue_tncn:,.0f}"],
+                    ['LƯƠNG THỰC NHẬN (NET)', f"{chi_tiet.luong_thuc_nhan:,.0f}"],
+                ]
+                luong_table = Table(luong_data, colWidths=[120*mm, 60*mm])
+                luong_table.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0066cc')),
+                    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+                    ('FONTNAME', (0,0), (-1,-1), vn_font),
+                    ('FONTNAME', (0,0), (-1,0), vn_font_bold),
+                    ('ALIGN', (1,0), (1,-1), 'RIGHT'),
+                    ('FONTSIZE', (0,0), (-1,-1), 10),
+                    ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
+                    ('BACKGROUND', (0,4), (-1,4), colors.HexColor('#d4edda')),
+                    ('FONTNAME', (0,4), (-1,4), vn_font_bold),
+                    ('BACKGROUND', (0,-1), (-1,-1), colors.HexColor('#0066cc')),
+                    ('TEXTCOLOR', (0,-1), (-1,-1), colors.white),
+                    ('FONTNAME', (0,-1), (-1,-1), vn_font_bold),
+                    ('FONTSIZE', (0,-1), (-1,-1), 12),
+                    ('PADDING', (0,0), (-1,-1), 5),
+                ]))
+                content.append(luong_table)
+                content.append(Spacer(1, 8*mm))
+
+                # Nhận xét
+                if chi_tiet.ai_nhan_xet:
+                    content.append(Paragraph("<b>Nhận xét từ phòng nhân sự:</b>", normal))
+                    for line in chi_tiet.ai_nhan_xet.split('\n')[:8]:  # max 8 dòng
+                        content.append(Paragraph(line or '&nbsp;', normal))
+
+                doc.build(content)
+                pdf_content = buf.getvalue()
+                pdf_filename = f'PhieuLuong_{nv.name}_{self.thang}_{self.nam}.pdf'
+            except Exception as e:
+                pdf_content = None
+                pdf_filename = None
+
+            # 3. Lệnh tạo Email và đính kèm PDF
             nhan_vien = chi_tiet.nhan_vien_id
             email_target = getattr(nhan_vien, 'email_cong_ty', False) or getattr(nhan_vien, 'email', False) or 'thuyet1230@gmail.com'
-            
+
             mail_values = {
                 'subject': f'Phiếu lương và Nhận xét tháng {self.thang}/{self.nam}',
                 'body_html': f'<pre>{chi_tiet.ai_nhan_xet}</pre>',
                 'email_to': email_target,
             }
-            # Tạo mail và gửi ngay lập tức
+
+            if pdf_content and pdf_filename:
+                import base64
+                mail_values['attachment_ids'] = [(0, 0, {
+                    'name': pdf_filename,
+                    'datas': base64.b64encode(pdf_content),
+                    'mimetype': 'application/pdf',
+                })]
+
             mail = self.env['mail.mail'].sudo().create(mail_values)
             mail.send()
         

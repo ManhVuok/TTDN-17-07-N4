@@ -24,18 +24,61 @@
                     </div>
                     
                     <group>
-                        <group string="Thông tin nhân viên">
+                        <group string="Thong tin nhan vien">
                             <field name="phong_ban_id" readonly="1"/>
                             <field name="chuc_vu_id" readonly="1"/>
                             <field name="hop_dong_id"/>
                         </group>
-                        <group string="Thông tin hợp đồng">
+                        <group string="Thong tin hop dong">
                             <field name="luong_co_ban" readonly="1"/>
                             <field name="luong_dong_bao_hiem" readonly="1"/>
                             <field name="so_nguoi_phu_thuoc" readonly="1"/>
                         </group>
                     </group>
-                    
+
+                    <!-- SALARY SUMMARY CARDS -->
+                    <div class="row mt-2 mb-3">
+                        <div class="col-md-4">
+                            <div style="
+                                background: linear-gradient(135deg, #1976d2, #1565c0);
+                                border-radius: 12px; padding: 16px 20px; color: white; text-align: center;
+                                box-shadow: 0 4px 12px rgba(25,118,210,0.3);
+                            ">
+                                <i class="fa fa-bar-chart" style="font-size: 20px; opacity: 0.8; margin-bottom: 6px; display: block;"/>
+                                <div style="font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">Tong thu nhap (Gross)</div>
+                                <div style="font-size: 18px; font-weight: 700; margin-top: 4px;">
+                                    <field name="tong_thu_nhap" widget="monetary" nolabel="1"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="
+                                background: linear-gradient(135deg, #c62828, #b71c1c);
+                                border-radius: 12px; padding: 16px 20px; color: white; text-align: center;
+                                box-shadow: 0 4px 12px rgba(198,40,40,0.3);
+                            ">
+                                <i class="fa fa-minus-circle" style="font-size: 20px; opacity: 0.8; margin-bottom: 6px; display: block;"/>
+                                <div style="font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">Tong khau tru</div>
+                                <div style="font-size: 18px; font-weight: 700; margin-top: 4px;">
+                                    <field name="tong_khau_tru" widget="monetary" nolabel="1"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="
+                                background: linear-gradient(135deg, #2e7d32, #1b5e20);
+                                border-radius: 12px; padding: 16px 20px; color: white; text-align: center;
+                                box-shadow: 0 4px 12px rgba(46,125,50,0.35);
+                            ">
+                                <i class="fa fa-money" style="font-size: 22px; opacity: 0.9; margin-bottom: 6px; display: block;"/>
+                                <div style="font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">Luong thuc nhan (Net)</div>
+                                <div style="font-size: 20px; font-weight: 700; margin-top: 4px;">
+                                    <field name="luong_thuc_nhan" widget="monetary" nolabel="1"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <notebook>
                         <page string="Chấm công">
                             <group>

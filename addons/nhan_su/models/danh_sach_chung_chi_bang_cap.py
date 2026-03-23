@@ -5,7 +5,7 @@ class ChungChiBangCap(models.Model):
     _description = 'Bảng chứa thông tin danh sách chứng chỉ, bằng cấp'
     _rec_name = "nhan_vien_id"
     
-    nhan_vien_id = fields.Many2one("nhan_vien", string="Nhân viên", required=True)
+    nhan_vien_id = fields.Many2one("hr.employee", string="Nhân viên", required=True)
     chung_chi_id = fields.Many2one("chung_chi_bang_cap", string="Tên chứng chỉ", required=True)
     loai_chung_chi = fields.Selection(
         [

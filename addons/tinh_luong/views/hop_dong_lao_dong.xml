@@ -13,30 +13,71 @@
                 </header>
                 <sheet>
                     
-                    <widget name="web_ribbon" title="Đang hiệu lực" bg_color="bg-success" attrs="{'invisible': [('trang_thai', '!=', 'hieu_luc')]}"/>
-                    <widget name="web_ribbon" title="Hết hạn" bg_color="bg-danger" attrs="{'invisible': [('trang_thai', '!=', 'het_han')]}"/>
-                    <widget name="web_ribbon" title="Mới" bg_color="bg-info" attrs="{'invisible': [('trang_thai', '!=', 'moi')]}"/>
-                    
+                    <widget name="web_ribbon" title="Dang hieu luc" bg_color="bg-success" attrs="{'invisible': [('trang_thai', '!=', 'hieu_luc')]}"/>
+                    <widget name="web_ribbon" title="Het han" bg_color="bg-danger" attrs="{'invisible': [('trang_thai', '!=', 'het_han')]}"/>
+                    <widget name="web_ribbon" title="Moi" bg_color="bg-info" attrs="{'invisible': [('trang_thai', '!=', 'moi')]}"/>
+
                     <div class="oe_title">
-                        <label for="ma_hop_dong" string="Mã hợp đồng"/>
+                        <label for="ma_hop_dong" string="Ma hop dong"/>
                         <h1>
                             <field name="ma_hop_dong" placeholder="HD-XXXX-YYYY" class="text-primary"/>
                         </h1>
                     </div>
-                    
+
+                    <!-- CONTRACT INFO HEADER -->
+                    <div style="
+                        background: linear-gradient(135deg, #263238, #37474f);
+                        border-radius: 14px; padding: 18px 24px; margin-bottom: 16px;
+                        display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+                        box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+                    ">
+                        <div style="flex: 1; min-width: 200px;">
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Nhan vien</div>
+                            <div style="font-size: 18px; font-weight: 700; color: white;">
+                                <field name="nhan_vien_id" readonly="1" options="{'no_open': True}" nolabel="1"/>
+                            </div>
+                            <div style="margin-top: 4px;">
+                                <field name="loai_hop_dong" nolabel="1"
+                                    widget="badge"
+                                    decoration-success="loai_hop_dong == 'khong_thoi_han'"
+                                    decoration-info="loai_hop_dong == 'co_thoi_han'"
+                                    decoration-warning="loai_hop_dong == 'thu_viec'"/>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; margin-bottom: 2px;">Ngay ky</div>
+                                <div style="font-size: 14px; font-weight: 600; color: #b0bec5;"><field name="ngay_ky" readonly="1" nolabel="1"/></div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; margin-bottom: 2px;">Hieu luc</div>
+                                <div style="font-size: 14px; font-weight: 600; color: #a5d6a7;"><field name="ngay_hieu_luc" readonly="1" nolabel="1"/></div>
+                            </div>
+                            <div style="text-align: center;" attrs="{'invisible': [('loai_hop_dong', '=', 'khong_thoi_han')]}">
+                                <div style="font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; margin-bottom: 2px;">Het han</div>
+                                <div style="font-size: 14px; font-weight: 600; color: #ef9a9a;"><field name="ngay_het_han" readonly="1" nolabel="1"/></div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; margin-bottom: 2px;">Luong CB</div>
+                                <div style="font-size: 15px; font-weight: 700; color: #80cbc4;"><field name="luong_co_ban" widget="monetary" readonly="1" nolabel="1"/></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <group>
-                        <group string="Thông tin nhân viên">
+                        <group string="Thong tin nhan vien">
                             <field name="nhan_vien_id" options="{'no_create': True}"/>
                             <field name="phong_ban_id" readonly="1"/>
                             <field name="chuc_vu_id" readonly="1"/>
                         </group>
-                        <group string="Thông tin hợp đồng">
+                        <group string="Thong tin hop dong">
                             <field name="loai_hop_dong" widget="radio" options="{'horizontal': true}"/>
                             <field name="ngay_ky"/>
                             <field name="ngay_hieu_luc"/>
                             <field name="ngay_het_han" attrs="{'invisible': [('loai_hop_dong', '=', 'khong_thoi_han')]}"/>
                         </group>
                     </group>
+
                     
                     <notebook>
                         <page string="Thông tin lương" name="luong">

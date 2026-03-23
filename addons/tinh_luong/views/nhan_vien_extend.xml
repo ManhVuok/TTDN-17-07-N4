@@ -3,7 +3,7 @@
     <!-- Mở rộng Form View Nhân viên - thêm smart button hợp đồng -->
     <record id="view_nhan_vien_form_inherit_tinh_luong" model="ir.ui.view">
         <field name="name">nhan_vien.form.inherit.tinh_luong</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="inherit_id" ref="nhan_su.view_nhan_vien_form"/>
         <field name="arch" type="xml">
             <!-- Thêm smart button vào đầu sheet -->
@@ -45,10 +45,10 @@
     <!-- Mở rộng Tree View Nhân viên -->
     <record id="view_nhan_vien_tree_inherit_tinh_luong" model="ir.ui.view">
         <field name="name">nhan_vien.tree.inherit.tinh_luong</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="inherit_id" ref="nhan_su.view_nhan_vien_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='so_dien_thoai']" position="after">
+            <xpath expr="//field[@name='work_phone']" position="after">
                 <field name="luong_hien_tai" sum="Tổng lương"/>
             </xpath>
         </field>

@@ -24,15 +24,15 @@ class PhongBan(models.Model):
     
     # Trưởng phòng
     truong_phong_id = fields.Many2one(
-        'nhan_vien',
+        'hr.employee',
         string="Trưởng phòng",
-        domain="[('phong_ban_id', '=', id), ('trang_thai', '=', 'dang_lam')]"
+        domain="[('department_id', '=', id), ('trang_thai', '=', 'dang_lam')]"
     )
     
     # Danh sách nhân viên trong phòng
     nhan_vien_ids = fields.One2many(
-        'nhan_vien',
-        'phong_ban_id',
+        'hr.employee',
+        'department_id',
         string="Danh sách nhân viên"
     )
     

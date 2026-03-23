@@ -10,7 +10,7 @@ class DangKyCaLamTheoNgay(models.Model):
 
     ma_dot_ngay = fields.Char("Mã đợt ngày", required=True)
     dot_dang_ky_id = fields.Many2one('dot_dang_ky', string="Đợt đăng ký", required=True)
-    nhan_vien_id = fields.Many2one('nhan_vien', string="Nhân viên", required=True)
+    nhan_vien_id = fields.Many2one('hr.employee', string="Nhân viên", required=True)
     ngay_lam = fields.Date(string="Ngày làm", required=True)
     ca_lam = fields.Selection([
         ("", ""),
@@ -30,4 +30,4 @@ class DangKyCaLamTheoNgay(models.Model):
     def _check_nhan_vien_in_dot_dang_ky(self):
         for record in self:
             if record.nhan_vien_id not in record.dot_dang_ky_id.nhan_vien_ids:
-                raise ValidationError(f'Nhân viên {record.nhan_vien_id.ho_va_ten} không thuộc đợt đăng ký này!')
+                raise ValidationError(f'Nhân viên {record.nhan_vien_id.name} không thuộc đợt đăng ký này!')

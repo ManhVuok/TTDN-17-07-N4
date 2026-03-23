@@ -3,12 +3,12 @@
     <!-- Report Action -->
     <record id="action_report_ho_so_nhan_vien" model="ir.actions.report">
         <field name="name">Hồ sơ nhân viên</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">nhan_su.report_ho_so_nhan_vien</field>
         <field name="report_file">nhan_su.report_ho_so_nhan_vien</field>
-        <field name="print_report_name">'Hồ sơ - %s' % (object.ho_va_ten)</field>
-        <field name="binding_model_id" ref="model_nhan_vien"/>
+        <field name="print_report_name">'Hồ sơ - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
         <field name="binding_type">report</field>
     </record>
     
@@ -27,8 +27,8 @@
                         <!-- Avatar và thông tin cơ bản -->
                         <div class="row mb-4">
                             <div class="col-3 text-center">
-                                <t t-if="o.anh">
-                                    <img t-att-src="image_data_uri(o.anh)" style="max-width: 150px; max-height: 180px; border: 1px solid #ddd;"/>
+                                <t t-if="o.image_1920">
+                                    <img t-att-src="image_data_uri(o.image_1920)" style="max-width: 150px; max-height: 180px; border: 1px solid #ddd;"/>
                                 </t>
                                 <t t-else="">
                                     <div style="width: 150px; height: 180px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd;">
@@ -44,15 +44,15 @@
                                     </tr>
                                     <tr>
                                         <td style="background: #f5f5f5;"><strong>Họ và tên</strong></td>
-                                        <td><strong><span t-field="o.ho_va_ten"/></strong></td>
+                                        <td><strong><span t-field="o.name"/></strong></td>
                                     </tr>
                                     <tr>
                                         <td style="background: #f5f5f5;"><strong>Phòng ban</strong></td>
-                                        <td><span t-field="o.phong_ban_id"/></td>
+                                        <td><span t-field="o.department_id"/></td>
                                     </tr>
                                     <tr>
                                         <td style="background: #f5f5f5;"><strong>Chức vụ</strong></td>
-                                        <td><span t-field="o.chuc_vu_id"/></td>
+                                        <td><span t-field="o.job_id"/></td>
                                     </tr>
                                     <tr>
                                         <td style="background: #f5f5f5;"><strong>Trạng thái</strong></td>
@@ -79,7 +79,7 @@
                             </tr>
                             <tr>
                                 <td style="background: #f5f5f5;"><strong>Giới tính</strong></td>
-                                <td><span t-field="o.gioi_tinh"/></td>
+                                <td><span t-field="o.gender"/></td>
                                 <td style="background: #f5f5f5;"><strong>Tình trạng hôn nhân</strong></td>
                                 <td><span t-field="o.tinh_trang_hon_nhan"/></td>
                             </tr>
@@ -108,13 +108,13 @@
                         <table class="table table-bordered">
                             <tr>
                                 <td style="width: 25%; background: #f5f5f5;"><strong>Email cá nhân</strong></td>
-                                <td style="width: 25%;"><span t-field="o.email"/></td>
+                                <td style="width: 25%;"><span t-field="o.work_email"/></td>
                                 <td style="width: 25%; background: #f5f5f5;"><strong>Email công ty</strong></td>
                                 <td style="width: 25%;"><span t-field="o.email_cong_ty"/></td>
                             </tr>
                             <tr>
                                 <td style="background: #f5f5f5;"><strong>Số điện thoại</strong></td>
-                                <td colspan="3"><span t-field="o.so_dien_thoai"/></td>
+                                <td colspan="3"><span t-field="o.work_phone"/></td>
                             </tr>
                         </table>
                         
@@ -235,12 +235,12 @@
     <!-- Report Danh sách nhân viên -->
     <record id="action_report_danh_sach_nhan_vien" model="ir.actions.report">
         <field name="name">Danh sách nhân viên</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">nhan_su.report_danh_sach_nhan_vien</field>
         <field name="report_file">nhan_su.report_danh_sach_nhan_vien</field>
         <field name="print_report_name">'Danh sách nhân viên - %s' % (context_today().strftime('%%d-%%m-%%Y'))</field>
-        <field name="binding_model_id" ref="model_nhan_vien"/>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
         <field name="binding_type">report</field>
     </record>
     
@@ -273,12 +273,12 @@
                                 <tr>
                                     <td><span t-esc="o_index + 1"/></td>
                                     <td><span t-field="o.ma_dinh_danh"/></td>
-                                    <td><strong><span t-field="o.ho_va_ten"/></strong></td>
-                                    <td><span t-field="o.gioi_tinh"/></td>
-                                    <td><span t-field="o.phong_ban_id"/></td>
-                                    <td><span t-field="o.chuc_vu_id"/></td>
-                                    <td><span t-field="o.so_dien_thoai"/></td>
-                                    <td><span t-field="o.email"/></td>
+                                    <td><strong><span t-field="o.name"/></strong></td>
+                                    <td><span t-field="o.gender"/></td>
+                                    <td><span t-field="o.department_id"/></td>
+                                    <td><span t-field="o.job_id"/></td>
+                                    <td><span t-field="o.work_phone"/></td>
+                                    <td><span t-field="o.work_email"/></td>
                                     <td>
                                         <span t-if="o.trang_thai == 'dang_lam'">Đang làm</span>
                                         <span t-if="o.trang_thai == 'thu_viec'">Thử việc</span>

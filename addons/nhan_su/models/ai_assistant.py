@@ -298,41 +298,56 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
         
         if is_gemini_native:
             # Danh sách các model để thử theo thứ tự ưu tiên
-            models_to_try = [model_name]
-            # Thêm các version mới nhất mà API key này hỗ trợ
-            models_to_try.extend(["gemini-2.0-flash", "gemini-2.5-flash", "gemini-flash-latest"])
-            if "gemini-1.5-flash" not in models_to_try:
-                models_to_try.append("gemini-1.5-flash")
-            models_to_try.extend(["gemini-1.5-flash-latest", "gemini-1.5-pro", "gemini-pro-latest"])
+            # Models được xác nhận hoạt động với Gemini v1beta API
+            VALID_MODELS = [
+                "gemini-1.5-flash",       # Miễn phí, nhanh, ổn định
+                "gemini-2.0-flash",       # Mới, miễn phí
+                "gemini-2.0-flash-lite",  # Nhẹ, nhanh
+                "gemini-1.5-pro",         # Mạnh hơn
+                "gemini-1.5-flash-001",   # Stable version
+            ]
+            # Ưu tiên model từ config nếu hợp lệ
+            if model_name and model_name in VALID_MODELS:
+                models_to_try = [model_name] + [m for m in VALID_MODELS if m != model_name]
+            else:
+                models_to_try = VALID_MODELS
             
             last_error = ""
             for m in models_to_try:
-                # Dùng v1beta cho tất cả để rộng đường
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent"
-                params = {"key": api_key}
-                headers = {"Content-Type": "application/json"}
-                data = {
-                    "contents": [{
-                        "parts": [{
-                            "text": f"{system_prompt}\n\nCâu hỏi: {cau_hoi}"
+                # Thử v1beta trước, nếu 404 thì thử v1
+                for api_ver in ["v1beta", "v1"]:
+                    url = f"https://generativelanguage.googleapis.com/{api_ver}/models/{m}:generateContent"
+                    params = {"key": api_key}
+                    headers = {"Content-Type": "application/json"}
+                    data = {
+                        "contents": [{
+                            "parts": [{
+                                "text": f"{system_prompt}\n\nCâu hỏi: {cau_hoi}"
+                            }]
                         }]
-                    }]
-                }
-                
-                print(f"DEBUG: Trình thử model: {m}...")
-                try:
-                    response = requests.post(url, headers=headers, params=params, json=data, timeout=60)
-                    if response.status_code == 200:
-                        result = response.json()
-                        print(f"DEBUG: ===> THÀNH CÔNG VỚI {m}!")
-                        return result['candidates'][0]['content']['parts'][0]['text']
-                    else:
-                        last_error = f"API Error ({m}): {response.status_code} - {response.text}"
-                        print(f"DEBUG: {m} thất bại, thử tiếp...")
-                        continue
-                except Exception as e:
-                    last_error = str(e)
-                    continue
+                    }
+                    try:
+                        response = requests.post(url, headers=headers, params=params, json=data, timeout=60)
+                        if response.status_code == 200:
+                            result = response.json()
+                            return result['candidates'][0]['content']['parts'][0]['text']
+                        elif response.status_code == 429:
+                            raise UserError(
+                                f"Hết quota Gemini API (model: {m})!\n"
+                                f"Giải pháp:\n"
+                                f"1. Chờ đến 7:00 sáng (reset hằng ngày)\n"
+                                f"2. Hoặc vào aistudio.google.com/apikey tạo API Key mới"
+                            )
+                        elif response.status_code == 404:
+                            last_error = f"404 - {m} không tồn tại trong {api_ver}"
+                            break  # Thử api_ver khác không cần thiết, sang model tiếp
+                        else:
+                            last_error = f"API Error ({m}/{api_ver}): {response.status_code} - {response.text[:200]}"
+                    except UserError:
+                        raise
+                    except Exception as e:
+                        last_error = str(e)
+                        break
             
             # Nếu chạy hết vòng lặp mà không được
             raise UserError(f"Không có model Gemini nào hoạt động. Lỗi cuối cùng: {last_error}")

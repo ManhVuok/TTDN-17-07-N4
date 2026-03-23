@@ -1,0 +1,26 @@
+﻿.\venv\Scripts\python.exe : 2026-03-23 
+18:59:28,356 22532 INFO ? odoo: Odoo version 
+15.0 
+At line:1 char:1
++ .\venv\Scripts\python.exe odoo-bin.py -c 
+odoo.conf -d ttdn_v3 -i hr,n ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified:  
+   (2026-03-23 18:5...o version 15.0 :Strin  
+  g) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandE 
+   rror
+ 
+2026-03-23 18:59:28,356 22532 INFO ? odoo: 
+Using configuration file at 
+C:\TTDN-17-07-N4\odoo.conf 
+2026-03-23 18:59:28,356 22532 INFO ? odoo: 
+addons paths: 
+['C:\\TTDN-17-07-N4\\odoo\\addons', 
+'c:\\users\\thuye\\appdata\\local\\openerp 
+s.a\\odoo\\addons\\15.0', 
+'c:\\ttdn-17-07-n4\\addons', 
+'c:\\ttdn-17-07-n4\\odoo\\addons'] 
+2026-03-23 18:59:28,356 22532 INFO ? odoo: 
+database: odoo@localhost:5431 

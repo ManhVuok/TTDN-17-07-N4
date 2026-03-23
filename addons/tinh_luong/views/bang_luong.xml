@@ -71,29 +71,61 @@
                         </group>
                     </group>
                     
-                    <!-- Thống kê tổng quan dạng card -->
+                    <!-- Thống kê tổng quan - Premium Cards -->
                     <div class="row mt-3 mb-3">
                         <div class="col-md-3">
-                            <div class="card bg-info text-white text-center">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tổng thu nhập (Gross)</h5>
-                                    <h3><field name="tong_luong_gross" widget="monetary" nolabel="1"/></h3>
+                            <div style="
+                                background: linear-gradient(135deg, #1565c0, #0d47a1);
+                                border-radius: 14px; padding: 20px;
+                                color: white; text-align: center;
+                                box-shadow: 0 4px 16px rgba(21,101,192,0.35);
+                            ">
+                                <i class="fa fa-users" style="font-size: 28px; opacity: 0.8; margin-bottom: 8px; display: block;"/>
+                                <div style="font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">Tong nhan vien</div>
+                                <div style="font-size: 28px; font-weight: 700; margin-top: 4px;">
+                                    <field name="tong_nhan_vien" nolabel="1"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card bg-success text-white text-center">
-                                <div class="card-body">
-                                    <h5 class="card-title">Thực lĩnh (Net)</h5>
-                                    <h3><field name="tong_luong_net" widget="monetary" nolabel="1"/></h3>
+                            <div style="
+                                background: linear-gradient(135deg, #00897b, #00695c);
+                                border-radius: 14px; padding: 20px;
+                                color: white; text-align: center;
+                                box-shadow: 0 4px 16px rgba(0,105,92,0.35);
+                            ">
+                                <i class="fa fa-money" style="font-size: 28px; opacity: 0.8; margin-bottom: 8px; display: block;"/>
+                                <div style="font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">Thuc linh (Net)</div>
+                                <div style="font-size: 20px; font-weight: 700; margin-top: 4px;">
+                                    <field name="tong_luong_net" widget="monetary" nolabel="1"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card bg-warning text-center">
-                                <div class="card-body">
-                                    <h5 class="card-title">Bảo hiểm</h5>
-                                    <h3><field name="tong_bao_hiem" widget="monetary" nolabel="1"/></h3>
+                            <div style="
+                                background: linear-gradient(135deg, #6a1b9a, #4a148c);
+                                border-radius: 14px; padding: 20px;
+                                color: white; text-align: center;
+                                box-shadow: 0 4px 16px rgba(74,20,140,0.35);
+                            ">
+                                <i class="fa fa-bar-chart" style="font-size: 28px; opacity: 0.8; margin-bottom: 8px; display: block;"/>
+                                <div style="font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">Thu nhap (Gross)</div>
+                                <div style="font-size: 20px; font-weight: 700; margin-top: 4px;">
+                                    <field name="tong_luong_gross" widget="monetary" nolabel="1"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="
+                                background: linear-gradient(135deg, #e65100, #bf360c);
+                                border-radius: 14px; padding: 20px;
+                                color: white; text-align: center;
+                                box-shadow: 0 4px 16px rgba(191,54,12,0.35);
+                            ">
+                                <i class="fa fa-shield" style="font-size: 28px; opacity: 0.8; margin-bottom: 8px; display: block;"/>
+                                <div style="font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">Bao hiem</div>
+                                <div style="font-size: 20px; font-weight: 700; margin-top: 4px;">
+                                    <field name="tong_bao_hiem" widget="monetary" nolabel="1"/>
                                 </div>
                             </div>
                         </div>

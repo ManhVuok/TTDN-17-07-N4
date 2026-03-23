@@ -42,7 +42,7 @@ class AttendanceAutomation(models.Model):
             message += f"--------------------------------\n"
             message += f"<b>Danh sách đi muộn:</b>\n"
             for lc in latecomers[:10]: # Giới hạn 10 người đầu tiên
-                message += f"- {lc.nhan_vien_id.ho_va_ten} ({lc.phut_di_muon} phút)\n"
+                message += f"- {lc.nhan_vien_id.name} ({lc.phut_di_muon} phút)\n"
             if len(latecomers) > 10:
                 message += f"... và {len(latecomers)-10} người khác.\n"
 

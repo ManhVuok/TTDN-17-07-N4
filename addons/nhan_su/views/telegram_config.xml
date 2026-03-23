@@ -17,29 +17,70 @@
         <field name="name">telegram.config.form</field>
         <field name="model">telegram.config</field>
         <field name="arch" type="xml">
-            <form string="Cấu hình Telegram Bot">
+            <form string="Cau hinh Telegram Bot">
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="ten" placeholder="Ví dụ: Bot Thông báo Lương"/>
-                        </h1>
+                    <!-- HEADER -->
+                    <div style="
+                        background: linear-gradient(135deg, #1a237e, #283593, #0288d1);
+                        border-radius: 16px; padding: 24px 32px;
+                        margin-bottom: 20px; text-align: center;
+                        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+                    ">
+                        <div style="
+                            display: inline-flex; align-items: center; justify-content: center;
+                            width: 56px; height: 56px; background: rgba(255,255,255,0.15);
+                            border-radius: 50%; margin-bottom: 10px;
+                        ">
+                            <i class="fa fa-telegram" style="font-size: 28px; color: #64b5f6;"/>
+                        </div>
+                        <h2 style="color: #fff; margin: 0 0 4px 0; font-size: 20px; font-weight: 700;">
+                            Telegram Bot
+                        </h2>
+                        <p style="color: rgba(255,255,255,0.65); margin: 0; font-size: 13px;">
+                            Gui thong bao tu dong cho nhan vien qua Telegram
+                        </p>
                     </div>
-                    <group>
+
+                    <!-- CONFIG FIELDS -->
+                    <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 16px; border: 1px solid #e9ecef;">
+                        <div style="font-size: 12px; font-weight: 700; color: #495057; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;">
+                            Thong tin cau hinh
+                        </div>
                         <group>
-                            <field name="bot_token" password="True"/>
-                            <field name="chat_id"/>
+                            <group>
+                                <field name="ten" placeholder="Vi du: Bot Thong bao Luong"/>
+                                <field name="bot_token" password="True"/>
+                            </group>
+                            <group>
+                                <field name="chat_id"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
                         </group>
-                        <group>
-                            <field name="active"/>
-                        </group>
-                    </group>
-                    <div class="alert alert-info" role="alert">
-                        <strong>Hướng dẫn:</strong>
-                        <ul>
-                            <li>Token lấy từ @BotFather trên Telegram.</li>
-                            <li>Chat ID có thể lấy qua @userinfobot hoặc các bot tương tự.</li>
-                            <li>Hệ thống sẽ dùng cấu hình đang "Kích hoạt" để gửi thông báo.</li>
-                        </ul>
+                    </div>
+
+                    <!-- SETUP GUIDE -->
+                    <div style="background: #e3f2fd; border-radius: 12px; padding: 16px 20px; border-left: 4px solid #1976d2;">
+                        <div style="font-size: 12px; font-weight: 700; color: #1565c0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Huong dan cai dat
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                <div style="background: #1976d2; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;">1</div>
+                                <div style="font-size: 13px; color: #1a237e;">Tren Telegram, tim <strong>@BotFather</strong> va gui lenh <strong>/newbot</strong> de tao bot moi</div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                <div style="background: #1976d2; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;">2</div>
+                                <div style="font-size: 13px; color: #1a237e;">Copy <strong>Bot Token</strong> (dang: <code>123456:ABC-DEF...</code>) va dan vao o tren</div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                <div style="background: #1976d2; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;">3</div>
+                                <div style="font-size: 13px; color: #1a237e;">Tim <strong>@userinfobot</strong>, gui <strong>/start</strong> de lay <strong>Chat ID</strong> cua ban</div>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                <div style="background: #1976d2; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;">4</div>
+                                <div style="font-size: 13px; color: #1a237e;">Bat <strong>Kich hoat</strong> de he thong dung cau hinh nay gui thong bao</div>
+                            </div>
+                        </div>
                     </div>
                 </sheet>
             </form>

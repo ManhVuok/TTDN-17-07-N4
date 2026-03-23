@@ -47,10 +47,10 @@
                                     <tree decoration-success="trang_thai == 'dang_lam'" 
                                           decoration-muted="trang_thai == 'nghi_viec'">
                                         <field name="ma_dinh_danh"/>
-                                        <field name="ho_va_ten"/>
-                                        <field name="chuc_vu_id"/>
+                                        <field name="name"/>
+                                        <field name="job_id"/>
                                         <field name="trang_thai" widget="badge"/>
-                                        <field name="email"/>
+                                        <field name="work_email"/>
                                     </tree>
                                 </field>
                             </page>

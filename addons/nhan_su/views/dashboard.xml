@@ -7,11 +7,11 @@
     <!-- Pivot View Nhân viên theo phòng ban và chức vụ -->
     <record id="view_nhan_vien_pivot" model="ir.ui.view">
         <field name="name">nhan_vien.pivot</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="arch" type="xml">
             <pivot string="Thống kê nhân viên theo phòng ban" display_quantity="true">
-                <field name="phong_ban_id" type="row"/>
-                <field name="chuc_vu_id" type="col"/>
+                <field name="department_id" type="row"/>
+                <field name="job_id" type="col"/>
             </pivot>
         </field>
     </record>
@@ -19,12 +19,12 @@
     <!-- Pivot View - Tuổi trung bình theo phòng ban -->
     <record id="view_nhan_vien_pivot_tuoi" model="ir.ui.view">
         <field name="name">nhan_vien.pivot.tuoi</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">50</field>
         <field name="arch" type="xml">
             <pivot string="Độ tuổi trung bình" display_quantity="true">
-                <field name="phong_ban_id" type="row"/>
-                <field name="gioi_tinh" type="col"/>
+                <field name="department_id" type="row"/>
+                <field name="gender" type="col"/>
                 <field name="tuoi" type="measure"/>
             </pivot>
         </field>
@@ -33,12 +33,12 @@
     <!-- Pivot View - Theo giới tính -->
     <record id="view_nhan_vien_pivot_gioi_tinh" model="ir.ui.view">
         <field name="name">nhan_vien.pivot.gioi_tinh</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">55</field>
         <field name="arch" type="xml">
             <pivot string="Thống kê theo giới tính" display_quantity="true">
-                <field name="gioi_tinh" type="row"/>
-                <field name="phong_ban_id" type="col"/>
+                <field name="gender" type="row"/>
+                <field name="department_id" type="col"/>
             </pivot>
         </field>
     </record>
@@ -46,12 +46,12 @@
     <!-- Pivot View - Theo trạng thái -->
     <record id="view_nhan_vien_pivot_trang_thai" model="ir.ui.view">
         <field name="name">nhan_vien.pivot.trang_thai</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">60</field>
         <field name="arch" type="xml">
             <pivot string="Thống kê theo trạng thái" display_quantity="true">
                 <field name="trang_thai" type="row"/>
-                <field name="phong_ban_id" type="col"/>
+                <field name="department_id" type="col"/>
             </pivot>
         </field>
     </record>
@@ -61,10 +61,10 @@
     <!-- Graph View - Pie: Nhân viên theo phòng ban -->
     <record id="view_nhan_vien_graph" model="ir.ui.view">
         <field name="name">nhan_vien.graph</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="arch" type="xml">
             <graph string="Phân bố nhân viên theo phòng ban" type="pie">
-                <field name="phong_ban_id" type="row"/>
+                <field name="department_id" type="row"/>
             </graph>
         </field>
     </record>
@@ -72,11 +72,11 @@
     <!-- Graph View - Pie: Giới tính -->
     <record id="view_nhan_vien_graph_gioi_tinh" model="ir.ui.view">
         <field name="name">nhan_vien.graph.gioi_tinh</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">50</field>
         <field name="arch" type="xml">
             <graph string="Phân bố giới tính" type="pie">
-                <field name="gioi_tinh" type="row"/>
+                <field name="gender" type="row"/>
             </graph>
         </field>
     </record>
@@ -84,11 +84,11 @@
     <!-- Graph View - Bar: Chức vụ -->
     <record id="view_nhan_vien_graph_chuc_vu" model="ir.ui.view">
         <field name="name">nhan_vien.graph.chuc_vu</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">60</field>
         <field name="arch" type="xml">
             <graph string="Số nhân viên theo chức vụ" type="bar">
-                <field name="chuc_vu_id" type="row"/>
+                <field name="job_id" type="row"/>
             </graph>
         </field>
     </record>
@@ -96,7 +96,7 @@
     <!-- Graph View - Pie: Trạng thái làm việc -->
     <record id="view_nhan_vien_graph_trang_thai" model="ir.ui.view">
         <field name="name">nhan_vien.graph.trang_thai</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">65</field>
         <field name="arch" type="xml">
             <graph string="Trạng thái làm việc" type="pie">
@@ -108,11 +108,11 @@
     <!-- Graph View - Bar: Tuổi theo phòng ban -->
     <record id="view_nhan_vien_graph_tuoi_pb" model="ir.ui.view">
         <field name="name">nhan_vien.graph.tuoi_pb</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">75</field>
         <field name="arch" type="xml">
             <graph string="Độ tuổi trung bình theo phòng ban" type="bar">
-                <field name="phong_ban_id" type="row"/>
+                <field name="department_id" type="row"/>
                 <field name="tuoi" type="measure"/>
             </graph>
         </field>
@@ -121,12 +121,12 @@
     <!-- Graph View - Bar: Giới tính theo phòng ban -->
     <record id="view_nhan_vien_graph_gioi_tinh_pb" model="ir.ui.view">
         <field name="name">nhan_vien.graph.gioi_tinh_pb</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">80</field>
         <field name="arch" type="xml">
             <graph string="Giới tính theo phòng ban" type="bar" stacked="1">
-                <field name="phong_ban_id" type="row"/>
-                <field name="gioi_tinh" type="col"/>
+                <field name="department_id" type="row"/>
+                <field name="gender" type="col"/>
             </graph>
         </field>
     </record>
@@ -134,7 +134,7 @@
     <!-- Graph View - Pie: Quê quán -->
     <record id="view_nhan_vien_graph_que_quan" model="ir.ui.view">
         <field name="name">nhan_vien.graph.que_quan</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">85</field>
         <field name="arch" type="xml">
             <graph string="Phân bố theo quê quán" type="pie">
@@ -146,7 +146,7 @@
     <!-- Graph View - Pie: Tình trạng hôn nhân -->
     <record id="view_nhan_vien_graph_hon_nhan" model="ir.ui.view">
         <field name="name">nhan_vien.graph.hon_nhan</field>
-        <field name="model">nhan_vien</field>
+        <field name="model">hr.employee</field>
         <field name="priority">90</field>
         <field name="arch" type="xml">
             <graph string="Tình trạng hôn nhân" type="pie">
@@ -160,7 +160,7 @@
     <!-- Dashboard chính -->
     <record id="action_nhan_su_dashboard" model="ir.actions.act_window">
         <field name="name">Dashboard Nhân sự</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">graph,pivot,kanban,tree,form</field>
         <field name="view_id" ref="view_nhan_vien_graph"/>
         <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
@@ -177,7 +177,7 @@
     <!-- Thống kê theo phòng ban -->
     <record id="action_thong_ke_phong_ban" model="ir.actions.act_window">
         <field name="name">Thống kê theo phòng ban</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">pivot,graph,tree</field>
         <field name="view_id" ref="view_nhan_vien_pivot"/>
         <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
@@ -191,7 +191,7 @@
     <!-- Thống kê giới tính -->
     <record id="action_thong_ke_gioi_tinh" model="ir.actions.act_window">
         <field name="name">Thống kê giới tính</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">graph,pivot,tree</field>
         <field name="view_id" ref="view_nhan_vien_graph_gioi_tinh"/>
         <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
@@ -205,7 +205,7 @@
     <!-- Thống kê theo chức vụ -->
     <record id="action_thong_ke_chuc_vu" model="ir.actions.act_window">
         <field name="name">Thống kê theo chức vụ</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">graph,pivot,tree</field>
         <field name="view_id" ref="view_nhan_vien_graph_chuc_vu"/>
         <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
@@ -219,7 +219,7 @@
     <!-- Thống kê độ tuổi -->
     <record id="action_thong_ke_tuoi" model="ir.actions.act_window">
         <field name="name">Phân tích độ tuổi</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">pivot,graph,tree</field>
         <field name="view_id" ref="view_nhan_vien_pivot_tuoi"/>
         <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
@@ -233,7 +233,7 @@
     <!-- Thống kê quê quán -->
     <record id="action_thong_ke_que_quan" model="ir.actions.act_window">
         <field name="name">Phân bố quê quán</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">graph,pivot,tree</field>
         <field name="view_id" ref="view_nhan_vien_graph_que_quan"/>
         <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
@@ -247,7 +247,7 @@
     <!-- Thống kê trạng thái -->
     <record id="action_thong_ke_trang_thai" model="ir.actions.act_window">
         <field name="name">Trạng thái nhân viên</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">graph,pivot,tree</field>
         <field name="view_id" ref="view_nhan_vien_graph_trang_thai"/>
         <field name="help" type="html">
@@ -260,7 +260,7 @@
     <!-- Nhân viên đang làm việc -->
     <record id="action_nv_dang_lam" model="ir.actions.act_window">
         <field name="name">NV đang làm việc</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
     </record>
@@ -268,7 +268,7 @@
     <!-- Nhân viên đã nghỉ việc -->
     <record id="action_nv_nghi_viec" model="ir.actions.act_window">
         <field name="name">NV đã nghỉ việc</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="domain">[('trang_thai', '=', 'nghi_viec')]</field>
     </record>
@@ -276,7 +276,7 @@
     <!-- Nhân viên thử việc -->
     <record id="action_nv_thu_viec" model="ir.actions.act_window">
         <field name="name">NV đang thử việc</field>
-        <field name="res_model">nhan_vien</field>
+        <field name="res_model">hr.employee</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="domain">[('trang_thai', '=', 'thu_viec')]</field>
     </record>
