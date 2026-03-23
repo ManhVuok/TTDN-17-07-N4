@@ -92,14 +92,14 @@ class AIAssistant(models.TransientModel):
 
     def _get_nhan_vien_context(self):
         """Lấy thông tin tổng hợp về nhân viên"""
-        NhanVien = self.env['nhan_vien']
+        NhanVien = self.env['hr.employee']
         
         tong_nv = NhanVien.search_count([])
         nv_dang_lam = NhanVien.search_count([('trang_thai', '=', 'dang_lam')])
         nv_thu_viec = NhanVien.search_count([('trang_thai', '=', 'thu_viec')])
         nv_nghi_viec = NhanVien.search_count([('trang_thai', '=', 'nghi_viec')])
-        nv_nam = NhanVien.search_count([('gioi_tinh', '=', 'Nam')])
-        nv_nu = NhanVien.search_count([('gioi_tinh', '=', 'Nữ')])
+        nv_nam = NhanVien.search_count([('gender', '=', 'male')])
+        nv_nu = NhanVien.search_count([('gender', '=', 'female')])
         
         # Tuổi trung bình
         nv_list = NhanVien.search([('trang_thai', '=', 'dang_lam')])
@@ -108,15 +108,16 @@ class AIAssistant(models.TransientModel):
         # Danh sách nhân viên
         ds_nhan_vien = []
         for nv in NhanVien.search([('trang_thai', '=', 'dang_lam')], limit=50):
+            gender_map = {'male': 'Nam', 'female': 'Nữ', 'other': 'Khác'}
             ds_nhan_vien.append({
                 'ma': nv.ma_dinh_danh,
-                'ho_ten': nv.ho_va_ten,
-                'phong_ban': nv.phong_ban_id.ten_phong_ban if nv.phong_ban_id else 'Chưa phân bổ',
-                'chuc_vu': nv.chuc_vu_id.ten_chuc_vu if nv.chuc_vu_id else 'Chưa có',
+                'ho_ten': nv.name,
+                'phong_ban': nv.department_id.name if nv.department_id else 'Chưa phân bổ',
+                'chuc_vu': nv.job_id.name if nv.job_id else 'Chưa có',
                 'tuoi': nv.tuoi,
-                'gioi_tinh': nv.gioi_tinh,
-                'email': nv.email,
-                'sdt': nv.so_dien_thoai,
+                'gioi_tinh': gender_map.get(nv.gender, nv.gender or 'Chưa có'),
+                'email': nv.work_email,
+                'sdt': nv.work_phone,
             })
         
         return f"""
@@ -143,7 +144,7 @@ class AIAssistant(models.TransientModel):
                 'ten': pb.ten_phong_ban,
                 'so_nhan_vien': pb.so_nhan_vien,
                 'so_nv_dang_lam': pb.so_nhan_vien_dang_lam,
-                'truong_phong': pb.truong_phong_id.ho_va_ten if pb.truong_phong_id else 'Chưa có',
+                'truong_phong': pb.truong_phong_id.name if pb.truong_phong_id else 'Chưa có',
             })
         
         return f"""
@@ -176,7 +177,7 @@ Tổng số phòng ban: {len(ds_phong_ban)}
         # Top nhân viên đi muộn
         top_di_muon = {}
         for cc in cc_thang.filtered(lambda x: x.phut_di_muon > 0):
-            nv = cc.nhan_vien_id.ho_va_ten
+            nv = cc.nhan_vien_id.name
             if nv not in top_di_muon:
                 top_di_muon[nv] = 0
             top_di_muon[nv] += cc.phut_di_muon

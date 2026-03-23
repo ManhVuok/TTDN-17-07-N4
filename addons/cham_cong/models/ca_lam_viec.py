@@ -137,14 +137,14 @@ class DangKyTangCa(models.Model):
     )
     
     nhan_vien_id = fields.Many2one(
-        'nhan_vien',
+        'hr.employee',
         string="Nhân viên",
         required=True,
         domain="[('trang_thai', '=', 'dang_lam')]"
     )
     
     phong_ban_id = fields.Many2one(
-        related='nhan_vien_id.phong_ban_id',
+        related='nhan_vien_id.department_id',
         string="Phòng ban",
         store=True,
         readonly=True
@@ -241,7 +241,7 @@ class DangKyTangCa(models.Model):
     def _compute_ten_hien_thi(self):
         for record in self:
             if record.nhan_vien_id and record.ngay_tang_ca:
-                record.ten_hien_thi = f"{record.nhan_vien_id.ho_va_ten} - {record.ngay_tang_ca}"
+                record.ten_hien_thi = f"{record.nhan_vien_id.name} - {record.ngay_tang_ca}"
             else:
                 record.ten_hien_thi = "Đăng ký tăng ca mới"
     

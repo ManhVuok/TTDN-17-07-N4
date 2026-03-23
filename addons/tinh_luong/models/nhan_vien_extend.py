@@ -6,7 +6,7 @@ class NhanVienTinhLuong(models.Model):
     """
     Mở rộng model nhan_vien để thêm thông tin liên kết với module tính lương
     """
-    _inherit = 'nhan_vien'
+    _inherit = 'hr.employee'
     
     # Liên kết với hợp đồng lao động
     hop_dong_ids = fields.One2many(
@@ -55,7 +55,7 @@ class NhanVienTinhLuong(models.Model):
         """
         self.ensure_one()
         return {
-            'name': f'Hợp đồng - {self.ho_va_ten}',
+            'name': f'Hợp đồng - {self.name}',
             'type': 'ir.actions.act_window',
             'res_model': 'hop_dong_lao_dong',
             'view_mode': 'tree,form',

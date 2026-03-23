@@ -15,7 +15,7 @@ class NghiPhepNam(models.Model):
     
     # ==================== THÔNG TIN CƠ BẢN ====================
     nhan_vien_id = fields.Many2one(
-        'nhan_vien',
+        'hr.employee',
         string="Nhân viên",
         required=True,
         ondelete='cascade',
@@ -23,7 +23,7 @@ class NghiPhepNam(models.Model):
     )
     
     phong_ban_id = fields.Many2one(
-        related='nhan_vien_id.phong_ban_id',
+        related='nhan_vien_id.department_id',
         string="Phòng ban",
         store=True,
         readonly=True
@@ -101,7 +101,7 @@ class NghiPhepNam(models.Model):
     def _compute_display_name(self):
         for record in self:
             if record.nhan_vien_id and record.nam:
-                record.display_name = f"{record.nhan_vien_id.ho_va_ten} - {record.nam}"
+                record.display_name = f"{record.nhan_vien_id.name} - {record.nam}"
             else:
                 record.display_name = "Nghỉ phép mới"
     
@@ -177,7 +177,7 @@ class NghiPhepNam(models.Model):
         """Xem danh sách đơn nghỉ phép của nhân viên trong năm"""
         self.ensure_one()
         return {
-            'name': f'Đơn nghỉ phép - {self.nhan_vien_id.ho_va_ten} - {self.nam}',
+            'name': f'Đơn nghỉ phép - {self.nhan_vien_id.name} - {self.nam}',
             'type': 'ir.actions.act_window',
             'res_model': 'don_tu',
             'view_mode': 'tree,form',
@@ -199,7 +199,7 @@ class NghiPhepNam(models.Model):
         if not nam:
             nam = date.today().year
         
-        nhan_vien_list = self.env['nhan_vien'].search([
+        nhan_vien_list = self.env['hr.employee'].search([
             ('trang_thai', '=', 'dang_lam')
         ])
         

@@ -34,18 +34,18 @@ class ChiTietLuong(models.Model):
     
     # Thông tin nhân viên
     nhan_vien_id = fields.Many2one(
-        'nhan_vien',
+        'hr.employee',
         string="Nhân viên",
         required=True,
         ondelete='cascade'
     )
     phong_ban_id = fields.Many2one(
-        related='nhan_vien_id.phong_ban_id',
+        related='nhan_vien_id.department_id',
         string="Phòng ban",
         store=True
     )
     chuc_vu_id = fields.Many2one(
-        related='nhan_vien_id.chuc_vu_id',
+        related='nhan_vien_id.job_id',
         string="Chức vụ",
         store=True
     )
@@ -531,7 +531,7 @@ class ChiTietLuong(models.Model):
         """
         self.ensure_one()
         return {
-            'name': f'Chấm công - {self.nhan_vien_id.ho_va_ten}',
+            'name': f'Chấm công - {self.nhan_vien_id.name}',
             'type': 'ir.actions.act_window',
             'res_model': 'bang_cham_cong',
             'view_mode': 'tree,form,calendar',

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================== VIEWS GIA ĐÌNH THÂN NHÂN ==================== -->
+
+    <!-- Form View hr.family -->
+    <record id="view_hr_family_form" model="ir.ui.view">
+        <field name="name">hr.family.form</field>
+        <field name="model">hr.family</field>
+        <field name="arch" type="xml">
+            <form string="Thân nhân">
+                <sheet>
+                    <group>
+                        <group string="Thông tin cơ bản">
+                            <field name="employee_id"/>
+                            <field name="name"/>
+                            <field name="relationship"/>
+                        </group>
+                        <group string="Thông tin chi tiết">
+                            <field name="birth_date"/>
+                            <field name="age" readonly="1"/>
+                            <field name="is_dependent"/>
+                            <field name="ghi_chu"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View hr.family -->
+    <record id="view_hr_family_tree" model="ir.ui.view">
+        <field name="name">hr.family.tree</field>
+        <field name="model">hr.family</field>
+        <field name="arch" type="xml">
+            <tree string="Danh sách thân nhân"
+                  decoration-warning="is_dependent == True"
+                  decoration-muted="is_dependent == False">
+                <field name="name"/>
+                <field name="relationship"/>
+                <field name="birth_date"/>
+                <field name="age"/>
+                <field name="is_dependent" widget="toggle_button" options='{"terminology": "active"}'/>
+                <field name="ghi_chu"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Inline Tree dùng trong Form Employee (Tab Gia đình) -->
+    <record id="view_hr_family_tree_inline" model="ir.ui.view">
+        <field name="name">hr.family.tree.inline</field>
+        <field name="model">hr.family</field>
+        <field name="arch" type="xml">
+            <tree string="Thân nhân"
+                  editable="bottom"
+                  decoration-warning="is_dependent == True">
+                <field name="name"/>
+                <field name="relationship"/>
+                <field name="birth_date"/>
+                <field name="age" readonly="1"/>
+                <field name="is_dependent"/>
+                <field name="ghi_chu"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Inherit FORM CHUẨN hr.employee để thêm Tab Gia đình -->
+    <record id="view_employee_form_inherit_family" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.family</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Gia đình" name="gia_dinh">
+                    <group string="Thống kê giảm trừ gia cảnh">
+                        <field name="so_nguoi_phu_thuoc" readonly="1"/>
+                    </group>
+                    <field name="family_ids" nolabel="1"
+                           context="{'default_employee_id': active_id}">
+                        <tree editable="bottom"
+                              decoration-warning="is_dependent == True">
+                            <field name="name" string="Họ và tên"/>
+                            <field name="relationship"/>
+                            <field name="birth_date"/>
+                            <field name="age" readonly="1"/>
+                            <field name="is_dependent"/>
+                            <field name="ghi_chu"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action cho hr.family -->
+    <record id="action_hr_family" model="ir.actions.act_window">
+        <field name="name">Thân nhân nhân viên</field>
+        <field name="res_model">hr.family</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

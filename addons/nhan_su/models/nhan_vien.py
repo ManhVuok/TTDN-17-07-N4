@@ -3,24 +3,26 @@ from datetime import datetime
 from odoo.exceptions import ValidationError
 
 class NhanVien(models.Model):
-    _name = 'nhan_vien'
+    _inherit = 'hr.employee'
     _description = 'Bảng chứa thông tin nhân viên'
-    _rec_name = 'ho_va_ten'
-    _order = 'ten asc, tuoi desc'
 
     # ==================== THÔNG TIN CƠ BẢN ====================
     ma_dinh_danh = fields.Char("Mã nhân viên", required=True, copy=False)
     ho_ten_dem = fields.Char("Họ tên đệm", required=True)
     ten = fields.Char("Tên", required=True)
-    ho_va_ten = fields.Char("Họ và tên", compute="_compute_ho_va_ten", store=True)
+    
+    name = fields.Char(string="Họ và tên", compute="_compute_name", store=True, readonly=False)
+
+    @api.depends('ho_ten_dem', 'ten')
+    def _compute_name(self):
+        for record in self:
+            if record.ho_ten_dem or record.ten:
+                record.name = ((record.ho_ten_dem or '') + ' ' + (record.ten or '')).strip()
+
     ngay_sinh = fields.Date("Ngày sinh", required=True)
     tuoi = fields.Integer("Tuổi", compute="_compute_tinh_tuoi", store=True)
-    gioi_tinh = fields.Selection([
-        ("Nam", "Nam"),
-        ("Nữ", "Nữ")
-    ], string="Giới tính", required=True)
-    
-    anh = fields.Binary("Ảnh đại diện")
+
+    # hr.employee có sẵn 'gender' (gioi_tinh), 'image_1920' (anh) nên ta không định nghĩa lại.
     
     # ==================== TRẠNG THÁI LÀM VIỆC ====================
     trang_thai = fields.Selection([
@@ -53,8 +55,7 @@ class NhanVien(models.Model):
     ], string="Tình trạng hôn nhân", default='doc_than')
     
     # ==================== THÔNG TIN LIÊN HỆ ====================
-    email = fields.Char("Email", required=True)
-    so_dien_thoai = fields.Char("Số điện thoại", required=True)
+    # Thay vì dùng email, so_dien_thoai riêng, ta dùng work_email, work_phone của hr.employee
     email_cong_ty = fields.Char("Email công ty")
     
     # ==================== NGƯỜI LIÊN HỆ KHẨN CẤP ====================
@@ -68,19 +69,24 @@ class NhanVien(models.Model):
     chi_nhanh_ngan_hang = fields.Char("Chi nhánh")
     
     # ==================== THÔNG TIN TỔ CHỨC ====================
-    phong_ban_id = fields.Many2one(
-        "phong_ban", 
-        string="Phòng ban", 
-        compute="_compute_cong_tac", 
-        store=True
-    )
-    chuc_vu_id = fields.Many2one(
-        "chuc_vu", 
-        string="Chức vụ", 
-        compute="_compute_cong_tac", 
-        store=True
-    )
+    # hr.employee đã có department_id, job_id, ta sẽ dùng hàm compute để map từ lich_su_cong_tac
+    # và ta sẽ ghi đè method compute nếu cần, nhưng tốt nhất update logic vào department_id/job_id.
     
+    @api.depends("lich_su_cong_tac_ids")
+    def _compute_cong_tac(self):
+        for record in self:
+            if record.lich_su_cong_tac_ids:
+                lich_su = self.env['lich_su_cong_tac'].search([
+                    ('nhan_vien_id', '=', record.id),
+                    ('loai_chuc_vu', '=', "Chính"),
+                    ('trang_thai', '=', "Đang giữ")
+                ], limit=1)
+                record.job_id = lich_su.chuc_vu_id.id if lich_su else False
+                record.department_id = lich_su.phong_ban_id.id if lich_su else False
+            else:
+                record.job_id = False
+                record.department_id = False
+
     # ==================== QUAN HỆ ====================
     lich_su_cong_tac_ids = fields.One2many(
         "lich_su_cong_tac", 
@@ -92,11 +98,30 @@ class NhanVien(models.Model):
         inverse_name="nhan_vien_id",
         string="Danh sách chứng chỉ bằng cấp"
     )
+
+    # ==================== THÂN NHÂN ====================
+    family_ids = fields.One2many(
+        'hr.family',
+        'employee_id',
+        string="Danh sách thân nhân"
+    )
+    so_nguoi_phu_thuoc = fields.Integer(
+        "Số người phụ thuộc",
+        compute="_compute_so_nguoi_phu_thuoc",
+        store=True,
+        help="Dùng để tính giảm trừ gia cảnh khi tính thuế TNCN"
+    )
+
+    @api.depends('family_ids', 'family_ids.is_dependent')
+    def _compute_so_nguoi_phu_thuoc(self):
+        for rec in self:
+            rec.so_nguoi_phu_thuoc = len(rec.family_ids.filtered(lambda f: f.is_dependent))
+
     
     # ==================== SQL CONSTRAINTS ====================
     _sql_constraints = [
         ('ma_dinh_danh_unique', 'UNIQUE(ma_dinh_danh)', 'Mã nhân viên phải là duy nhất!'),
-        ('email_unique', 'UNIQUE(email)', 'Email đã tồn tại trong hệ thống!'),
+        # Loại bỏ email_unique tạm thời nếu work_email không yêu cầu unique
     ]
     
     # ==================== COMPUTED FIELDS ====================
@@ -108,28 +133,15 @@ class NhanVien(models.Model):
                 record.tuoi = year_now - record.ngay_sinh.year
             else:
                 record.tuoi = 0
-    
-    @api.depends('ho_ten_dem', 'ten')
-    def _compute_ho_va_ten(self):
-        for record in self:
-            record.ho_va_ten = (record.ho_ten_dem or '') + ' ' + (record.ten or '')
-    
-    @api.depends("lich_su_cong_tac_ids")
-    def _compute_cong_tac(self):
-        for record in self:
-            if record.lich_su_cong_tac_ids:
-                lich_su = self.env['lich_su_cong_tac'].search([
-                    ('nhan_vien_id', '=', record.id),
-                    ('loai_chuc_vu', '=', "Chính"),
-                    ('trang_thai', '=', "Đang giữ")
-                ], limit=1)
-                record.chuc_vu_id = lich_su.chuc_vu_id.id if lich_su else False
-                record.phong_ban_id = lich_su.phong_ban_id.id if lich_su else False
-            else:
-                record.chuc_vu_id = False
-                record.phong_ban_id = False
             
     # ==================== CONSTRAINTS ====================
+    @api.constrains('ngay_sinh')
+    def _check_ngay_sinh(self):
+        """Kiểm tra ngày sinh hợp lệ theo yêu cầu Mức 1 - Giai đoạn 1"""
+        for rec in self:
+            if rec.ngay_sinh and rec.ngay_sinh > fields.Date.today():
+                raise ValidationError("Ngày sinh không được lớn hơn ngày hiện tại!")
+
     @api.constrains("tuoi")
     def _check_tuoi(self):
         for record in self:

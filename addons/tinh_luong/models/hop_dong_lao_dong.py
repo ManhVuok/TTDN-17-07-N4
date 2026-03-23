@@ -19,7 +19,7 @@ class HopDongLaoDong(models.Model):
     
     # Liên kết với nhân viên từ module nhan_su
     nhan_vien_id = fields.Many2one(
-        'nhan_vien', 
+        'hr.employee', 
         string="Nhân viên", 
         required=True,
         ondelete='cascade'
@@ -27,13 +27,13 @@ class HopDongLaoDong(models.Model):
     
     # Thông tin từ nhân viên (để hiển thị)
     phong_ban_id = fields.Many2one(
-        related='nhan_vien_id.phong_ban_id',
+        related='nhan_vien_id.department_id',
         string="Phòng ban",
         store=True,
         readonly=True
     )
     chuc_vu_id = fields.Many2one(
-        related='nhan_vien_id.chuc_vu_id',
+        related='nhan_vien_id.job_id',
         string="Chức vụ",
         store=True,
         readonly=True

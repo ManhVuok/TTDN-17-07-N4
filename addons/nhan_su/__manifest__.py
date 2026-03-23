@@ -21,7 +21,7 @@
     'category': 'Human Resources',
     'version': '1.1',
     'license': 'LGPL-3',
-    'depends': ['base'],
+    'depends': ['base', 'hr'],
     'external_dependencies': {
         'python': ['requests'],
     },
@@ -36,6 +36,7 @@
         'views/ai_assistant.xml',
         'views/dashboard.xml',
         'views/telegram_config.xml',
+        'views/hr_family.xml',
         'report/ho_so_nhan_vien_report.xml',
         'views/menu.xml',
         'data/sample_data.xml',

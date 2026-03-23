@@ -4,7 +4,7 @@
         <!-- Form View - Đầy đủ thông tin cho triển khai thực tế -->
         <record id="view_nhan_vien_form" model="ir.ui.view">
             <field name="name">nhan_vien.form</field>
-            <field name="model">nhan_vien</field>
+            <field name="model">hr.employee</field>
             <field name="arch" type="xml">
                 <form string="Hồ sơ nhân viên">
                     <header>
@@ -22,19 +22,19 @@
                         <widget name="web_ribbon" title="ĐÃ NGHỈ VIỆC" bg_color="bg-danger" attrs="{'invisible': [('trang_thai', '!=', 'nghi_viec')]}"/>
                         <widget name="web_ribbon" title="TẠM NGHỈ" bg_color="bg-warning" attrs="{'invisible': [('trang_thai', '!=', 'tam_nghi')]}"/>
                         
-                        <field name="anh" widget="image" class="oe_avatar" options="{'preview_image': 'anh', 'size': [200, 200]}"/>
+                        <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_1920', 'size': [200, 200]}"/>
                         <div class="oe_title">
-                            <label for="ho_va_ten" string="Họ và tên"/>
+                            <label for="name" string="Họ và tên"/>
                             <h1>
-                                <field name="ho_va_ten" readonly="1" class="text-primary"/>
+                                <field name="name" readonly="1" class="text-primary"/>
                             </h1>
                             <div class="o_row">
                                 <span class="badge badge-pill badge-info" style="font-size: 14px;">
-                                    <field name="chuc_vu_id" readonly="1" class="oe_inline"/>
+                                    <field name="job_id" readonly="1" class="oe_inline"/>
                                 </span>
                                 <span class="text-muted mx-2">|</span>
                                 <span class="badge badge-pill badge-secondary" style="font-size: 14px;">
-                                    <field name="phong_ban_id" readonly="1" class="oe_inline"/>
+                                    <field name="department_id" readonly="1" class="oe_inline"/>
                                 </span>
                             </div>
                         </div>
@@ -46,13 +46,13 @@
                                 <field name="ten" placeholder="VD: An"/>
                                 <field name="ngay_sinh"/>
                                 <field name="tuoi" readonly="1"/>
-                                <field name="gioi_tinh" widget="radio" options="{'horizontal': true}"/>
+                                <field name="gender" widget="radio" options="{'horizontal': true}"/>
                                 <field name="tinh_trang_hon_nhan"/>
                             </group>
                             <group string="Thông tin làm việc">
                                 <field name="ngay_vao_lam"/>
                                 <field name="ngay_nghi_viec" attrs="{'invisible': [('trang_thai', '!=', 'nghi_viec')]}"/>
-                                <field name="email_cong_ty" widget="email" placeholder="an.nguyen@company.com"/>
+                                <field name="email_cong_ty" widget="work_email" placeholder="an.nguyen@company.com"/>
                             </group>
                         </group>
                         
@@ -74,8 +74,8 @@
                             <page string="Liên hệ" name="lien_he">
                                 <group>
                                     <group string="Thông tin liên hệ">
-                                        <field name="email" widget="email"/>
-                                        <field name="so_dien_thoai" widget="phone"/>
+                                        <field name="work_email" widget="work_email"/>
+                                        <field name="work_phone" widget="phone"/>
                                     </group>
                                     <group string="Liên hệ khẩn cấp">
                                         <field name="nguoi_lien_he_khan_cap" placeholder="VD: Nguyễn Văn Bình"/>
@@ -122,6 +122,23 @@
                                     </tree>
                                 </field>
                             </page>
+                            <page string="Gia đình" name="gia_dinh">
+                                <group string="Thống kê giảm trừ gia cảnh">
+                                    <field name="so_nguoi_phu_thuoc" readonly="1"/>
+                                </group>
+                                <field name="family_ids" nolabel="1"
+                                       context="{'default_employee_id': active_id}">
+                                    <tree editable="bottom"
+                                          decoration-warning="is_dependent == True">
+                                        <field name="name" string="Họ và tên"/>
+                                        <field name="relationship"/>
+                                        <field name="birth_date"/>
+                                        <field name="age" readonly="1"/>
+                                        <field name="is_dependent"/>
+                                        <field name="ghi_chu"/>
+                                    </tree>
+                                </field>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>
@@ -131,7 +148,7 @@
         <!-- Tree View - Hiển thị trạng thái nhân viên -->
         <record id="view_nhan_vien_tree" model="ir.ui.view">
             <field name="name">nhan_vien.tree</field>
-            <field name="model">nhan_vien</field>
+            <field name="model">hr.employee</field>
             <field name="arch" type="xml">
                 <tree string="Danh sách nhân viên" 
                       decoration-success="trang_thai == 'dang_lam'"
@@ -139,20 +156,20 @@
                       decoration-muted="trang_thai == 'nghi_viec'"
                       decoration-warning="trang_thai in ['tam_nghi', 'nghi_thai_san']">
                     <field name="ma_dinh_danh" decoration-bf="1"/>
-                    <field name="ho_va_ten" decoration-bf="1"/>
-                    <field name="gioi_tinh" widget="badge" 
-                           decoration-info="gioi_tinh == 'Nam'" 
-                           decoration-danger="gioi_tinh == 'Nữ'"/>
+                    <field name="name" decoration-bf="1"/>
+                    <field name="gender" widget="badge" 
+                           decoration-info="gender == 'Nam'" 
+                           decoration-danger="gender == 'Nữ'"/>
                     <field name="tuoi"/>
-                    <field name="phong_ban_id" widget="badge" decoration-success="1"/>
-                    <field name="chuc_vu_id" widget="badge" decoration-info="1"/>
+                    <field name="department_id" widget="badge" decoration-success="1"/>
+                    <field name="job_id" widget="badge" decoration-info="1"/>
                     <field name="trang_thai" widget="badge"
                            decoration-success="trang_thai == 'dang_lam'"
                            decoration-info="trang_thai == 'thu_viec'"
                            decoration-muted="trang_thai == 'nghi_viec'"
                            decoration-warning="trang_thai in ['tam_nghi', 'nghi_thai_san']"/>
-                    <field name="email" widget="email"/>
-                    <field name="so_dien_thoai" widget="phone"/>
+                    <field name="work_email" widget="work_email"/>
+                    <field name="work_phone" widget="phone"/>
                 </tree>
             </field>
         </record>
@@ -160,17 +177,17 @@
         <!-- Kanban View - Thiết kế đẹp và gọn gàng -->
         <record id="view_nhan_vien_kanban" model="ir.ui.view">
             <field name="name">nhan_vien.kanban</field>
-            <field name="model">nhan_vien</field>
+            <field name="model">hr.employee</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="phong_ban_id" class="o_kanban_small_column">
+                <kanban default_group_by="department_id" class="o_kanban_small_column">
                     <field name="id"/>
-                    <field name="anh"/>
-                    <field name="ho_va_ten"/>
-                    <field name="chuc_vu_id"/>
-                    <field name="phong_ban_id"/>
-                    <field name="email"/>
-                    <field name="so_dien_thoai"/>
-                    <field name="gioi_tinh"/>
+                    <field name="image_1920"/>
+                    <field name="name"/>
+                    <field name="job_id"/>
+                    <field name="department_id"/>
+                    <field name="work_email"/>
+                    <field name="work_phone"/>
+                    <field name="gender"/>
                     <field name="trang_thai"/>
                     <templates>
                         <t t-name="kanban-box">
@@ -179,23 +196,23 @@
                                     <!-- Header với Avatar và Tên -->
                                     <div class="d-flex align-items-center">
                                         <!-- Avatar nhỏ gọn -->
-                                        <div t-if="record.anh.raw_value" 
+                                        <div t-if="record.image_1920.raw_value" 
                                              class="rounded-circle mr-2"
                                              style="width: 40px; height: 40px; overflow: hidden; flex-shrink: 0;">
-                                            <img t-att-src="kanban_image('nhan_vien', 'anh', record.id.value)" 
+                                            <img t-att-src="kanban_image('hr.employee', 'image_1920', record.id.value)" 
                                                  style="width: 100%; height: 100%; object-fit: cover;"/>
                                         </div>
-                                        <div t-if="!record.anh.raw_value" 
+                                        <div t-if="!record.image_1920.raw_value" 
                                              class="rounded-circle mr-2 d-flex align-items-center justify-content-center"
-                                             t-attf-style="width: 40px; height: 40px; flex-shrink: 0; background: #{record.gioi_tinh.raw_value == 'Nam' ? '#3498db' : '#e91e63'}; color: white;">
-                                            <i t-attf-class="fa #{record.gioi_tinh.raw_value == 'Nam' ? 'fa-male' : 'fa-female'}" 
-                                               style="font-size: 18px;" t-att-title="record.gioi_tinh.value"/>
+                                             t-attf-style="width: 40px; height: 40px; flex-shrink: 0; background: #{record.gender.raw_value == 'Nam' ? '#3498db' : '#e91e63'}; color: white;">
+                                            <i t-attf-class="fa #{record.gender.raw_value == 'Nam' ? 'fa-male' : 'fa-female'}" 
+                                               style="font-size: 18px;" t-att-title="record.gender.value"/>
                                         </div>
                                         
                                         <!-- Tên và Trạng thái -->
                                         <div class="flex-grow-1 min-width-0">
                                             <strong class="d-block text-truncate" style="font-size: 13px;">
-                                                <field name="ho_va_ten"/>
+                                                <field name="name"/>
                                             </strong>
                                             <span t-attf-class="badge #{record.trang_thai.raw_value == 'dang_lam' ? 'badge-success' : (record.trang_thai.raw_value == 'thu_viec' ? 'badge-info' : 'badge-secondary')}"
                                                   style="font-size: 10px; padding: 2px 6px;">
@@ -210,26 +227,26 @@
                                     <!-- Chức vụ -->
                                     <div class="mb-1">
                                         <span class="badge" style="background: #2ecc71; color: white; font-size: 10px;">
-                                            <field name="chuc_vu_id"/>
+                                            <field name="job_id"/>
                                         </span>
                                     </div>
                                     
                                     <!-- Phòng ban -->
                                     <div class="mb-2">
                                         <span class="badge" style="background: #9b59b6; color: white; font-size: 10px;">
-                                            <field name="phong_ban_id"/>
+                                            <field name="department_id"/>
                                         </span>
                                     </div>
                                     
                                     <!-- Thông tin liên hệ -->
                                     <div style="font-size: 11px; color: #7f8c8d;">
-                                        <div t-if="record.email.raw_value" class="text-truncate">
+                                        <div t-if="record.work_email.raw_value" class="text-truncate">
                                             <i class="fa fa-envelope-o mr-1" title="Email"/>
-                                            <field name="email"/>
+                                            <field name="work_email"/>
                                         </div>
-                                        <div t-if="record.so_dien_thoai.raw_value">
+                                        <div t-if="record.work_phone.raw_value">
                                             <i class="fa fa-phone mr-1" title="Số điện thoại"/>
-                                            <field name="so_dien_thoai"/>
+                                            <field name="work_phone"/>
                                         </div>
                                     </div>
                                 </div>
@@ -243,10 +260,10 @@
         <!-- Graph View - Phân tích nhân sự -->
         <record id="view_nhan_vien_graph" model="ir.ui.view">
             <field name="name">nhan_vien.graph</field>
-            <field name="model">nhan_vien</field>
+            <field name="model">hr.employee</field>
             <field name="arch" type="xml">
                 <graph string="Thống kê nhân sự" type="pie" sample="1">
-                    <field name="phong_ban_id"/>
+                    <field name="department_id"/>
                     <field name="trang_thai"/>
                 </graph>
             </field>
@@ -255,10 +272,10 @@
         <!-- Pivot View - Phân tích chuyên sâu -->
         <record id="view_nhan_vien_pivot" model="ir.ui.view">
             <field name="name">nhan_vien.pivot</field>
-            <field name="model">nhan_vien</field>
+            <field name="model">hr.employee</field>
             <field name="arch" type="xml">
                 <pivot string="Bảng phân tích nhân sự" sample="1">
-                    <field name="phong_ban_id" type="row"/>
+                    <field name="department_id" type="row"/>
                     <field name="trang_thai" type="col"/>
                     <field name="id" type="measure"/>
                 </pivot>
@@ -268,28 +285,28 @@
         <!-- Search View -->
         <record model="ir.ui.view" id="nhan_vien_search">
             <field name="name">nhan_vien.search</field>
-            <field name="model">nhan_vien</field>
+            <field name="model">hr.employee</field>
             <field name="arch" type="xml">
                 <search string="Tìm kiếm nhân viên">
                     <field name="ma_dinh_danh" string="Mã NV"/>
-                    <field name="ho_va_ten" string="Họ tên"/>
-                    <field name="email"/>
-                    <field name="so_dien_thoai"/>
-                    <field name="phong_ban_id"/>
-                    <field name="chuc_vu_id"/>
+                    <field name="name" string="Họ tên"/>
+                    <field name="work_email"/>
+                    <field name="work_phone"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
                     <separator/>
                     <filter string="Đang làm việc" name="dang_lam" domain="[('trang_thai','=','dang_lam')]" icon="fa-check"/>
                     <filter string="Thử việc" name="thu_viec" domain="[('trang_thai','=','thu_viec')]" icon="fa-clock-o"/>
                     <filter string="Đã nghỉ việc" name="nghi_viec" domain="[('trang_thai','=','nghi_viec')]" icon="fa-times"/>
                     <separator/>
-                    <filter string="Nam" name="nam" domain="[('gioi_tinh','=','Nam')]" icon="fa-male"/>
-                    <filter string="Nữ" name="nu" domain="[('gioi_tinh','=','Nữ')]" icon="fa-female"/>
+                    <filter string="Nam" name="nam" domain="[('gender','=','Nam')]" icon="fa-male"/>
+                    <filter string="Nữ" name="nu" domain="[('gender','=','Nữ')]" icon="fa-female"/>
                     <separator/>
                     <group expand="1" string="Nhóm theo">
-                        <filter string="Phòng ban" name="group_phong_ban" context="{'group_by':'phong_ban_id'}"/>
-                        <filter string="Chức vụ" name="group_chuc_vu" context="{'group_by':'chuc_vu_id'}"/>
+                        <filter string="Phòng ban" name="group_phong_ban" context="{'group_by':'department_id'}"/>
+                        <filter string="Chức vụ" name="group_chuc_vu" context="{'group_by':'job_id'}"/>
                         <filter string="Trạng thái" name="group_trang_thai" context="{'group_by':'trang_thai'}"/>
-                        <filter string="Giới tính" name="group_gioi_tinh" context="{'group_by':'gioi_tinh'}"/>
+                        <filter string="Giới tính" name="group_gioi_tinh" context="{'group_by':'gender'}"/>
                     </group>
                 </search>
             </field>
@@ -298,7 +315,7 @@
         <!-- Action -->
         <record id="action_nhan_vien" model="ir.actions.act_window">
             <field name="name">Nhân viên</field>
-            <field name="res_model">nhan_vien</field>
+            <field name="res_model">hr.employee</field>
             <field name="view_mode">kanban,tree,graph,pivot,form</field>
             <field name="search_view_id" ref="nhan_vien_search"/>
             <field name="context">{'search_default_dang_lam': 1}</field>

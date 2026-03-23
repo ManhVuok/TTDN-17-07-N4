@@ -16,7 +16,7 @@ class DonTu(models.Model):
     )
     
     nhan_vien_id = fields.Many2one(
-        'nhan_vien', 
+        'hr.employee', 
         string="Nhân viên", 
         required=True,
         domain="[('trang_thai', '=', 'dang_lam')]"
@@ -24,7 +24,7 @@ class DonTu(models.Model):
     
     # Thông tin từ nhân viên
     phong_ban_id = fields.Many2one(
-        related='nhan_vien_id.phong_ban_id',
+        related='nhan_vien_id.department_id',
         string="Phòng ban",
         store=True,
         readonly=True
@@ -98,7 +98,7 @@ class DonTu(models.Model):
         for record in self:
             if record.nhan_vien_id and record.loai_don and record.ngay_ap_dung:
                 loai = loai_don_dict.get(record.loai_don, '')
-                record.ten_don = f"{loai} - {record.nhan_vien_id.ho_va_ten} - {record.ngay_ap_dung}"
+                record.ten_don = f"{loai} - {record.nhan_vien_id.name} - {record.ngay_ap_dung}"
             else:
                 record.ten_don = "Đơn mới"
     
@@ -111,7 +111,7 @@ class DonTu(models.Model):
                 return
             message = f"<b>{title}</b>\n"
             message += f"--------------------------------\n"
-            message += f"👤 <b>Nhân viên:</b> {self.nhan_vien_id.ho_va_ten}\n"
+            message += f"👤 <b>Nhân viên:</b> {self.nhan_vien_id.name}\n"
             message += f"{detail}\n"
             message += f"--------------------------------\n"
             message += f"<i>Odoo HR & Chấm công</i>"
