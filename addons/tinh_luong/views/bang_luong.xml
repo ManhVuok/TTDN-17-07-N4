@@ -193,7 +193,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <span class="badge badge-secondary">
-                                                <i class="fa fa-users"/> <field name="tong_nhan_vien"/> NV
+                                                <i class="fa fa-users" title="Số nhân viên"/> <field name="tong_nhan_vien"/> NV
                                             </span>
                                         </div>
                                         <div class="col-6 text-right">

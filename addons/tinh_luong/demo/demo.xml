@@ -143,7 +143,7 @@
         <record id="demo_hop_dong_nv1" model="hop_dong_lao_dong">
             <field name="ma_hop_dong">HD001</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_1"/>
-            <field name="loai_hop_dong">khong_xac_dinh</field>
+            <field name="loai_hop_dong">khong_thoi_han</field>
             <field name="ngay_ky">2020-01-01</field>
             <field name="ngay_hieu_luc">2020-01-01</field>
             <field name="luong_co_ban">25000000</field>
@@ -156,7 +156,7 @@
         <record id="demo_hop_dong_nv2" model="hop_dong_lao_dong">
             <field name="ma_hop_dong">HD002</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_2"/>
-            <field name="loai_hop_dong">xac_dinh_12_thang</field>
+            <field name="loai_hop_dong">co_thoi_han</field>
             <field name="ngay_ky">2021-06-15</field>
             <field name="ngay_hieu_luc">2021-06-15</field>
             <field name="ngay_het_han">2027-06-14</field>
@@ -170,7 +170,7 @@
         <record id="demo_hop_dong_nv3" model="hop_dong_lao_dong">
             <field name="ma_hop_dong">HD003</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_3"/>
-            <field name="loai_hop_dong">khong_xac_dinh</field>
+            <field name="loai_hop_dong">khong_thoi_han</field>
             <field name="ngay_ky">2019-03-01</field>
             <field name="ngay_hieu_luc">2019-03-01</field>
             <field name="luong_co_ban">18000000</field>
@@ -183,7 +183,7 @@
         <record id="demo_hop_dong_nv4" model="hop_dong_lao_dong">
             <field name="ma_hop_dong">HD004</field>
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_4"/>
-            <field name="loai_hop_dong">xac_dinh_12_thang</field>
+            <field name="loai_hop_dong">co_thoi_han</field>
             <field name="ngay_ky">2024-01-01</field>
             <field name="ngay_hieu_luc">2024-01-01</field>
             <field name="ngay_het_han">2027-01-01</field>

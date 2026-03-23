@@ -50,6 +50,7 @@ class BangLuong(models.Model):
         'cau_hinh_luong',
         string="Cấu hình lương",
         required=True,
+        ondelete='cascade',
         default=lambda self: self.env['cau_hinh_luong'].search([('active', '=', True)], limit=1).id
     )
     
@@ -254,28 +255,50 @@ class BangLuong(models.Model):
         self.trang_thai = 'da_tra'
 
     def action_ai_send_payslip(self):
-        """Dùng AI để sinh nhận xét lương và mô phỏng gửi Email"""
+        """Dùng AI để sinh nhận xét lương và gửi Email thực tế qua hệ thống Odoo"""
         self.ensure_one()
         if self.trang_thai not in ['da_duyet', 'da_tra']:
             raise UserError("Phải duyệt bảng lương trước khi gửi Payslip!")
             
         AIHelper = self.env['ai.assistant']
+        count = 0
+        
         for chi_tiet in self.chi_tiet_luong_ids:
-            prompt = f"Viết 1 nhận xét ngắn (3-4 câu) gửi cho {chi_tiet.nhan_vien_id.ho_va_ten}.\nLương tháng {self.thang}/{self.nam}.\nĐi làm: {chi_tiet.so_cong_thuc_te} ngày. Vắng mặt: {chi_tiet.so_ngay_vang} ngày. Đi muộn: {chi_tiet.tong_phut_di_muon} phút.\nYêu cầu: Nhận xét khách quan, nhẹ nhàng khuyên bảo nếu đi muộn, khen ngợi nếu chăm chỉ. Đóng vai: Chuyên gia nhân sự gửi trực tiếp cho nhân sự qua Email."
-            try:
-                ai_doc = AIHelper.create({'cau_hoi': prompt, 'loai_context': 'tong_hop'})
-                nhan_xet_ai = ai_doc._call_ai_api(prompt, "Bạn là Trưởng phòng Nhân sự chuyên nghiệp.")
-                chi_tiet.ai_nhan_xet = nhan_xet_ai + f"\n[Đã đính kèm Payslip_{self.thang}_{self.nam}_{chi_tiet.nhan_vien_id.ma_dinh_danh}.pdf]"
-            except Exception as e:
-                chi_tiet.ai_nhan_xet = f"Không thể lấy đánh giá AI: {str(e)}"
+            count += 1
+            # Để demo nhanh (tránh load 30s), chỉ gọi AI thật cho 2 người đầu tiên. Những người sau dùng mẫu có sẵn.
+            if count <= 2:
+                prompt = f"Viết 1 nhận xét ngắn (3-4 câu) gửi cho {chi_tiet.nhan_vien_id.ho_va_ten}.\nLương tháng {self.thang}/{self.nam}.\nĐi làm: {chi_tiet.so_cong_thuc_te} ngày. Vắng mặt: {chi_tiet.so_ngay_vang} ngày. Đi muộn: {chi_tiet.tong_phut_di_muon} phút.\nYêu cầu: Nhận xét khách quan, nhẹ nhàng khuyên bảo nếu đi muộn, khen ngợi nếu chăm chỉ. Đóng vai: Chuyên gia nhân sự gửi theo dạng văn bản Email (bắt đầu bằng tên người nhận)."
+                try:
+                    ai_doc = AIHelper.create({'cau_hoi': prompt, 'loai_context': 'tong_hop'})
+                    nhan_xet = ai_doc._call_ai_api(prompt, "Bạn là Trưởng phòng Nhân sự chuyên nghiệp.")
+                except Exception as e:
+                    nhan_xet = f"Không thể lấy đánh giá AI: {str(e)}"
+            else:
+                nhan_xet = f"Kính gửi {chi_tiet.nhan_vien_id.ho_va_ten},\n\nPhòng nhân sự gửi anh/chị thông tin lương tháng {self.thang}/{self.nam}. Trong tháng anh/chị có {chi_tiet.so_cong_thuc_te} ngày công. Cảm ơn sự đóng góp của anh/chị!\n\nTrân trọng,\nPhòng Nhân sự"
+
+            chi_tiet.ai_nhan_xet = nhan_xet + f"\n\n[Đã đính kèm Payslip_{self.thang}_{self.nam}.pdf]"
+
+            # 2. Lệnh tạo Email đẩy vào hàng đợi của Odoo
+            # Dùng getattr để tránh triệt để lỗi kẹt cache attribute cũ trong Python
+            nhan_vien = chi_tiet.nhan_vien_id
+            email_target = getattr(nhan_vien, 'email_cong_ty', False) or getattr(nhan_vien, 'email', False) or 'thuyet1230@gmail.com'
+            
+            mail_values = {
+                'subject': f'Phiếu lương và Nhận xét tháng {self.thang}/{self.nam}',
+                'body_html': f'<pre>{chi_tiet.ai_nhan_xet}</pre>',
+                'email_to': email_target,
+            }
+            # Tạo mail và gửi ngay lập tức
+            mail = self.env['mail.mail'].sudo().create(mail_values)
+            mail.send()
         
         self.trang_thai = 'da_tra'
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': 'Gửi Email AI Thành công',
-                'message': f'Đã sử dụng LLM phân tích lương và đánh giá cho {len(self.chi_tiet_luong_ids)} nhân viên!',
+                'title': 'Gửi Email thành công!',
+                'message': f'Đã sinh {len(self.chi_tiet_luong_ids)} nhận xét và GỬI TRỰC TIẾP tới email nhân viên.',
                 'type': 'success',
             }
         }

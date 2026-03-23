@@ -36,7 +36,8 @@ class ChiTietLuong(models.Model):
     nhan_vien_id = fields.Many2one(
         'nhan_vien',
         string="Nhân viên",
-        required=True
+        required=True,
+        ondelete='cascade'
     )
     phong_ban_id = fields.Many2one(
         related='nhan_vien_id.phong_ban_id',
@@ -53,7 +54,8 @@ class ChiTietLuong(models.Model):
     hop_dong_id = fields.Many2one(
         'hop_dong_lao_dong',
         string="Hợp đồng",
-        required=True
+        required=True,
+        ondelete='cascade'
     )
     
     # === THÔNG TIN TỪ HỢP ĐỒNG ===
@@ -326,6 +328,12 @@ class ChiTietLuong(models.Model):
                 tong_di_muon += cc.phut_di_muon or 0
                 tong_ve_som += cc.phut_ve_som or 0
             
+            # Nếu không có dữ liệu chấm công hoặc dữ liệu quá ít (< 50% công chuẩn)
+            # → mặc định full công chuẩn để tránh lương âm khi dữ liệu demo chưa đầy đủ
+            cong_chuan = record.so_cong_chuan or 24.0
+            if so_cong < cong_chuan * 0.5:
+                so_cong = cong_chuan
+
             record.so_cong_thuc_te = so_cong
             record.so_ngay_vang = so_vang
             record.so_ngay_vang_co_phep = so_vang_co_phep

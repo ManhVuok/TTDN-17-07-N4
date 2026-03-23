@@ -51,7 +51,7 @@
                             </group>
                             
                             <separator string="Các khoản phụ cấp"/>
-                            <field name="phu_cap_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="phu_cap_ids" widget="many2many_tags"/>
                             
                             <group>
                                 <group>

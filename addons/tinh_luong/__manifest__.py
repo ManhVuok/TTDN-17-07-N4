@@ -26,6 +26,7 @@
     'license': 'LGPL-3',
     'depends': [
         'base',
+        'mail',
         'nhan_su',
         'cham_cong'
     ],
@@ -44,7 +45,6 @@
         'data/sample_data.xml',
     ],
     'demo': [
-        'demo/demo.xml',
     ],
     'installable': True,
     'application': True,
