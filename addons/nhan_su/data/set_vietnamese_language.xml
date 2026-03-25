@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Đặt ngôn ngữ Tiếng Việt cho user Admin -->
+        <record id="base.user_admin" model="res.users">
+            <field name="lang">vi_VN</field>
+        </record>
+
+        <!-- Đặt ngôn ngữ Tiếng Việt cho user root -->
+        <record id="base.user_root" model="res.users">
+            <field name="lang">vi_VN</field>
+        </record>
+    </data>
+</odoo>

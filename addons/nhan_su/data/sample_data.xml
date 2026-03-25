@@ -64,6 +64,37 @@
             <field name="phu_cap_chuc_vu">0</field>
         </record>
 
+        <!-- hr.department (Phòng ban Odoo gốc) -->
+        <record id="hr_dept_it" model="hr.department">
+            <field name="name">Phòng Công nghệ thông tin</field>
+        </record>
+        <record id="hr_dept_ke_toan" model="hr.department">
+            <field name="name">Phòng Kế toán</field>
+        </record>
+        <record id="hr_dept_nhan_su" model="hr.department">
+            <field name="name">Phòng Nhân sự</field>
+        </record>
+        <record id="hr_dept_kinh_doanh" model="hr.department">
+            <field name="name">Phòng Kinh doanh</field>
+        </record>
+
+        <!-- hr.job (Chức vụ Odoo gốc) -->
+        <record id="hr_job_gd" model="hr.job">
+            <field name="name">Giám đốc</field>
+        </record>
+        <record id="hr_job_tp" model="hr.job">
+            <field name="name">Trưởng phòng</field>
+        </record>
+        <record id="hr_job_pp" model="hr.job">
+            <field name="name">Phó phòng</field>
+        </record>
+        <record id="hr_job_nv" model="hr.job">
+            <field name="name">Nhân viên</field>
+        </record>
+        <record id="hr_job_thuc_tap" model="hr.job">
+            <field name="name">Thực tập sinh</field>
+        </record>
+
         <!-- Demo Nhân viên (10 Records) -->
         <record id="demo_nhan_vien_1" model="hr.employee">
             <field name="name">Nguyễn Văn An</field>
@@ -76,6 +107,8 @@
             <field name="work_phone">0901234501</field>
             <field name="que_quan">Hà Nội</field>
             <field name="ngay_vao_lam">2020-01-01</field>
+            <field name="department_id" ref="hr_dept_it"/>
+            <field name="job_id" ref="hr_job_gd"/>
         </record>
         <record id="demo_nhan_vien_2" model="hr.employee">
             <field name="name">Trần Thị Bình</field>
@@ -88,6 +121,8 @@
             <field name="work_phone">0912345602</field>
             <field name="que_quan">Hồ Chí Minh</field>
             <field name="ngay_vao_lam">2021-06-15</field>
+            <field name="department_id" ref="hr_dept_nhan_su"/>
+            <field name="job_id" ref="hr_job_tp"/>
         </record>
         <record id="demo_nhan_vien_3" model="hr.employee">
             <field name="name">Lê Hoàng Cường</field>
@@ -100,6 +135,8 @@
             <field name="work_phone">0923456703</field>
             <field name="que_quan">Đà Nẵng</field>
             <field name="ngay_vao_lam">2019-03-01</field>
+            <field name="department_id" ref="hr_dept_ke_toan"/>
+            <field name="job_id" ref="hr_job_tp"/>
         </record>
         <record id="demo_nhan_vien_4" model="hr.employee">
             <field name="name">Phạm Thị Dung</field>
@@ -112,6 +149,8 @@
             <field name="work_phone">0934567804</field>
             <field name="que_quan">Hải Phòng</field>
             <field name="ngay_vao_lam">2024-01-01</field>
+            <field name="department_id" ref="hr_dept_it"/>
+            <field name="job_id" ref="hr_job_nv"/>
         </record>
         <record id="demo_nhan_vien_5" model="hr.employee">
             <field name="name">Hoàng Minh Đức</field>
@@ -124,6 +163,8 @@
             <field name="work_phone">0945678905</field>
             <field name="que_quan">Nghệ An</field>
             <field name="ngay_vao_lam">2025-12-01</field>
+            <field name="department_id" ref="hr_dept_it"/>
+            <field name="job_id" ref="hr_job_thuc_tap"/>
         </record>
         <record id="demo_nhan_vien_6" model="hr.employee">
             <field name="name">Ngô Thị Hoa</field>
@@ -136,6 +177,8 @@
             <field name="work_phone">0951234506</field>
             <field name="que_quan">Cần Thơ</field>
             <field name="ngay_vao_lam">2022-05-10</field>
+            <field name="department_id" ref="hr_dept_kinh_doanh"/>
+            <field name="job_id" ref="hr_job_nv"/>
         </record>
         <record id="demo_nhan_vien_7" model="hr.employee">
             <field name="name">Đỗ Văn Gia</field>
@@ -148,6 +191,8 @@
             <field name="work_phone">0961234507</field>
             <field name="que_quan">Quảng Ninh</field>
             <field name="ngay_vao_lam">2021-10-01</field>
+            <field name="department_id" ref="hr_dept_kinh_doanh"/>
+            <field name="job_id" ref="hr_job_nv"/>
         </record>
         <record id="demo_nhan_vien_8" model="hr.employee">
             <field name="name">Bùi Thị Huệ</field>
@@ -160,6 +205,8 @@
             <field name="work_phone">0971234508</field>
             <field name="que_quan">Thái Bình</field>
             <field name="ngay_vao_lam">2023-03-15</field>
+            <field name="department_id" ref="hr_dept_nhan_su"/>
+            <field name="job_id" ref="hr_job_nv"/>
         </record>
         <record id="demo_nhan_vien_9" model="hr.employee">
             <field name="name">Vũ Văn Hùng</field>
@@ -172,6 +219,8 @@
             <field name="work_phone">0881234509</field>
             <field name="que_quan">Bắc Ninh</field>
             <field name="ngay_vao_lam">2022-01-01</field>
+            <field name="department_id" ref="hr_dept_it"/>
+            <field name="job_id" ref="hr_job_pp"/>
         </record>
         <record id="demo_nhan_vien_10" model="hr.employee">
             <field name="name">Lý Thị Lan</field>
@@ -184,6 +233,8 @@
             <field name="work_phone">0771234510</field>
             <field name="que_quan">Nam Định</field>
             <field name="ngay_vao_lam">2025-06-01</field>
+            <field name="department_id" ref="hr_dept_it"/>
+            <field name="job_id" ref="hr_job_thuc_tap"/>
         </record>
 
         <!-- Lịch sử công tác (Demo) -->

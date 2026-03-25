@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Xóa/Ẩn nhân viên demo mặc định của Odoo (không có mã định danh) -->
+        <function model="hr.employee" name="_remove_default_demo_employees"/>
+    </data>
+</odoo>

@@ -210,6 +210,8 @@ class BangLuong(models.Model):
         if self.trang_thai != 'da_tinh':
             raise UserError("Chỉ có thể gửi duyệt sau khi đã tính lương!")
         self.trang_thai = 'cho_duyet'
+        # Gửi thông báo Telegram khi gửi duyệt
+        self._send_telegram_gui_duyet()
     
     def action_duyet(self):
         """Duyệt bảng lương"""
@@ -246,6 +248,29 @@ class BangLuong(models.Model):
 
         _logger.info(f"Nội dung thông báo: {message}")
         config.send_message(message)
+
+    def _send_telegram_gui_duyet(self):
+        """Gửi thông báo Telegram khi gửi duyệt bảng lương"""
+        self.ensure_one()
+        config = self.env['telegram.config'].get_active_config()
+        _logger.info(f"--- Gửi thông báo Telegram: Gửi duyệt bảng lương {self.ma_bang_luong} ---")
+        if not config:
+            _logger.warning("Không tìm thấy cấu hình Telegram Bot nào đang hoạt động.")
+            return
+
+        message = f"<b>🔔 YÊU CẦU DUYỆT BẢNG LƯƠNG</b>\n"
+        message += f"--------------------------------\n"
+        message += f"🗓 <b>Kỳ lương:</b> Tháng {self.thang}/{self.nam}\n"
+        message += f"👤 <b>Số nhân viên:</b> {self.tong_nhan_vien}\n"
+        message += f"💰 <b>Tổng lương Gross:</b> {self.tong_luong_gross:,.0f} VNĐ\n"
+        message += f"💵 <b>Tổng lương Net:</b> {self.tong_luong_net:,.0f} VNĐ\n"
+        message += f"📝 <b>Người gửi:</b> {self.env.user.name}\n"
+        message += f"⏳ <b>Trạng thái:</b> Đang chờ duyệt\n"
+        message += f"--------------------------------\n"
+        message += f"<i>Vui lòng vào hệ thống để phê duyệt!</i>"
+
+        _logger.info(f"Nội dung thông báo gửi duyệt: {message}")
+        config.send_message(message)
     
     def action_tra_luong(self):
         """Xác nhận đã trả lương"""
@@ -253,6 +278,14 @@ class BangLuong(models.Model):
         if self.trang_thai != 'da_duyet':
             raise UserError("Chỉ có thể xác nhận trả lương sau khi đã duyệt!")
         self.trang_thai = 'da_tra'
+        # Reload form để UI cập nhật đúng trạng thái, tránh browser cache hiển thị nút cũ
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'bang_luong',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
 
     def action_ai_send_payslip(self):
         """Dùng AI để sinh nhận xét lương và gửi Email thực tế qua hệ thống Odoo"""

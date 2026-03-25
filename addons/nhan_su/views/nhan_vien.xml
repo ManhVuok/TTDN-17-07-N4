@@ -13,18 +13,6 @@
                                options="{'clickable': '1'}"/>
                     </header>
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <!-- Smart Button: Hợp đồng lao động -->
-                            <button name="%(tinh_luong.action_hop_dong_lao_dong)d"
-                                    type="action"
-                                    class="oe_stat_button"
-                                    icon="fa-file-text-o"
-                                    context="{'search_default_nhan_vien_id': active_id}">
-                                <div class="o_field_widget o_stat_info">
-                                    <span class="o_stat_text">Hợp đồng</span>
-                                </div>
-                            </button>
-                        </div>
                         
                         <widget name="web_ribbon" title="ĐANG LÀM VIỆC" bg_color="bg-success" attrs="{'invisible': [('trang_thai', '!=', 'dang_lam')]}"/>
                         <widget name="web_ribbon" title="THỬ VIỆC" bg_color="bg-info" attrs="{'invisible': [('trang_thai', '!=', 'thu_viec')]}"/>

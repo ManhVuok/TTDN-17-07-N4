@@ -168,6 +168,20 @@ class NhanVien(models.Model):
                 if len(record.so_cmnd) not in [9, 12]:
                     raise ValidationError("Số CMND phải có 9 số hoặc CCCD phải có 12 số!")
     
+    # ==================== XÓA NHÂN VIÊN DEMO MẶC ĐỊNH ====================
+    @api.model
+    def _remove_default_demo_employees(self):
+        """Ẩn (archive) các nhân viên demo mặc định của Odoo không có mã định danh.
+        Được gọi tự động khi cài đặt/cập nhật module."""
+        demo_employees = self.search([
+            ('ma_dinh_danh', '=', False),
+        ])
+        if demo_employees:
+            demo_employees.write({'active': False})
+            import logging
+            _logger = logging.getLogger(__name__)
+            _logger.info("Đã ẩn %d nhân viên demo mặc định (không có mã định danh).", len(demo_employees))
+
     # ==================== ONCHANGE ====================
     @api.onchange('trang_thai')
     def _onchange_trang_thai(self):

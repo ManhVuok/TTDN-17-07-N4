@@ -24,13 +24,13 @@
                             attrs="{'invisible': [('trang_thai', '!=', 'da_duyet')]}"/>
                     <button name="action_ai_send_payslip" string="AI Đánh giá &amp; Gửi Email Payslip" type="object"
                             class="btn-info" icon="fa-magic"
-                            attrs="{'invisible': [('trang_thai', 'not in', ['da_duyet', 'da_tra'])]}"/>
+                            attrs="{'invisible': [('trang_thai', '!=', 'da_tra')]}"/>
                     <button name="action_huy" string="Hủy bảng lương" type="object"
                             class="btn-danger" icon="fa-times"
                             attrs="{'invisible': [('trang_thai', 'in', ['da_tra', 'huy'])]}"/>
                     <button name="action_reset" string="Đặt lại" type="object"
                             class="btn-secondary" icon="fa-refresh"
-                            attrs="{'invisible': [('trang_thai', 'in', ['nhap', 'da_tra'])]}"/>
+                            attrs="{'invisible': [('trang_thai', 'in', ['nhap', 'da_tra', 'huy'])]}"/>
                     <field name="trang_thai" widget="statusbar" 
                            statusbar_visible="nhap,da_tinh,cho_duyet,da_duyet,da_tra"
                            options="{'clickable': '0'}"/>

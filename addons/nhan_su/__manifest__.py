@@ -28,6 +28,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/nhan_vien.xml',
+        'views/hide_default_hr_fields.xml',
         'views/phong_ban.xml',
         'views/chuc_vu.xml',
         'views/lich_su_cong_tac.xml',
@@ -40,6 +41,8 @@
         'report/ho_so_nhan_vien_report.xml',
         'views/menu.xml',
         'data/sample_data.xml',
+        'data/remove_default_employees.xml',
+        'data/set_vietnamese_language.xml',
     ],
     'demo': [
         'demo/demo.xml',
@@ -47,4 +50,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'post_init_hook': '_post_init_hook',
 }

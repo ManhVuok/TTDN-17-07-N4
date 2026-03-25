@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ẩn các tab/page mặc định không cần thiết của hr.employee form view gốc -->
+    <record id="view_employee_form_hide_defaults" model="ir.ui.view">
+        <field name="name">hr.employee.form.hide.defaults</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <!-- Ẩn tab Work Information -->
+            <xpath expr="//page[@name='public']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Ẩn tab Private Information -->
+            <xpath expr="//page[@name='personal_information']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Ẩn tab HR Settings -->
+            <xpath expr="//page[@name='hr_settings']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Ẩn nút Launch Plan -->
+            <xpath expr="//button[@name='%(hr.plan_wizard_action)d']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Ẩn trường job_title mặc định (dùng trường custom thay thế) -->
+            <xpath expr="//field[@name='job_title']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Ẩn trường category_ids (Tags) -->
+            <xpath expr="//div[hasclass('oe_title')]//field[@name='category_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Ẩn các trường thông tin mặc định (mobile, work_phone, work_email, department, manager, coach) -->
+            <xpath expr="//field[@name='mobile_phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Ẩn button_box (stat buttons) -->
+            <xpath expr="//div[@name='button_box']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
