@@ -3,6 +3,7 @@
     <!-- Menu chính -->
     <menuitem id="menu_tinh_luong_root"
               name="Tính Lương"
+              web_icon="tinh_luong,static/description/icon.png"
               sequence="15"/>
     
     <!-- Menu Dashboard (action được định nghĩa trong dashboard.xml) -->

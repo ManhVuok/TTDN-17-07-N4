@@ -24,7 +24,7 @@ class AICauHinhAPI(models.Model):
     model_name = fields.Char(
         "Model Name", 
         required=True, 
-        default="google/gemini-2.0-flash-lite-preview-02-05:free"
+        default="gemini-1.5-flash"
     )
     active = fields.Boolean("Đang sử dụng", default=True)
     
@@ -107,7 +107,7 @@ class AIAssistant(models.TransientModel):
         
         # Danh sách nhân viên
         ds_nhan_vien = []
-        for nv in NhanVien.search([('trang_thai', '=', 'dang_lam')], limit=50):
+        for nv in NhanVien.search([('trang_thai', '=', 'dang_lam')], limit=15):
             gender_map = {'male': 'Nam', 'female': 'Nữ', 'other': 'Khác'}
             ds_nhan_vien.append({
                 'ma': nv.ma_dinh_danh,
@@ -278,11 +278,11 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
 === HƯỚNG DẪN ===
 1. Trả lời dựa trên dữ liệu thực tế được cung cấp ở trên
 2. Nếu không có thông tin trong dữ liệu, hãy nói rõ là không có thông tin
-3. Trả lời ngắn gọn, rõ ràng, dễ hiểu
-4. Sử dụng tiếng Việt chuẩn, chuyên nghiệp
-5. Nếu cần thống kê, hãy tính toán và đưa ra các so sánh (ví dụ: tháng này so với tháng trước nếu có dữ liệu)
-6. ĐẶC BIỆT: Hãy đóng vai trò là một cố vấn nhân sự cấp cao, đưa ra các nhận xét về tình hình kỷ luật (đi muộn), chi phí lương, và đề xuất các giải pháp cải thiện môi trường làm việc.
-7. Format câu trả lời bằng Markdown đẹp, dễ đọc, có tiêu đề và bảng biểu nếu cần.
+3. Trả lời CỰC KỲ ngắn gọn, đi thẳng vào vấn đề. Ưu tiên tóm tắt.
+4. Sử dụng tiếng Việt chuẩn, chuyên nghiệp.
+5. Nếu dữ liệu được cung cấp bị giới hạn (tóm tắt), hãy trả lời dựa trên thông tin sẵn có tốt nhất.
+6. ĐẶC BIỆT: Hãy đóng vai trò là một cố vấn nhân sự cấp cao, đưa ra các nhận xét và giải pháp cải thiện.
+7. Format bằng Markdown đẹp, dễ đọc, ưu tiên dùng bảng nếu có số liệu.
 """
         
         api_key = (config.api_key or "").strip()
@@ -300,11 +300,13 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
             # Danh sách các model để thử theo thứ tự ưu tiên
             # Models được xác nhận hoạt động với Gemini v1beta API
             VALID_MODELS = [
-                "gemini-1.5-flash",       # Miễn phí, nhanh, ổn định
-                "gemini-2.0-flash",       # Mới, miễn phí
-                "gemini-2.0-flash-lite",  # Nhẹ, nhanh
-                "gemini-1.5-pro",         # Mạnh hơn
-                "gemini-1.5-flash-001",   # Stable version
+                "gemini-2.0-flash",       # Mới, hiệu năng cao
+                "gemini-1.5-flash",       # Ổn định, nhanh
+                "gemini-1.5-flash-8b",    # Rất nhẹ, ít tốn quota
+                "gemini-2.0-flash-lite",  # Bản lite của 2.0
+                "gemini-1.5-pro",         # Mạnh mẽ nhất
+                "gemini-2.0-pro-exp-02-05", # Bản Pro thực nghiệm
+                "gemini-1.5-flash-001",   # Stable version 001
             ]
             # Ưu tiên model từ config nếu hợp lệ
             if model_name and model_name in VALID_MODELS:
@@ -312,10 +314,16 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
             else:
                 models_to_try = VALID_MODELS
             
-            last_error = ""
+            tried_models = []
+            last_error = "N/A"
             for m in models_to_try:
-                # Thử v1beta trước, nếu 404 thì thử v1
+                # Nếu một model đã bị lỗi quota ở v1beta thì không cần thử tiếp v1 của chính nó
+                model_quota_exceeded = False
+                
                 for api_ver in ["v1beta", "v1"]:
+                    if model_quota_exceeded:
+                        break
+                        
                     url = f"https://generativelanguage.googleapis.com/{api_ver}/models/{m}:generateContent"
                     params = {"key": api_key}
                     headers = {"Content-Type": "application/json"}
@@ -326,31 +334,46 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
                             }]
                         }]
                     }
+                    
                     try:
+                        _logger.info(f"Đang thử model: {m} ({api_ver})")
                         response = requests.post(url, headers=headers, params=params, json=data, timeout=60)
+                        
                         if response.status_code == 200:
                             result = response.json()
                             return result['candidates'][0]['content']['parts'][0]['text']
+                            
                         elif response.status_code == 429:
-                            raise UserError(
-                                f"Hết quota Gemini API (model: {m})!\n"
-                                f"Giải pháp:\n"
-                                f"1. Chờ đến 7:00 sáng (reset hằng ngày)\n"
-                                f"2. Hoặc vào aistudio.google.com/apikey tạo API Key mới"
-                            )
+                            _logger.warning(f"Model {m} ({api_ver}) hết quota.")
+                            last_error = f"Model {m} hết quota (429)"
+                            tried_models.append(f"{m} (429)")
+                            model_quota_exceeded = True # Bỏ qua api_ver tiếp theo của model này
+                            continue
+                            
                         elif response.status_code == 404:
                             last_error = f"404 - {m} không tồn tại trong {api_ver}"
-                            break  # Thử api_ver khác không cần thiết, sang model tiếp
+                            tried_models.append(f"{m}/{api_ver} (404)")
+                            continue # Thử version khác
+                            
                         else:
                             last_error = f"API Error ({m}/{api_ver}): {response.status_code} - {response.text[:200]}"
-                    except UserError:
-                        raise
+                            tried_models.append(f"{m} (Error {response.status_code})")
                     except Exception as e:
                         last_error = str(e)
-                        break
+                        _logger.error(f"Lỗi khi gọi {m}/{api_ver}: {last_error}")
+                        tried_models.append(f"{m} (Exception)")
+                        continue
             
             # Nếu chạy hết vòng lặp mà không được
-            raise UserError(f"Không có model Gemini nào hoạt động. Lỗi cuối cùng: {last_error}")
+            raise UserError(
+                f"Tất cả các model AI đều không khả dụng hoặc hết quota.\n\n"
+                f"Danh sách đã thử: {', '.join(tried_models)}\n"
+                f"Lỗi cuối cùng: {last_error}\n\n"
+                f"Giải pháp:\n"
+                f"1. Kiểm tra lại API Key trong Cài đặt > AI Assistant\n"
+                f"2. Truy cập aistudio.google.com/apikey để tạo Key mới nếu Key cũ bị khóa\n"
+                f"3. Hoặc chuyển sang dùng OpenRouter API (có phí cực rẻ/miễn phí) để ổn định hơn."
+            )
 
         else:
             # Cấu hình cho OpenRouter / OpenAI format
@@ -412,7 +435,7 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
             self.env['ai.lich_su_chat'].create({
                 'cau_hoi': self.cau_hoi,
                 'tra_loi': tra_loi,
-                'context_data': context_data[:5000],  # Giới hạn
+                'context_data': context_data[:3000],  # Giới hạn chặt chẽ hơn để tiết kiệm token
                 'thanh_cong': True,
             })
             
@@ -425,7 +448,7 @@ Nhiệm vụ của bạn là trả lời các câu hỏi dựa trên dữ liệu
             self.env['ai.lich_su_chat'].create({
                 'cau_hoi': self.cau_hoi,
                 'tra_loi': '',
-                'context_data': context_data[:5000],
+                'context_data': context_data[:3000],
                 'thanh_cong': False,
                 'loi': str(e),
             })

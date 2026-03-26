@@ -108,13 +108,13 @@ class BangChamCong(models.Model):
             tz = timezone(user_tz)
 
             if record.ca_lam == "Sáng":
-                gio_vao = time(7, 30)  # 7:30 AM
+                gio_vao = time(8, 30)  # 8:30 AM
                 gio_ra = time(11, 30)  # 11:30 AM
             elif record.ca_lam == "Chiều":
                 gio_vao = time(13, 30)  # 1:30 PM
                 gio_ra = time(17, 30)  # 5:30 PM
             elif record.ca_lam == "Cả ngày":
-                gio_vao = time(7, 30)  # 7:30 AM
+                gio_vao = time(8, 30)  # 8:30 AM
                 gio_ra = time(17, 30)  # 5:30 PM
             else:
                 record.gio_vao_ca = False
