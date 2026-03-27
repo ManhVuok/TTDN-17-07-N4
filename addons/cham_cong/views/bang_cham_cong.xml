@@ -89,7 +89,7 @@
                 <tree string="Bảng chấm công"
                       decoration-success="trang_thai == 'di_lam'"
                       decoration-warning="trang_thai in ['di_muon', 've_som', 'di_muon_ve_som']"
-                      decoration-danger="trang_thai == 'vang_mat'"
+                      decoration-danger="phut_di_muon &gt; 0 or trang_thai == 'vang_mat'"
                       decoration-info="trang_thai == 'vang_mat_co_phep'">
                     <field name="nhan_vien_id" decoration-bf="1"/>
                     <field name="ngay_cham_cong"/>

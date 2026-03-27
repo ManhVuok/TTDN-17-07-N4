@@ -158,4 +158,11 @@ Quá trình "Chấm Công - Tính Lương" được thực hiện với các bư
 - 🎓 **Khoa**: Công nghệ thông tin – Đại học Đại Nam
 - 📧 **Email**: thuyet1230@gmail.com, vu2873726@gmail.com
 
+## 7. Nguồn tham khảo
+
+Dự án được xây dựng và tham khảo dựa trên các hệ thống từ khóa học trước (Khóa K16) nhằm tối ưu hóa luồng nghiệp vụ và kiến trúc module:
+
+- **Repository tham khảo chính**: `TTDN-16-06-N13` (Lớp CNTT 16-06 - Nhóm 13)
+- **Nền tảng học phần**: Business-Internship (FIT-DNU)
+
 ---

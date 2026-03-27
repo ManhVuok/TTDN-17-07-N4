@@ -1,0 +1,13 @@
+2026-03-26 07:19:57,850 5424 INFO ? odoo: Odoo version 15.0 
+2026-03-26 07:19:57,851 5424 INFO ? odoo: Using configuration file at C:\TTDN-17-07-N4\odoo.conf 
+2026-03-26 07:19:57,851 5424 INFO ? odoo: addons paths: ['C:\\TTDN-17-07-N4\\odoo\\addons', 'c:\\users\\thuye\\appdata\\local\\openerp s.a\\odoo\\addons\\15.0', 'c:\\ttdn-17-07-n4\\addons', 'c:\\ttdn-17-07-n4\\odoo\\addons'] 
+2026-03-26 07:19:57,851 5424 INFO ? odoo: database: odoo@localhost:5431 
+2026-03-26 07:19:58,032 5424 INFO ? odoo.addons.base.models.ir_actions_report: You need Wkhtmltopdf to print a pdf version of the reports. 
+2026-03-26 07:19:58,469 5424 INFO ? odoo.service.server: Initiating shutdown 
+2026-03-26 07:19:58,470 5424 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-03-26 07:19:58,556 5424 INFO ttdn_final2 odoo.modules.loading: loading 1 modules... 
+2026-03-26 07:19:58,565 5424 INFO ttdn_final2 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-03-26 07:19:58,614 5424 INFO ttdn_final2 odoo.modules.loading: loading 25 modules... 
+2026-03-26 07:19:59,547 5424 INFO ttdn_final2 odoo.modules.loading: 25 modules loaded in 0.93s, 0 queries (+0 extra) 
+2026-03-26 07:19:59,610 5424 INFO ttdn_final2 odoo.modules.loading: Modules loaded. 
+2026-03-26 07:19:59,618 5424 INFO ttdn_final2 odoo.modules.registry: Registry loaded in 1.147s 

@@ -5,6 +5,7 @@
         <record id="view_nhan_vien_form" model="ir.ui.view">
             <field name="name">nhan_vien.form</field>
             <field name="model">hr.employee</field>
+            <field name="priority">1</field>
             <field name="arch" type="xml">
                 <form string="Hồ sơ nhân viên">
                     <header>
@@ -148,6 +149,7 @@
         <record id="view_nhan_vien_tree" model="ir.ui.view">
             <field name="name">nhan_vien.tree</field>
             <field name="model">hr.employee</field>
+            <field name="priority">1</field>
             <field name="arch" type="xml">
                 <tree string="Danh sách nhân viên" 
                       decoration-success="trang_thai == 'dang_lam'"
@@ -177,6 +179,7 @@
         <record id="view_nhan_vien_kanban" model="ir.ui.view">
             <field name="name">nhan_vien.kanban</field>
             <field name="model">hr.employee</field>
+            <field name="priority">1</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="department_id" class="o_kanban_small_column">
                     <field name="id"/>

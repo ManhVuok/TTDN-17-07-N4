@@ -167,12 +167,10 @@ class BangLuong(models.Model):
             self.env['chi_tiet_luong'].create(chi_tiet_vals)
         
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Thành công',
-                'message': f'Đã tạo chi tiết lương cho {len(chi_tiet_vals)} nhân viên',
-                'type': 'success',
+            'effect': {
+                'fadeout': 'slow',
+                'message': f'Đã tạo chi tiết lương cho {len(chi_tiet_vals)} nhân viên!',
+                'type': 'rainbow_man',
             }
         }
     
@@ -195,12 +193,10 @@ class BangLuong(models.Model):
         self.trang_thai = 'da_tinh'
         
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Thành công',
+            'effect': {
+                'fadeout': 'slow',
                 'message': 'Đã tính lương cho tất cả nhân viên!',
-                'type': 'success',
+                'type': 'rainbow_man',
             }
         }
     
@@ -278,14 +274,7 @@ class BangLuong(models.Model):
         if self.trang_thai != 'da_duyet':
             raise UserError("Chỉ có thể xác nhận trả lương sau khi đã duyệt!")
         self.trang_thai = 'da_tra'
-        # Reload form để UI cập nhật đúng trạng thái, tránh browser cache hiển thị nút cũ
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'bang_luong',
-            'res_id': self.id,
-            'view_mode': 'form',
-            'target': 'current',
-        }
+        return True
 
     def action_ai_send_payslip(self):
         """Dùng AI để sinh nhận xét lương và gửi Email thực tế qua hệ thống Odoo"""
@@ -463,12 +452,10 @@ class BangLuong(models.Model):
         
         self.trang_thai = 'da_tra'
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Gửi Email thành công!',
-                'message': f'Đã sinh {len(self.chi_tiet_luong_ids)} nhận xét và GỬI TRỰC TIẾP tới email nhân viên.',
-                'type': 'success',
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Đã gửi Payslip đính kèm AI qua Email!',
+                'type': 'rainbow_man',
             }
         }
     
